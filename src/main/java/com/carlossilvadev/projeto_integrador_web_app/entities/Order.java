@@ -3,6 +3,7 @@ package com.carlossilvadev.projeto_integrador_web_app.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,8 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") // formatação padrão ISO 8601
 	private Instant moment;
 	
+	private Integer orderStatus;
+	
 	@ManyToOne // define associação N:1 para relação no db
 	@JoinColumn(name = "client_id") // determina chave FK do User na tabela Order
 	private User client;
@@ -34,9 +37,10 @@ public class Order implements Serializable {
 	public Order() {
 	}
 	
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		this.id = id;
 		this.moment = moment;
+		this.setOrderStatus(orderStatus); // chama o método passando um tipo OrderStatus como params
 		this.client = client;
 	}
 	
@@ -54,7 +58,16 @@ public class Order implements Serializable {
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
-
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus); // chama o método que pega o numero e encontra o status correspondente
+	}
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode(); // armazena o numero do status passado como param
+		}
+	}
+	
 	public User getClient() {
 		return client;
 	}
