@@ -1,12 +1,10 @@
 package com.carlossilvadev.projeto_integrador_web_app.resources;
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.ResponseEntity;
 
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
-
 
 @RestController // anotação que define a classe como um controlador Rest (camada de recursos)
 @RequestMapping(value = "/users") // define o caminho do recurso

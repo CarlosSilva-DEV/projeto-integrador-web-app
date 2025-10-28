@@ -1,9 +1,19 @@
 package com.carlossilvadev.projeto_integrador_web_app.entities;
 import java.io.Serializable;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+@Entity // especifica que a classe é uma entidade
+@Table(name = "tb_user") // define que a classe será uma tabela do db
 public class User implements Serializable { // interface usada para salvar o estado atual de um objeto (permite persistência em dbs)
 	private static final long serialVersionUID = 1L; // número de série padrão
 	
+	@Id // mapeia o atributo como um ID
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // determina que o ID será auto-increment no db
 	private Long id;
 	private String nome;
 	private String email;
@@ -84,6 +94,4 @@ public class User implements Serializable { // interface usada para salvar o est
 			return false;
 		return true;
 	}
-	
-	
 }
