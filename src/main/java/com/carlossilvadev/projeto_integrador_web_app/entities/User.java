@@ -1,26 +1,35 @@
 package com.carlossilvadev.projeto_integrador_web_app.entities;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
-@Entity // especifica que a classe é uma entidade
-@Table(name = "tb_user") // define que a classe será uma tabela do db
-public class User implements Serializable { // interface usada para salvar o estado atual de um objeto (permite persistência em dbs)
+@Entity
+@Table(name = "tb_user") // classe será uma tabela do db
+public class User implements Serializable { // interface que salva o estado atual de um objeto (persistência em dbs)
 	private static final long serialVersionUID = 1L; // número de série padrão
 	
 	@Id // mapeia o atributo como um ID
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // determina que o ID será auto-increment no db
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // o ID será auto-increment no db
 	private Long id;
 	private String nome;
 	private String email;
 	private String telefone;
 	private String senha;
 	
-	// Construtores (vazio e com params)
+	@JsonIgnore // evita looping nas requisições de User-Order
+	@OneToMany(mappedBy = "client") // define associação 1:N para relação no db
+	private List<Order> orders = new ArrayList<>();
+	
+	// Construtores (padrão do Spring: vazio e com params)
 	public User() {
 	}
 	
@@ -34,6 +43,10 @@ public class User implements Serializable { // interface usada para salvar o est
 	}
 	
 	// getters e setters
+	public List<Order> getOrders(){
+		return orders;
+	}
+	
 	public Long getId() {
 		return id;
 	}
