@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
 import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
+import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
@@ -75,5 +76,9 @@ public class TestConfig implements CommandLineRunner{
 		
 		// salvando associação no repositório
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		Payment pay1 = new Payment(null, Instant.parse("2025-10-27T10:41:48Z"), o2);
+		o2.setPayment(pay1); // chama método da classe dependente
+		orderRepository.save(o2); // salvando relacionamento de dependência (obj dependente não usa repositorio próprio)
 	}
 }

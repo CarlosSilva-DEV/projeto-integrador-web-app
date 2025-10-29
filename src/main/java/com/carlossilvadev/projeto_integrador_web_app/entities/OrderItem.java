@@ -60,6 +60,11 @@ public class OrderItem implements Serializable {
 		this.preco = preco;
 	}
 	
+	// calculo subtotal
+	public double getSubtotal() {
+		return this.getPreco() * this.getQuantidade();
+	}
+	
 	// hashcode e equals
 	@Override
 	public int hashCode() {
