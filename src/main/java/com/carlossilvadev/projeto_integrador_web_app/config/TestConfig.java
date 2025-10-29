@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
+import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
+import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderItemRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
@@ -32,6 +34,9 @@ public class TestConfig implements CommandLineRunner{
 	@Autowired
 	private ProductRepository productRepository;
 	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		User u1 = new User(null, "Maria", "maria@gmail.com", "999999999", "123456");
@@ -49,11 +54,18 @@ public class TestConfig implements CommandLineRunner{
 		Product p2 = new Product(null, "Redmagic 10 Pro 256GB 12GB RAM Snapdragon 8 Elite", "Lorem ipsum dolor sit amet...", 4599.90, "");
 		Product p3 = new Product(null, "Macbook Pro", "Lorem ipsum dolor sit amet...", 6599.90, "");
 		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPreco());
+		OrderItem oi2 = new OrderItem(o2, p2, 1, p2.getPreco());
+		OrderItem oi3 = new OrderItem(o2, p3, 1, p3.getPreco());
+		OrderItem oi4 = new OrderItem(o3, p1, 1, p1.getPreco());
+		OrderItem oi5 = new OrderItem(o3, p3, 1, p3.getPreco());
+		
 		
 		userRepository.saveAll(Arrays.asList(u1, u2)); // salvando objetos dentro de um array no repositório Users
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 		categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4, oi5));
 		
 		// associando produtos com categorias
 		p1.getCategories().add(c2);
