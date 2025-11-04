@@ -3,10 +3,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service // registro da clase como um componente "Service" do Spring
 public class UserService {
@@ -20,7 +26,7 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get(); // operação do Optional retornando objeto User
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id)); // exceção para id inexistente
 	}
 	
 	// método Service que salva objeto no Repository (Post)
@@ -30,14 +36,24 @@ public class UserService {
 	
 	// método Service que deleta objeto no Repository (Delete)
 	public void delete(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException exception) { // exceção para id inexistente
+			throw new ResourceNotFoundException(id);
+		} catch (DataIntegrityViolationException exception) { // exceção para id com associações
+			throw new DatabaseException(exception.getMessage());
+		}
 	}
 	
 	// método Service que atualiza objeto no Repository (Put)
 	public User update(Long id, User obj) {
-		User entity = repository.getReferenceById(id); // cria objeto monitorado pelo JPA que vai armazenar os novos dados
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id); // cria objeto monitorado pelo JPA que vai armazenar os novos dados
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException exception) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 	
 	private void updateData(User entity, User obj) {
