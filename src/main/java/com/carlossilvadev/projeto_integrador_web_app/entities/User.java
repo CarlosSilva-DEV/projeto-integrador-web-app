@@ -3,9 +3,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
+
+import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +27,13 @@ public class User implements Serializable { // interface que salva o estado atua
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // o ID será auto-increment no db
 	private Long id;
 	private String nome;
+	private String login;
 	private String email;
 	private String telefone;
 	private String senha;
+	
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 	
 	@JsonIgnore // evita looping nas requisições de User-Order
 	@OneToMany(mappedBy = "client") // define associação 1:N para relação no db
@@ -33,13 +43,18 @@ public class User implements Serializable { // interface que salva o estado atua
 	public User() {
 	}
 	
-	public User(Long id, String nome, String email, String telefone, String senha) {
+	public User(String nome, String login, String email, String telefone, String senha) {
 		super();
-		this.id = id;
+		this.id = null;
 		this.nome = nome;
+		this.login = login;
 		this.email = email;
 		this.telefone = telefone;
 		this.senha = senha;
+	}
+	
+	public User(UserDTO userDto) {
+		BeanUtils.copyProperties(userDto, this);
 	}
 	
 	// getters e setters
@@ -59,6 +74,13 @@ public class User implements Serializable { // interface que salva o estado atua
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getEmail() {
@@ -80,6 +102,13 @@ public class User implements Serializable { // interface que salva o estado atua
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public UserRole getRole() {
+		return role;
+	}
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 	
 	// hashcode e equals

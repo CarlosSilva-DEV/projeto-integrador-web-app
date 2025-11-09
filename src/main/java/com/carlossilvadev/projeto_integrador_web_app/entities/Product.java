@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
+
+import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -40,12 +43,16 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public Product(Long id, String nome, String descricao, double preco, String imgUrl) {
-		this.id = id;
+	public Product(String nome, String descricao, double preco, String imgUrl) {
+		this.id = null;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.imgUrl = imgUrl;
+	}
+	
+	public Product(ProductDTO productDto) {
+		BeanUtils.copyProperties(productDto, this);
 	}
 	
 	// getters e setters

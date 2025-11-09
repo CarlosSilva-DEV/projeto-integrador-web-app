@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
+
+import com.carlossilvadev.projeto_integrador_web_app.dto.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -31,9 +34,13 @@ public class Category implements Serializable {
 	public Category() {
 	}
 	
-	public Category(Long id, String nome) {
-		this.id = id;
+	public Category(String nome) {
+		this.id = null;
 		this.nome = nome;
+	}
+	
+	public Category(CategoryDTO categoryDto) {
+		BeanUtils.copyProperties(categoryDto, this);
 	}
 	
 	// getters e setters

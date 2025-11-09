@@ -3,6 +3,7 @@ package com.carlossilvadev.projeto_integrador_web_app.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +23,8 @@ public class Payment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 	
 	@JsonIgnore
@@ -32,9 +36,9 @@ public class Payment implements Serializable {
 	public Payment() {
 	}
 
-	public Payment(Long id, Instant moment, Order order) {
-		this.id = id;
-		this.moment = moment;
+	public Payment(Order order) {
+		this.id = null;
+		this.moment = Instant.now();
 		this.order = order;
 	}
 	
@@ -49,15 +53,19 @@ public class Payment implements Serializable {
 	public Instant getMoment() {
 		return moment;
 	}
-	public void setMoment(Instant moment) {
-		this.moment = moment;
-	}
 
 	public Order getOrder() {
 		return order;
 	}
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+	
+	@PrePersist
+	public void prePersist() {
+		if (this.moment == null) {
+			this.moment = Instant.now();
+		}
 	}
 	
 	// hashcode e equals

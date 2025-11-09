@@ -5,6 +5,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
+
+import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -17,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 
@@ -48,11 +52,15 @@ public class Order implements Serializable {
 	public Order() {
 	}
 	
-	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
-		this.id = id;
-		this.moment = moment;
+	public Order(OrderStatus orderStatus, User client) {
+		this.id = null;
+		this.moment = Instant.now();
 		this.setOrderStatus(orderStatus); // chama o método passando um tipo OrderStatus como params
 		this.client = client;
+	}
+	
+	public Order(OrderDTO orderDto) {
+		BeanUtils.copyProperties(orderDto, this);
 	}
 	
 	// getters e setters
@@ -69,9 +77,6 @@ public class Order implements Serializable {
 
 	public Instant getMoment() {
 		return moment;
-	}
-	public void setMoment(Instant moment) {
-		this.moment = moment;
 	}
 	
 	public OrderStatus getOrderStatus() {
@@ -106,6 +111,13 @@ public class Order implements Serializable {
 		}
 		
 		return soma;
+	}
+	
+	@PrePersist
+	public void prePersist() {
+		if (this.moment == null) {
+			this.moment = Instant.now();
+		}
 	}
 	
 	
