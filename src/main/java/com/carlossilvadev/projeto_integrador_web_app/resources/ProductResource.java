@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,6 +25,7 @@ public class ProductResource {
 	@Autowired
 	private ProductService service;
 	
+	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	@GetMapping
 	public ResponseEntity<List<ProductDTO>> findAll() {
 		List<ProductDTO> lista = service.findAll();
@@ -35,6 +38,14 @@ public class ProductResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@GetMapping(value = "/search")
+	public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam(value = "q", required = false) String nome) {
+		List<ProductDTO> products = service.search(nome);
+		return ResponseEntity.ok().body(products);
+	}
+	
+	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO obj) {
 		ProductDTO productDto = service.insert(obj);
@@ -42,12 +53,14 @@ public class ProductResource {
 		return ResponseEntity.created(uri).body(productDto);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO productDto) {
 		ProductDTO updatedProduct = service.update(id, productDto);

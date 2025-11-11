@@ -59,6 +59,7 @@ public class TestConfig implements CommandLineRunner{
 		Product p1 = new Product("Jojo's Bizarre Adventure Part 5: Golden Wind", "Lorem ipsum dolor sit amet...", 89.90, "");
 		Product p2 = new Product("Redmagic 10 Pro 256GB 12GB RAM Snapdragon 8 Elite", "Lorem ipsum dolor sit amet...", 4599.90, "");
 		Product p3 = new Product("Macbook Pro", "Lorem ipsum dolor sit amet...", 6599.90, "");
+		Product p4 = new Product("Jojo's Bizarre Adventure Part 8: JoJolion", "Lorem ipsum dolor sit amet...", 129.90, "");
 		
 		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPreco());
 		OrderItem oi2 = new OrderItem(o2, p2, 1, p2.getPreco());
@@ -70,7 +71,7 @@ public class TestConfig implements CommandLineRunner{
 		userRepository.saveAll(Arrays.asList(u1, u2)); // salvando objetos dentro de um array no repositório Users
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 		categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
-		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4, oi5));
 		
 		// associando produtos com categorias
@@ -78,9 +79,10 @@ public class TestConfig implements CommandLineRunner{
 		p2.getCategories().add(c1);
 		p3.getCategories().add(c1);
 		p3.getCategories().add(c3);
+		p4.getCategories().add(c2);
 		
 		// salvando associação no repositório
-		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 		
 		Payment pay1 = new Payment(o2);
 		o2.setPayment(pay1); // chama método da classe dependente

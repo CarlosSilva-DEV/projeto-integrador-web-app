@@ -21,6 +21,7 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
+	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	public List<ProductDTO> findAll() {
 		List<Product> products = repository.findAll();
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
@@ -32,6 +33,22 @@ public class ProductService {
 		return new ProductDTO(product);
 	}
 	
+	// realizar busca (com ou sem params)
+	public List<ProductDTO> search(String searchTerm) {
+		if (searchTerm == null || searchTerm.trim().isEmpty()) {
+			return findAll();
+		}
+		return findByNome(searchTerm.trim());
+	}
+	
+	// método auxiliar para buscar nome do produto no repositório
+	public List<ProductDTO> findByNome(String nome) {
+		List<Product> products = repository.findByNomeContainingIgnoreCase(nome);
+		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
+	}
+	
+	
+	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	public ProductDTO insert(ProductDTO productDto) {
 		Product product = new Product(productDto);
 		return new ProductDTO(repository.save(product));
