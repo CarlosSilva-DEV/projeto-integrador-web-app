@@ -10,4 +10,5 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 public interface UserRepository extends JpaRepository<User, Long>{ // extende jparepository<entidade, ID>
 	
 	Optional<User> findByLogin(String login);
+	Optional<User> findByEmail(String email);
 }

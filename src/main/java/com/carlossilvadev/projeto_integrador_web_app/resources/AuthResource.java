@@ -30,15 +30,12 @@ public class AuthResource {
 	@PostMapping(value = "/login")
 	public ResponseEntity<AccessDTO> login(@RequestBody AuthenticationDTO authDto) {
 		AccessDTO token = authService.login(authDto);
-		if (token == null) {
-			return ResponseEntity.status(401).build();
-		}
 		return ResponseEntity.ok(token);
 	}
 	
 	// endpoint de registro de novo user
 	@PostMapping(value = "/register")
-	public ResponseEntity<UserDTO> register(@RequestBody RegisterDTO registerDto) {
+	public ResponseEntity<?> register(@RequestBody RegisterDTO registerDto) {
 		UserDTO newUser = authService.register(registerDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri();
 		return ResponseEntity.created(uri).body(newUser);

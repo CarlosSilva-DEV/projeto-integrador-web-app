@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.InvalidCredentialsException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,4 +32,22 @@ public class ResourceExceptionHandler {
 		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
+	
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<StandardError> invalidCredentials(InvalidCredentialsException exception, HttpServletRequest request) {
+		String error = "Invalid credentials";
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<StandardError> businessException(BusinessException exception, HttpServletRequest request) {
+		String error = "Business rule violation";
+		HttpStatus status = HttpStatus.CONFLICT;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	
 }

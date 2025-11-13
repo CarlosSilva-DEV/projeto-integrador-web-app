@@ -1,7 +1,12 @@
 package com.carlossilvadev.projeto_integrador_web_app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AuthenticationDTO {
+	@JsonProperty("login")
 	private String username;
+	
+	@JsonProperty("senha")
 	private String password;
 	
 	// getters e setters
