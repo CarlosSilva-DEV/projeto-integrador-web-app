@@ -16,6 +16,10 @@ public class CategoryDTO {
 	// Construtores
 	public CategoryDTO(Category category) {
 		BeanUtils.copyProperties(category, this);
+		
+		if (category.getProducts() != null) {
+			this.products = new HashSet<>(category.getProducts());
+		}
 	}
 	
 	public CategoryDTO() {

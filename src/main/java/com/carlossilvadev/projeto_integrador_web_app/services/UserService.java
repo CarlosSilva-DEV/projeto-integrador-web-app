@@ -30,7 +30,7 @@ public class UserService {
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	
 	// método auxiliar
-	private User getCurrentUserEntity() {
+	public User getCurrentUserEntity() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated()) {
 			throw new RuntimeException("Usuário não autenticado");

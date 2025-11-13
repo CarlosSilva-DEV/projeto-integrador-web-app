@@ -3,25 +3,36 @@ package com.carlossilvadev.projeto_integrador_web_app.dto;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.beans.BeanUtils;
+import java.util.stream.Collectors;
 
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
-import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
+import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class OrderDTO {
 	private Long id;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
-	private Integer orderStatus;
+	
+	private OrderStatus orderStatus;
 	private User client;
-	private Set<OrderItem> items = new HashSet<>();
+	private Set<OrderItemDTO> items = new HashSet<>();
 	private Payment payment;
 	
 	// Construtores
 	public OrderDTO(Order order) {
-		BeanUtils.copyProperties(order, this);
+		this.id = order.getId();
+		this.moment = order.getMoment();
+		this.orderStatus = order.getOrderStatus();
+		this.client = order.getClient();
+		this.payment = order.getPayment();
+		
+		if (order.getItems() != null) {
+			this.items = new HashSet<>(order.getItems().stream().map(OrderItemDTO::new).collect(Collectors.toSet()));
+		}
 	}
 	
 	public OrderDTO() {
@@ -39,10 +50,10 @@ public class OrderDTO {
 		return moment;
 	}
 	
-	public Integer getOrderStatus() {
+	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
-	public void setOrderStatus(Integer orderStatus) {
+	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 	
@@ -53,10 +64,10 @@ public class OrderDTO {
 		this.client = client;
 	}
 	
-	public Set<OrderItem> getItems() {
+	public Set<OrderItemDTO> getItems() {
 		return items;
 	}
-	public void setItems(Set<OrderItem> items) {
+	public void setItems(Set<OrderItemDTO> items) {
 		this.items = items;
 	}
 	

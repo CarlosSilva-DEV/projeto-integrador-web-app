@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProductDTO {
 	private Long id;
@@ -16,11 +17,17 @@ public class ProductDTO {
 	private double preco;
 	private String imgUrl;
 	private Set<Category> categories = new HashSet<>();
+	
+	@JsonIgnore
 	private Set<OrderItem> items = new HashSet<>();
 	
 	// Construtores
 	public ProductDTO(Product product) {
 		BeanUtils.copyProperties(product, this);
+		
+		if (product.getCategories() != null) {
+			this.categories = new HashSet<>(product.getCategories());
+		}
 	}
 
 	public ProductDTO() {

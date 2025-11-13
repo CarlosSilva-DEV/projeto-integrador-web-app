@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.carlossilvadev.projeto_integrador_web_app.dto.OrderCreateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
 import com.carlossilvadev.projeto_integrador_web_app.services.UserService;
 
 @RestController
@@ -23,28 +26,58 @@ import com.carlossilvadev.projeto_integrador_web_app.services.UserService;
 public class UserResource {
 	
 	@Autowired
-	private UserService service;
+	private UserService userService;
+	
+	@Autowired
+	private OrderService orderService;
 	
 	//============================ ENDPOINTS USUÁRIOS ==========================================================================
 	
 	// método que retorna usuário atual logado (users & admins)
 	@GetMapping("/profile")
 	public ResponseEntity<UserDTO> getCurrentUser() {
-		UserDTO userDto = service.getCurrentUser();
+		UserDTO userDto = userService.getCurrentUser();
 		return ResponseEntity.ok().body(userDto);
 	}
 	
 	@PutMapping("/profile")
 	public ResponseEntity<UserDTO> updateCurrentUser(@RequestBody UserDTO userDto) {
-		UserDTO updatedUser = service.updateCurrentUser(userDto);
+		UserDTO updatedUser = userService.updateCurrentUser(userDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 	
 	@DeleteMapping("/profile")
 	public ResponseEntity<Void> deleteCurrentUser() {
-		service.deleteCurrentUser();
+		userService.deleteCurrentUser();
 		return ResponseEntity.noContent().build();
 	}
+	
+	// requisições relacionadas ao pedido do usuário
+	@GetMapping("/profile/orders")
+	public ResponseEntity<List<OrderDTO>> findOrdersByCurrentUser() {
+		List<OrderDTO> orders = orderService.findOrdersByCurrentUser();
+		return ResponseEntity.ok().body(orders);
+	}
+	
+	@GetMapping("/profile/orders/{id}")
+	public ResponseEntity<OrderDTO> findOrderByIdAndCurrentUser(@PathVariable Long id) {
+		OrderDTO order = orderService.findByIdAndCurrentUser(id);
+		return ResponseEntity.ok().body(order);
+	}
+	
+	@PostMapping("/profile/orders")
+	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderCreateDTO orderCreateDto) {
+		OrderDTO newOrder = orderService.createOrder(orderCreateDto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newOrder.getId()).toUri();
+		return ResponseEntity.created(uri).body(newOrder);
+	}
+	
+	@PostMapping("/profile/orders/{id}/cancel")
+	public ResponseEntity<OrderDTO> cancelOrder(@PathVariable Long id) {
+		orderService.cancelOrder(id);
+		return ResponseEntity.noContent().build();
+	}
+	
 	
 	// ============================ ENDPOINTS ADMINISTRATIVOS ==================================================================
 	
@@ -52,7 +85,7 @@ public class UserResource {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
-		List<UserDTO> lista = service.findAll();
+		List<UserDTO> lista = userService.findAll();
 		return ResponseEntity.ok().body(lista);
 	}
 	
@@ -60,7 +93,7 @@ public class UserResource {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-		UserDTO obj = service.findById(id);
+		UserDTO obj = userService.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -68,7 +101,7 @@ public class UserResource {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping
 	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO obj) {
-		UserDTO userDto = service.insert(obj);
+		UserDTO userDto = userService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(userDto);
 	}
@@ -77,7 +110,7 @@ public class UserResource {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		service.delete(id);
+		userService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
@@ -85,7 +118,7 @@ public class UserResource {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO userDto) {
-		UserDTO updatedUser = service.update(id, userDto);
+		UserDTO updatedUser = userService.update(id, userDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 }

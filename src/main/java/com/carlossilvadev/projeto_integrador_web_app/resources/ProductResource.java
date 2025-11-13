@@ -27,9 +27,16 @@ public class ProductResource {
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	@GetMapping
-	public ResponseEntity<List<ProductDTO>> findAll() {
-		List<ProductDTO> lista = service.findAll();
-		return ResponseEntity.ok().body(lista);
+	public ResponseEntity<List<ProductDTO>> findAll(@RequestParam(value = "categoryId", required = false) Long categoryId, @RequestParam(value = "q", required = false) String searchTerm) {
+		List<ProductDTO> products;
+		
+		if (categoryId != null || (searchTerm != null && !searchTerm.trim().isEmpty())) {
+			products = service.findWithFilter(categoryId, searchTerm);
+		} else {
+			products = service.findAll();
+		}
+		
+		return ResponseEntity.ok().body(products);
 	}
 	
 	@GetMapping(value = "/{id}")
@@ -41,6 +48,12 @@ public class ProductResource {
 	@GetMapping(value = "/search")
 	public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam(value = "q", required = false) String nome) {
 		List<ProductDTO> products = service.search(nome);
+		return ResponseEntity.ok().body(products);
+	}
+	
+	@GetMapping(value = "/by-category/{categoryId}")
+	public ResponseEntity<List<ProductDTO>> findByCategory(@PathVariable Long categoryId) {
+		List<ProductDTO> products = service.findByCategory(categoryId);
 		return ResponseEntity.ok().body(products);
 	}
 	

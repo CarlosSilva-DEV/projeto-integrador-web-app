@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +38,8 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") // formatação padrão ISO 8601
 	private Instant moment;
 	
-	private Integer orderStatus;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus orderStatus;
 	
 	@ManyToOne // define associação N:1 para relação no db
 	@JoinColumn(name = "client_id") // determina chave FK do User na tabela Order
@@ -50,17 +53,14 @@ public class Order implements Serializable {
 	
 	// Construtores
 	public Order() {
-	}
-	
-	public Order(OrderStatus orderStatus, User client) {
-		this.id = null;
 		this.moment = Instant.now();
-		this.setOrderStatus(orderStatus); // chama o método passando um tipo OrderStatus como params
-		this.client = client;
+		this.setOrderStatus(OrderStatus.AGUARDANDO_PAGAMENTO);
 	}
 	
-	public Order(OrderDTO orderDto) {
-		BeanUtils.copyProperties(orderDto, this);
+	public Order(OrderDTO orderDto, User client) {
+		this();
+		BeanUtils.copyProperties(orderDto, this, "client", "orderStatus");
+		this.client = client;
 	}
 	
 	// getters e setters
@@ -78,14 +78,16 @@ public class Order implements Serializable {
 	public Instant getMoment() {
 		return moment;
 	}
+	public void setMoment(Instant moment) {
+		this.moment = moment;
+	}
 	
 	public OrderStatus getOrderStatus() {
-		return OrderStatus.valueOf(orderStatus); // chama o método que pega o numero e encontra o status correspondente
+		return orderStatus;
 	}
+	
 	public void setOrderStatus(OrderStatus orderStatus) {
-		if (orderStatus != null) {
-			this.orderStatus = orderStatus.getCode(); // armazena o numero do status passado como param
-		}
+		this.orderStatus = orderStatus;
 	}
 	
 	public User getClient() {
@@ -117,6 +119,10 @@ public class Order implements Serializable {
 	public void prePersist() {
 		if (this.moment == null) {
 			this.moment = Instant.now();
+		}
+		
+		if (this.orderStatus == null) {
+			this.orderStatus = OrderStatus.AGUARDANDO_PAGAMENTO;
 		}
 	}
 	

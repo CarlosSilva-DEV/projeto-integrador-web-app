@@ -48,12 +48,12 @@ public class WebSecurityConfig {
 		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/auth/login", "/auth/register").permitAll()
-				.requestMatchers("/users/profile").authenticated()
+				.requestMatchers("/users/profile/**").authenticated()
 				.requestMatchers("/users/**").hasRole("ADMIN")
-				.requestMatchers("/products/**").authenticated()
-				.requestMatchers("/orders/**").authenticated()
-				.requestMatchers("/categories/**").authenticated()
-				.requestMatchers("/h2-console").permitAll()
+				.requestMatchers("/products/**").permitAll()
+				.requestMatchers("/orders/**").hasRole("ADMIN")
+				.requestMatchers("/categories/**").permitAll()
+				.requestMatchers("/h2-console/**").permitAll()
 				.anyRequest().authenticated());
 		
 		http.addFilterBefore(authFilterToken, UsernamePasswordAuthenticationFilter.class);

@@ -9,7 +9,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
+import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
+import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
@@ -19,16 +21,19 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ProductService {
 	@Autowired
-	private ProductRepository repository;
+	private ProductRepository productRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	public List<ProductDTO> findAll() {
-		List<Product> products = repository.findAll();
+		List<Product> products = productRepository.findAllWithCategories();
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
 	public ProductDTO findById(Long id) {
-		Optional<Product> obj = repository.findById(id);
+		Optional<Product> obj = productRepository.findByIdWithCategories(id);
 		Product product = obj.orElseThrow(() -> new ResourceNotFoundException(id));
 		return new ProductDTO(product);
 	}
@@ -43,20 +48,54 @@ public class ProductService {
 	
 	// método auxiliar para buscar nome do produto no repositório
 	public List<ProductDTO> findByNome(String nome) {
-		List<Product> products = repository.findByNomeContainingIgnoreCase(nome);
+		List<Product> products = productRepository.findByNomeContainingIgnoreCase(nome);
+		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
+	}
+	
+	public List<ProductDTO> findByCategory(Long categoryId) {
+		List<Product> products = productRepository.findByCategoryId(categoryId);
+		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
+	}
+	
+	public List<ProductDTO> findWithFilter(Long categoryId, String searchTerm) {
+		List<Product> products;
+
+		if (categoryId != null && searchTerm != null && !searchTerm.trim().isEmpty()) {
+			products = productRepository.findByCategoryAndSearch(categoryId, searchTerm.trim());
+		} else if (categoryId != null) {
+			products = productRepository.findByCategoryId(categoryId);
+		} else if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+			products = productRepository.findByNomeContainingIgnoreCase(searchTerm.trim());
+		} else {
+			products = productRepository.findAllWithCategories();
+		}
+		
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	public ProductDTO insert(ProductDTO productDto) {
-		Product product = new Product(productDto);
-		return new ProductDTO(repository.save(product));
+		Product product = new Product();
+		product.setNome(productDto.getNome());
+		product.setDescricao(productDto.getDescricao());
+		product.setPreco(productDto.getPreco());
+		product.setImgUrl(productDto.getImgUrl());
+		
+		if (productDto.getCategories() != null) {
+			for (Category category : productDto.getCategories()) {
+				Category managedCategory = categoryRepository.findById(category.getId())
+						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+				product.getCategories().add(managedCategory);
+			}
+		}
+		
+		return new ProductDTO(productRepository.save(product));
 	}
 	
 	public void delete(Long id) {
 		try {
-			repository.deleteById(id);
+			productRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException exception) {
 			throw new ResourceNotFoundException(id);
 		} catch (DataIntegrityViolationException exception) {
@@ -66,9 +105,10 @@ public class ProductService {
 	
 	public ProductDTO update(Long id, ProductDTO productDto) {
 		try {
-			Product entity = repository.getReferenceById(id);
+			Product entity = productRepository.getReferenceById(id);
 			updateData(entity, productDto);
-			Product updatedProduct = repository.save(entity);
+			
+			Product updatedProduct = productRepository.save(entity);
 			return new ProductDTO(updatedProduct);
 		} catch (EntityNotFoundException exception) {
 			throw new ResourceNotFoundException(id);
@@ -80,5 +120,13 @@ public class ProductService {
 		entity.setDescricao(obj.getDescricao());
 		entity.setPreco(obj.getPreco());
 		entity.setImgUrl(obj.getImgUrl());
+		
+		if (obj.getCategories() != null) {
+			for (Category category : obj.getCategories()) {
+				Category managedCategory = categoryRepository.findById(category.getId())
+						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+				obj.getCategories().add(managedCategory);
+			}
+		}
 	}
 }

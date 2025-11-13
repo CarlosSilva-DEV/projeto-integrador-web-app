@@ -21,17 +21,19 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 	
+	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	public List<CategoryDTO> findAll() {
-		List<Category> categories = repository.findAll();
+		List<Category> categories = repository.findAllWithProducts();
 		return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
 	}
 	
 	public CategoryDTO findById(Long id) {
-		Optional<Category> obj = repository.findById(id);
+		Optional<Category> obj = repository.findByIdWithProducts(id);
 		Category category = obj.orElseThrow(() -> new ResourceNotFoundException(id));
 		return new CategoryDTO(category);
 	}
 	
+	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	public CategoryDTO insert(CategoryDTO categoryDto) {
 		Category category = new Category(categoryDto);
 		return new CategoryDTO(repository.save(category));

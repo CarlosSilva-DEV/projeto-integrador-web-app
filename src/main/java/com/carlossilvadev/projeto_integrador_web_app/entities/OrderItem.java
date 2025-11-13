@@ -18,6 +18,7 @@ public class OrderItem implements Serializable {
 	private OrderItemPK id = new OrderItemPK();
 	private Integer quantidade;
 	private double preco;
+	private double subtotal;
 	
 	// Construtores
 	public OrderItem() {
@@ -62,7 +63,8 @@ public class OrderItem implements Serializable {
 	
 	// calculo subtotal
 	public double getSubtotal() {
-		return this.getPreco() * this.getQuantidade();
+		this.subtotal = this.getPreco() * this.getQuantidade();
+		return this.subtotal;
 	}
 	
 	// hashcode e equals
