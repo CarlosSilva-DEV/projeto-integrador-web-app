@@ -53,6 +53,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/products/**").permitAll()
 				.requestMatchers("/orders/**").hasRole("ADMIN")
 				.requestMatchers("/categories/**").permitAll()
+				.requestMatchers("/payments/**").hasRole("ADMIN")
 				.requestMatchers("/h2-console/**").permitAll()
 				.anyRequest().authenticated());
 		

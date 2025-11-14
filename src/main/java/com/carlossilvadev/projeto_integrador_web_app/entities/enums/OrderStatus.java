@@ -2,6 +2,7 @@ package com.carlossilvadev.projeto_integrador_web_app.entities.enums;
 
 public enum OrderStatus {
 	AGUARDANDO_PAGAMENTO("AGUARDANDO_PAGAMENTO"),
+	PROCESSANDO_PAGAMENTO("PROCESSANDO_PAGAMENTO"),
 	PAGO("PAGO"),
 	CANCELADO("CANCELADO");
 	

@@ -17,6 +17,8 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.RegisterDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.AuthService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -28,14 +30,14 @@ public class AuthResource {
 	
 	// endpoint de login
 	@PostMapping(value = "/login")
-	public ResponseEntity<AccessDTO> login(@RequestBody AuthenticationDTO authDto) {
+	public ResponseEntity<AccessDTO> login(@Valid @RequestBody AuthenticationDTO authDto) {
 		AccessDTO token = authService.login(authDto);
 		return ResponseEntity.ok(token);
 	}
 	
 	// endpoint de registro de novo user
 	@PostMapping(value = "/register")
-	public ResponseEntity<?> register(@RequestBody RegisterDTO registerDto) {
+	public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDto) {
 		UserDTO newUser = authService.register(registerDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri();
 		return ResponseEntity.created(uri).body(newUser);

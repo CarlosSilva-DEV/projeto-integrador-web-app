@@ -16,6 +16,8 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.UserNotAuthenticatedException;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.UserNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -32,16 +34,23 @@ public class UserService {
 	// método auxiliar
 	public User getCurrentUserEntity() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated()) {
-			throw new RuntimeException("Usuário não autenticado");
+		
+		if (authentication == null) {
+			throw new UserNotAuthenticatedException("Nenhuma autenticação encontrada no contexto de segurança");
+		}
+		
+		if (!authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+			throw new UserNotAuthenticatedException("Usuário não autenticado");
 		}
 		
 		String username = authentication.getName();
-        return repository.findByLogin(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + username));
+		
+        return repository.findByLogin(username)
+        		.orElseThrow(() -> new UserNotFoundException("Usuário não encontrado: " + username));
 	}
 	
 	// método para retornar usuário atual logado
-	public UserDTO getCurrentUser() {
+	public UserDTO getCurrentUserDTO() {
 		User currentUser = getCurrentUserEntity();
 		return new UserDTO(currentUser);
 	}

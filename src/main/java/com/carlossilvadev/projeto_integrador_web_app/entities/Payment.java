@@ -3,10 +3,13 @@ package com.carlossilvadev.projeto_integrador_web_app.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.carlossilvadev.projeto_integrador_web_app.entities.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,14 +35,19 @@ public class Payment implements Serializable {
 	@MapsId
 	private Order order;
 	
+	@Enumerated(EnumType.STRING)
+	private PaymentStatus status;
+	
 	// Construtores
 	public Payment() {
+		this.status = PaymentStatus.PENDENTE;
 	}
 
 	public Payment(Order order) {
-		this.id = null;
+		this();
 		this.moment = Instant.now();
 		this.order = order;
+		this.status = PaymentStatus.PENDENTE;
 	}
 	
 	// getters e setters
@@ -61,10 +69,20 @@ public class Payment implements Serializable {
 		this.order = order;
 	}
 	
+	public PaymentStatus getStatus() {
+		return status;
+	}
+	public void setStatus(PaymentStatus status) {
+		this.status = status;
+	}
+	
 	@PrePersist
 	public void prePersist() {
 		if (this.moment == null) {
 			this.moment = Instant.now();
+		}
+		if (this.status == null) {
+			this.status = PaymentStatus.PENDENTE;
 		}
 	}
 	

@@ -20,6 +20,7 @@ public class OrderDTO {
 	private OrderStatus orderStatus;
 	private User client;
 	private Set<OrderItemDTO> items = new HashSet<>();
+	private double total;
 	private Payment payment;
 	
 	// Construtores
@@ -28,6 +29,7 @@ public class OrderDTO {
 		this.moment = order.getMoment();
 		this.orderStatus = order.getOrderStatus();
 		this.client = order.getClient();
+		this.total = order.getTotal();
 		this.payment = order.getPayment();
 		
 		if (order.getItems() != null) {
@@ -69,6 +71,10 @@ public class OrderDTO {
 	}
 	public void setItems(Set<OrderItemDTO> items) {
 		this.items = items;
+	}
+	
+	public double getTotal() {
+		return total;
 	}
 	
 	public Payment getPayment() {

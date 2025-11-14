@@ -4,16 +4,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
+import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderItemRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
-import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +25,9 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
+	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	public List<ProductDTO> findAll() {
 		List<Product> products = productRepository.findAllWithCategories();
@@ -34,7 +36,7 @@ public class ProductService {
 	
 	public ProductDTO findById(Long id) {
 		Optional<Product> obj = productRepository.findByIdWithCategories(id);
-		Product product = obj.orElseThrow(() -> new ResourceNotFoundException(id));
+		Product product = obj.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
 		return new ProductDTO(product);
 	}
 	
@@ -94,13 +96,17 @@ public class ProductService {
 	}
 	
 	public void delete(Long id) {
-		try {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
+		if (isProductInUse(product)) {
+			throw new BusinessException("Não é possível excluir o produto, pois ele está vinculado a pedidos existentes");
+		} else {
 			productRepository.deleteById(id);
-		} catch (EmptyResultDataAccessException exception) {
-			throw new ResourceNotFoundException(id);
-		} catch (DataIntegrityViolationException exception) {
-			throw new DatabaseException(exception.getMessage());
 		}
+	}
+	
+	private boolean isProductInUse(Product product) {
+		return orderItemRepository.existsByProductId(product.getId());
 	}
 	
 	public ProductDTO update(Long id, ProductDTO productDto) {
@@ -111,7 +117,7 @@ public class ProductService {
 			Product updatedProduct = productRepository.save(entity);
 			return new ProductDTO(updatedProduct);
 		} catch (EntityNotFoundException exception) {
-			throw new ResourceNotFoundException(id);
+			throw new ResourceNotFoundException("Usuário não encontrado" + id);
 		}
 	}
 	
@@ -124,7 +130,7 @@ public class ProductService {
 		if (obj.getCategories() != null) {
 			for (Category category : obj.getCategories()) {
 				Category managedCategory = categoryRepository.findById(category.getId())
-						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada" + category.getId()));
 				obj.getCategories().add(managedCategory);
 			}
 		}

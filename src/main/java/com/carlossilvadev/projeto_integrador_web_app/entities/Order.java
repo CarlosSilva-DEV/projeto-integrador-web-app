@@ -48,6 +48,8 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
 	
+	private double total;
+	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // obrigatório em relacionamento 1:1
 	private Payment payment;
 	
@@ -111,8 +113,8 @@ public class Order implements Serializable {
 		for (OrderItem i : items) {
 			soma += i.getSubtotal();
 		}
-		
-		return soma;
+		this.total = soma;
+		return total;
 	}
 	
 	@PrePersist

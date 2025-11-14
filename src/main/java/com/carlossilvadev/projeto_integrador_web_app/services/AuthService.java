@@ -43,19 +43,19 @@ public class AuthService {
 		}
 		
 		try {
-		// cria mecanismo de credencial para o Spring
-		UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
-		
-		// prepara mecanismo para autenticação
-		Authentication authentication = authenticationManager.authenticate(userAuth);
-		
-		// busca usuário autenticado
-		UserDetailsImpl userAuthenticate = (UserDetailsImpl) authentication.getPrincipal();
-		
-		String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
-		
-		return new AccessDTO(token);
-		
+			// cria mecanismo de credencial para o Spring
+			UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
+			
+			// prepara mecanismo para autenticação
+			Authentication authentication = authenticationManager.authenticate(userAuth);
+			
+			// busca usuário autenticado
+			UserDetailsImpl userAuthenticate = (UserDetailsImpl) authentication.getPrincipal();
+			
+			String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
+			
+			return new AccessDTO(token);
+			
 		} catch (BadCredentialsException exception) {
 			throw new InvalidCredentialsException("Senha incorreta");
 		}
@@ -81,7 +81,7 @@ public class AuthService {
 		user.setTelefone(registerDto.getTelefone());
 		user.setSenha(passwordEncoder.encode(registerDto.getSenha()));
 		user.setRole(UserRole.ROLE_USER);
-		
+			
 		return new UserDTO(userRepository.save(user));
 	}
 }

@@ -1,4 +1,5 @@
 package com.carlossilvadev.projeto_integrador_web_app.resources;
+
 import java.net.URI;
 import java.util.List;
 
@@ -17,9 +18,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.OrderCreateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.PaymentDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
+import com.carlossilvadev.projeto_integrador_web_app.services.PaymentService;
 import com.carlossilvadev.projeto_integrador_web_app.services.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -31,17 +36,20 @@ public class UserResource {
 	@Autowired
 	private OrderService orderService;
 	
+	@Autowired
+	private PaymentService paymentService;
+	
 	//============================ ENDPOINTS USUÁRIOS ==========================================================================
 	
 	// método que retorna usuário atual logado (users & admins)
 	@GetMapping("/profile")
 	public ResponseEntity<UserDTO> getCurrentUser() {
-		UserDTO userDto = userService.getCurrentUser();
+		UserDTO userDto = userService.getCurrentUserDTO();
 		return ResponseEntity.ok().body(userDto);
 	}
 	
 	@PutMapping("/profile")
-	public ResponseEntity<UserDTO> updateCurrentUser(@RequestBody UserDTO userDto) {
+	public ResponseEntity<UserDTO> updateCurrentUser(@Valid @RequestBody UserDTO userDto) {
 		UserDTO updatedUser = userService.updateCurrentUser(userDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
@@ -52,7 +60,8 @@ public class UserResource {
 		return ResponseEntity.noContent().build();
 	}
 	
-	// requisições relacionadas ao pedido do usuário
+	//////////////////////////////////// requisições relacionadas ao pedido do usuário
+	
 	@GetMapping("/profile/orders")
 	public ResponseEntity<List<OrderDTO>> findOrdersByCurrentUser() {
 		List<OrderDTO> orders = orderService.findOrdersByCurrentUser();
@@ -78,6 +87,20 @@ public class UserResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	//////////////////////////////////// requisições relacionadas ao pagamento dos pedidos do usuário
+	
+	@PostMapping("/profile/orders/{id}/payment")
+	public ResponseEntity<PaymentDTO> createOrderPayment(@PathVariable("id") Long orderId) {
+		PaymentDTO payment = paymentService.createPayment(orderId);
+		return ResponseEntity.ok(payment);
+	}
+	
+	@PostMapping("/profile/orders/{id}/payment/confirm")
+	public ResponseEntity<OrderDTO> confirmOrderPayment(@PathVariable("id") Long orderId) {
+		OrderDTO order = paymentService.confirmPayment(orderId);
+		return ResponseEntity.ok(order);
+	}
+	
 	
 	// ============================ ENDPOINTS ADMINISTRATIVOS ==================================================================
 	
@@ -100,7 +123,7 @@ public class UserResource {
 	// inserir user manualmente (admin-only)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping
-	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO obj) {
+	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserDTO obj) {
 		UserDTO userDto = userService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(userDto);
@@ -117,7 +140,7 @@ public class UserResource {
 	// atualizar user (admin-only)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO userDto) {
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO userDto) {
 		UserDTO updatedUser = userService.update(id, userDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
