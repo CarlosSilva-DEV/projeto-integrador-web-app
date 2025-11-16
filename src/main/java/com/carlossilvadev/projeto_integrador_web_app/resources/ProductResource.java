@@ -19,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/products")
 public class ProductResource {
@@ -60,7 +62,7 @@ public class ProductResource {
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
-	public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO obj) {
+	public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO obj) {
 		ProductDTO productDto = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(productDto);
@@ -75,7 +77,7 @@ public class ProductResource {
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO productDto) {
+	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO productDto) {
 		ProductDTO updatedProduct = service.update(id, productDto);
 		return ResponseEntity.ok().body(updatedProduct);
 	}

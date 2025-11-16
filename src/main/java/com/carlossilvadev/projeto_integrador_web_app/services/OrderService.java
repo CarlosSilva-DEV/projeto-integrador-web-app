@@ -13,6 +13,7 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
+import com.carlossilvadev.projeto_integrador_web_app.entities.enums.PaymentStatus;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderItemRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
@@ -72,7 +73,7 @@ public class OrderService {
 		
 		for (OrderItemDTO itemDto : orderCreateDto.getItems()) {
 			Product product = productRepository.findById(itemDto.getProductId())
-					.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + itemDto.getProductId()));
+					.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + itemDto.getProductId()));
 			
 			OrderItem orderItem = new OrderItem(savedOrder, product, itemDto.getQuantidade(), product.getPreco());
 			order.getItems().add(orderItem);
@@ -81,22 +82,29 @@ public class OrderService {
 		}
 		
 		Order orderWithItems = orderRepository.findByIdWithItems(savedOrder.getId())
-				.orElseThrow(() -> new ResourceNotFoundException(savedOrder.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + savedOrder.getId()));
 		
 		return new OrderDTO(orderWithItems);
 	}
 	
-	public void cancelOrder(Long id) {
+	public OrderDTO cancelOrder(Long id) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(id, currentUser)
-				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + id));
 		
 		if (order.getOrderStatus() == OrderStatus.PAGO) {
 			throw new BusinessException("Não é possivel cancelar um pedido já pago");
 		}
 		
+		if (order.getPayment() != null) {
+			order.getPayment().setStatus(PaymentStatus.CANCELADO);
+		}
+		
 		order.setOrderStatus(OrderStatus.CANCELADO);
+		
 		orderRepository.save(order);
+		
+		return new OrderDTO(order);
 	}
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
@@ -107,7 +115,7 @@ public class OrderService {
 	
 	public OrderDTO findById(Long id) {
 		Order order = orderRepository.findByIdWithItems(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + id));
 		return new OrderDTO(order);
 	}
 }

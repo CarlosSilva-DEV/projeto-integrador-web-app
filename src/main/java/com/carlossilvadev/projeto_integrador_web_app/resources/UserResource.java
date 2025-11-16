@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +20,7 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.OrderCreateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.PaymentDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.UserUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
 import com.carlossilvadev.projeto_integrador_web_app.services.PaymentService;
 import com.carlossilvadev.projeto_integrador_web_app.services.UserService;
@@ -48,9 +49,9 @@ public class UserResource {
 		return ResponseEntity.ok().body(userDto);
 	}
 	
-	@PutMapping("/profile")
-	public ResponseEntity<UserDTO> updateCurrentUser(@Valid @RequestBody UserDTO userDto) {
-		UserDTO updatedUser = userService.updateCurrentUser(userDto);
+	@PatchMapping("/profile")
+	public ResponseEntity<UserDTO> updateCurrentUser(@Valid @RequestBody UserUpdateDTO userUpdateDto) {
+		UserDTO updatedUser = userService.updateCurrentUser(userUpdateDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 	
@@ -83,8 +84,8 @@ public class UserResource {
 	
 	@PostMapping("/profile/orders/{id}/cancel")
 	public ResponseEntity<OrderDTO> cancelOrder(@PathVariable Long id) {
-		orderService.cancelOrder(id);
-		return ResponseEntity.noContent().build();
+		OrderDTO orderDto = orderService.cancelOrder(id);
+		return ResponseEntity.ok().body(orderDto);
 	}
 	
 	//////////////////////////////////// requisições relacionadas ao pagamento dos pedidos do usuário
@@ -139,9 +140,9 @@ public class UserResource {
 	
 	// atualizar user (admin-only)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO userDto) {
-		UserDTO updatedUser = userService.update(id, userDto);
+	@PatchMapping(value = "/{id}")
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userUpdateDto) {
+		UserDTO updatedUser = userService.update(id, userUpdateDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 }

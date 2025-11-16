@@ -3,7 +3,8 @@ package com.carlossilvadev.projeto_integrador_web_app.entities.enums;
 public enum PaymentStatus {
 	PENDENTE("PENDENTE"),
 	PROCESSANDO("PROCESSANDO"),
-	PAGO("PAGO");
+	PAGO("PAGO"),
+	CANCELADO("CANCELADO");
 	
 	private String status;
 	

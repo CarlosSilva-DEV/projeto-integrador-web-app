@@ -35,7 +35,7 @@ public class PaymentService {
 	public PaymentDTO createPayment(Long orderId) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
-				.orElseThrow(() -> new ResourceNotFoundException(orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + orderId));
 		
 		Optional<Payment> existingPayment = paymentRepository.findByOrderId(orderId);
 		
@@ -61,7 +61,7 @@ public class PaymentService {
 	public OrderDTO confirmPayment(Long orderId) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
-				.orElseThrow(() -> new ResourceNotFoundException(orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + orderId));
 		
 		order.setOrderStatus(OrderStatus.PAGO);
 		if (order.getPayment() != null) {
@@ -75,24 +75,27 @@ public class PaymentService {
 	
 	// métodos auxiliares (gerar códigos Pix e cálculo CRC16)
 	private String generatePixQrCode(Order order) {
-		String payload = String.format(
-				"00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-4266141740005204000053039865406%.2f5802BR5901%6001%62070503***6304",
-				order.getTotal(),
-				"MINHA_LOJA"
-				);
+		StringBuilder payload = new StringBuilder();
+		payload.append("00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000");
+		payload.append("5204000053039865406");
+		payload.append(String.format("%.2f", order.getTotal()));
+		payload.append("5802BR5901%6001%62070503***6304");
+		payload.append("MINHA_LOJA");
 		
-		String crc = calculateCRC16(payload);
-		return payload + crc;
+		String crc = calculateCRC16(payload.toString());
+		return payload.toString() + crc;
 	}
 	
 	private String generatePixCopiaCola(Order order) {
-		String payload = String.format(
-				"00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-4266141740005204000053039865406%.2f5802BR5901%6001%62070503***6304",
-				order.getTotal(), "MINHA_LOJA"
-				);
+		StringBuilder payload = new StringBuilder();
+		payload.append("00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000");
+		payload.append("5204000053039865406");
+		payload.append(String.format("%.2f", order.getTotal()));
+		payload.append("5802BR5901%6001%62070503***6304");
+		payload.append("MINHA_LOJA");
 		
-		String crc = calculateCRC16(payload);
-		return payload + crc;
+		String crc = calculateCRC16(payload.toString());
+		return payload.toString() + crc;
 	}
 	
 	private String calculateCRC16(String payload) {
@@ -127,18 +130,18 @@ public class PaymentService {
 	
 	public PaymentDTO findById(Long id) {
 		Payment payment = paymentRepository.findByIdWithOrdersAndClients(id)
-				.orElseThrow(() -> new ResourceNotFoundException(id));
+				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado: ID " + id));
 		return new PaymentDTO(payment);
 	}
 	
 	public Payment findPaymentByOrderId(Long orderId) {
 		return paymentRepository.findByOrderId(orderId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado para o pedido: " + orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado para o pedido: ID " + orderId));
 	}
 	
 	public PaymentDTO updatedPaymentStatus(Long paymentId, PaymentStatus newStatus) {
 		Payment payment = paymentRepository.findById(paymentId)
-				.orElseThrow(() -> new ResourceNotFoundException(paymentId));
+				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado: ID " + paymentId));
 		
 		payment.setStatus(newStatus);
 		Payment updatedPayment = paymentRepository.save(payment);

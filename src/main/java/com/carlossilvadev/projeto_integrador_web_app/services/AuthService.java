@@ -65,12 +65,12 @@ public class AuthService {
 	public UserDTO register(RegisterDTO registerDto) {
 		if (registerDto.getLogin() != null && !registerDto.getLogin().isEmpty() && 
 				userRepository.findByLogin(registerDto.getLogin()).isPresent()) {
-			throw new BusinessException("Login já está em uso: " + registerDto.getLogin());
+			throw new BusinessException("Login já está em uso");
 		}
 		
 		if (registerDto.getEmail() != null && !registerDto.getEmail().isEmpty() && 
 				userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
-			throw new BusinessException("Email já está em uso: " + registerDto.getEmail());
+			throw new BusinessException("Email já está em uso");
 			
 		}
 		

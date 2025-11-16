@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.carlossilvadev.projeto_integrador_web_app.dto.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/categories")
 public class CategoryResource {
@@ -41,7 +43,7 @@ public class CategoryResource {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping
-	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO obj) {
+	public ResponseEntity<CategoryDTO> insert(@Valid @RequestBody CategoryDTO obj) {
 		CategoryDTO categoryDto = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoryDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(categoryDto);
@@ -56,7 +58,7 @@ public class CategoryResource {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO categoryDto) {
+	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDto) {
 		CategoryDTO updatedCategory = service.update(id, categoryDto);
 		return ResponseEntity.ok().body(updatedCategory);
 	}

@@ -33,4 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 	List<Order> findByStatusIn(@Param("statusList") List<OrderStatus> statusList);
 	
 	List<Order> findByOrderStatus(OrderStatus status);
+	
+	@Query("SELECT COUNT(o) > 0 FROM Order o WHERE o.client = :client")
+	boolean existsByClient(@Param("client") User client);
 }

@@ -1,6 +1,5 @@
 package com.carlossilvadev.projeto_integrador_web_app.services;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductReposit
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductService {
@@ -35,8 +33,8 @@ public class ProductService {
 	}
 	
 	public ProductDTO findById(Long id) {
-		Optional<Product> obj = productRepository.findByIdWithCategories(id);
-		Product product = obj.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
+		Product product = productRepository.findByIdWithCategories(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + id));
 		return new ProductDTO(product);
 	}
 	
@@ -98,11 +96,12 @@ public class ProductService {
 	public void delete(Long id) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
+		
 		if (isProductInUse(product)) {
-			throw new BusinessException("Não é possível excluir o produto, pois ele está vinculado a pedidos existentes");
-		} else {
-			productRepository.deleteById(id);
+			throw new BusinessException("Não é possível excluir um Produto vinculado a Pedidos existentes");
 		}
+		
+		productRepository.deleteById(id);
 	}
 	
 	private boolean isProductInUse(Product product) {
@@ -110,15 +109,12 @@ public class ProductService {
 	}
 	
 	public ProductDTO update(Long id, ProductDTO productDto) {
-		try {
-			Product entity = productRepository.getReferenceById(id);
-			updateData(entity, productDto);
-			
-			Product updatedProduct = productRepository.save(entity);
-			return new ProductDTO(updatedProduct);
-		} catch (EntityNotFoundException exception) {
-			throw new ResourceNotFoundException("Usuário não encontrado" + id);
-		}
+		Product entity = productRepository.findByIdWithCategories(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + id));
+		updateData(entity, productDto);
+
+		Product updatedProduct = productRepository.save(entity);
+		return new ProductDTO(updatedProduct);
 	}
 	
 	private void updateData(Product entity, ProductDTO obj) {

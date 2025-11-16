@@ -88,4 +88,21 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    
+    // getters
+	public Long getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
 }

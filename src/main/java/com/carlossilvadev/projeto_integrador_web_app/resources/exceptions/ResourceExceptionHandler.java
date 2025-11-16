@@ -1,6 +1,8 @@
 package com.carlossilvadev.projeto_integrador_web_app.resources.exceptions;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
-import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.DatabaseException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.InvalidCredentialsException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.UserNotAuthenticatedException;
@@ -24,14 +25,6 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
 		String error = "Resource not found";
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
-		return ResponseEntity.status(status).body(err);
-	}
-	
-	@ExceptionHandler(DatabaseException.class)
-	public ResponseEntity<StandardError> database(DatabaseException exception, HttpServletRequest request) {
-		String error = "Database error";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
@@ -53,10 +46,19 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-		String error = "Invalid input data";
+	public ResponseEntity<StandardError> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {		
+		List<String> errors = exception.getBindingResult()
+				.getFieldErrors()
+				.stream()
+				.map(error -> error.getField() + ": " + error.getDefaultMessage())
+				.collect(Collectors.toList());
+		
+		String errorMessage = String.join("; ", errors);
+		
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, exception.getMessage(), request.getRequestURI());
+
+		StandardError err = new StandardError(Instant.now(), status.value(), "Invalid input data", errorMessage, request.getRequestURI());
+		
 		return ResponseEntity.status(status).body(err);
 	}
 	

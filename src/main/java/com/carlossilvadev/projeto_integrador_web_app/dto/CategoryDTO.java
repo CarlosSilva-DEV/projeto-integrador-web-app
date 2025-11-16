@@ -8,9 +8,16 @@ import org.springframework.beans.BeanUtils;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CategoryDTO {
 	private Long id;
+	
+	@NotBlank(message = "Nome é obrigatório")
+	@Size(min = 2, max = 20, message = "Nome deve ter entre 2 a 20 caracteres")
 	private String nome;
+	
 	private Set<Product> products = new HashSet<>();
 	
 	// Construtores

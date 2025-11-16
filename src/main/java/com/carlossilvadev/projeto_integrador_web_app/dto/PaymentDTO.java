@@ -12,7 +12,7 @@ public class PaymentDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 	
-	private OrderDTO orderDto;
+	private OrderDTO order;
 	private PaymentStatus status;
 	private String pixQrCode;
 	private String pixCopiaCola;
@@ -21,14 +21,14 @@ public class PaymentDTO {
 	public PaymentDTO(Payment payment) {
 		this.id = payment.getId();
 		this.moment = payment.getMoment();
-		this.orderDto = new OrderDTO(payment.getOrder());
+		this.order = new OrderDTO(payment.getOrder());
 		this.status = PaymentStatus.PENDENTE;
 	}
 	
 	public PaymentDTO(Payment payment, String pixQrCode, String pixCopiaCola) {
 		this.id = payment.getId();
 		this.moment = payment.getMoment();
-		this.orderDto = new OrderDTO(payment.getOrder());
+		this.order = new OrderDTO(payment.getOrder());
 		this.status = PaymentStatus.PENDENTE;
 		this.pixQrCode = pixQrCode;
 		this.pixCopiaCola = pixCopiaCola;
@@ -52,11 +52,11 @@ public class PaymentDTO {
 		this.moment = moment;
 	}
 
-	public OrderDTO getOrderDto() {
-		return orderDto;
+	public OrderDTO getOrder() {
+		return order;
 	}
-	public void setOrderDto(OrderDTO orderDto) {
-		this.orderDto = orderDto;
+	public void setOrder(OrderDTO order) {
+		this.order = order;
 	}
 
 	public PaymentStatus getStatus() {
