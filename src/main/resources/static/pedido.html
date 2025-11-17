@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Pedido - ModernStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">	
+    <link rel="stylesheet" href="css/pedido.css">	
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <a href="home-autenticado.html" class="logo">Modern<span>Store</span></a>
+                <div class="nav-buttons">
+                    <div class="user-menu">
+                        <div class="user-avatar">MJ</div>
+                        <span>Meu Perfil</span>
+                        <div class="user-dropdown">
+                            <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
+                            <a href="#"><i class="fas fa-shopping-bag"></i> Meus Pedidos</a>
+                            <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
+                            <a href="#"><i class="fas fa-cog"></i> Configurações</a>
+                            <a href="home-nao-autenticado.html"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                        </div>
+                    </div>
+                    <button class="btn-icon">
+                        <i class="fas fa-shopping-cart"></i> Carrinho
+                        <span class="cart-count">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="home-autenticado.html">Home</a> > 
+            <a href="perfil.html">Meu Perfil</a> > 
+            <span>Novo Pedido</span>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="new-order-container">
+            <!-- Seção de Produtos -->
+            <section class="products-section">
+                <div class="section-header">
+                    <h2 class="section-title">Selecionar Produtos</h2>
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="Buscar produtos..." id="productSearch">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+                    <!-- Produtos serão carregados via JavaScript -->
+                </div>
+            </section>
+
+            <!-- Resumo do Pedido -->
+            <aside class="order-summary">
+                <h3 class="summary-title">Resumo do Pedido</h3>
+                
+                <div class="order-items" id="orderItems">
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Seu pedido está vazio</p>
+                        <p>Adicione produtos para continuar</p>
+                    </div>
+                </div>
+
+                <div class="summary-totals" id="orderTotals" style="display: none;">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Frete:</span>
+                        <span id="shipping">R$ 0,00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Desconto:</span>
+                        <span id="discount">- R$ 0,00</span>
+                    </div>
+                    <div class="total-line final">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <button class="finish-order-btn" id="finishOrderBtn" disabled>
+                    <i class="fas fa-check-circle"></i> Finalizar Pedido
+                </button>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="modal-title">Pedido Criado com Sucesso!</h3>
+            <p class="modal-message">
+                Seu pedido foi criado com status <strong>AGUARDANDO PAGAMENTO</strong>. 
+                Você pode realizar o pagamento na área de pedidos do seu perfil.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="continueShoppingBtn">Continuar Comprando</button>
+                <button class="btn btn-primary" id="goToOrdersBtn">Ir para Meus Pedidos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ModernStore</h3>
+                    <p>Sua loja online de confiança com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Atendimento</h3>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Trocas e Devoluções</a></li>
+                        <li><a href="#">Formas de Pagamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Minha Conta</h3>
+                    <ul>
+                        <li><a href="perfil.html">Meus Pedidos</a></li>
+                        <li><a href="#">Meus Favoritos</a></li>
+                        <li><a href="perfil.html">Meu Perfil</a></li>
+                        <li><a href="#">Histórico de Compras</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 ModernStore. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"> </script>
+    <script src="js/pedido.js"> </script>
+</body>
+</html>

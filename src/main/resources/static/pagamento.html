@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - ModernStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/pagamento.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <a href="home-autenticado.html" class="logo">Modern<span>Store</span></a>
+                <div class="nav-buttons">
+                    <div class="user-menu">
+                        <div class="user-avatar">MJ</div>
+                        <span>Meu Perfil</span>
+                        <div class="user-dropdown">
+                            <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
+                            <a href="#"><i class="fas fa-shopping-bag"></i> Meus Pedidos</a>
+                            <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
+                            <a href="#"><i class="fas fa-cog"></i> Configurações</a>
+                            <a href="home-nao-autenticado.html"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                        </div>
+                    </div>
+                    <button class="btn-icon">
+                        <i class="fas fa-shopping-cart"></i> Carrinho
+                        <span class="cart-count">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="home-autenticado.html">Home</a> > 
+            <a href="perfil.html">Meu Perfil</a> > 
+            <a href="perfil.html">Meus Pedidos</a> > 
+            <span>Pagamento</span>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="payment-container">
+            <!-- Resumo do Pedido -->
+            <aside class="order-summary">
+                <h3 class="summary-title">Resumo do Pedido</h3>
+                
+                <div class="order-info">
+                    <div class="order-id">Pedido #ORD-2023-015</div>
+                    <div class="order-date">Realizado em 10/12/2023</div>
+                </div>
+
+                <div class="order-items">
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Smartphone Galaxy Pro</div>
+                            <div class="item-details">
+                                <span>Qtd: 1</span>
+                            </div>
+                        </div>
+                        <div class="item-price">R$ 1.299,99</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Fones de Ouvido Sem Fio</div>
+                            <div class="item-details">
+                                <span>Qtd: 1</span>
+                            </div>
+                        </div>
+                        <div class="item-price">R$ 299,99</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Capa Protetora</div>
+                            <div class="item-details">
+                                <span>Qtd: 1</span>
+                            </div>
+                        </div>
+                        <div class="item-price">R$ 49,99</div>
+                    </div>
+                </div>
+
+                <div class="summary-totals">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span>R$ 1.649,97</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Frete:</span>
+                        <span>R$ 0,00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Desconto:</span>
+                        <span>- R$ 164,99</span>
+                    </div>
+                    <div class="total-line final">
+                        <span>Total:</span>
+                        <span>R$ 1.484,98</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área de Pagamento -->
+            <main class="payment-section">
+                <!-- Cabeçalho -->
+                <div class="payment-header">
+                    <h2 class="payment-title">Finalizar Pagamento</h2>
+                    <p class="payment-subtitle">Complete o pagamento para finalizar seu pedido</p>
+                    <div class="payment-status">
+                        <i class="fas fa-clock"></i>
+                        <span>AGUARDANDO PAGAMENTO</span>
+                    </div>
+                </div>
+
+                <!-- Métodos de Pagamento -->
+                <div class="payment-methods">
+                    <div class="methods-tabs">
+                        <button class="method-tab active" data-method="pix">PIX</button>
+                        <button class="method-tab" data-method="credit">Cartão de Crédito</button>
+                        <button class="method-tab" data-method="boleto">Boleto</button>
+                    </div>
+
+                    <!-- Método PIX -->
+                    <div class="method-content active" id="pix-method">
+                        <div class="pix-method">
+                            <div class="pix-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <h3 class="pix-title">Pagamento via PIX</h3>
+                            <p class="pix-description">
+                                Pague instantaneamente usando o PIX. Escaneie o QR Code ou copie o código para pagar pelo app do seu banco.
+                            </p>
+                            
+                            <div class="qr-code-placeholder">
+                                QR Code PIX<br>(Será gerado dinamicamente)
+                            </div>
+
+                            <div class="pix-instructions">
+                                <h4>Como pagar:</h4>
+                                <ol>
+                                    <li>Abra o app do seu banco</li>
+                                    <li>Selecione a opção PIX</li>
+                                    <li>Escaneie o QR Code ou cole o código</li>
+                                    <li>Confirme o pagamento</li>
+                                </ol>
+                                <p><strong>O pedido será confirmado automaticamente após o pagamento.</strong></p>
+                            </div>
+
+                            <div class="copy-pix-code">
+                                <div class="pix-code" id="pixCode">00020126580014br.gov.bcb.pix0136aae6e0d8-8b5a-4b5e-9c3d-2b1a9f7e5c2d52040000530398654061,484.985802BR5913MODERN STORE6008SAO PAULO62290525MP230912023121015484.986304BB5A</div>
+                                <button class="copy-btn" id="copyPixBtn">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Método Cartão de Crédito -->
+                    <div class="method-content" id="credit-method">
+                        <div class="credit-card-form">
+                            <div class="card-preview">
+                                <div class="card-chip"></div>
+                                <div class="card-number">**** **** **** 1234</div>
+                                <div class="card-details">
+                                    <div class="card-name">MARIA SILVA</div>
+                                    <div class="card-expiry">12/25</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardNumber">Número do Cartão</label>
+                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardName">Nome no Cartão</label>
+                                <input type="text" id="cardName" class="form-control" placeholder="MARIA SILVA">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardExpiry">Validade</label>
+                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardCvv">CVV</label>
+                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="installments">Parcelas</label>
+                                <select id="installments" class="form-control">
+                                    <option value="1">1x de R$ 1.484,98 sem juros</option>
+                                    <option value="2">2x de R$ 742,49 sem juros</option>
+                                    <option value="3">3x de R$ 494,99 sem juros</option>
+                                    <option value="4">4x de R$ 371,25 sem juros</option>
+                                    <option value="5">5x de R$ 297,00 sem juros</option>
+                                    <option value="6">6x de R$ 247,50 sem juros</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Método Boleto -->
+                    <div class="method-content" id="boleto-method">
+                        <div class="boleto-method">
+                            <div class="boleto-icon">
+                                <i class="fas fa-barcode"></i>
+                            </div>
+                            <h3 class="pix-title">Pagamento via Boleto</h3>
+                            <p class="boleto-description">
+                                Gere um boleto bancário e pague em qualquer agência bancária, internet banking ou aplicativo.
+                            </p>
+
+                            <div class="boleto-instructions">
+                                <h4>Instruções:</h4>
+                                <ul>
+                                    <li>O boleto será gerado após a confirmação do pedido</li>
+                                    <li>Vencimento em 3 dias úteis</li>
+                                    <li>Enviaremos por e-mail</li>
+                                    <li>O pedido será processado após a confirmação do pagamento</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações de Pagamento -->
+                <div class="payment-actions">
+                    <div class="security-info">
+                        <i class="fas fa-lock"></i>
+                        <span>Pagamento 100% seguro e criptografado</span>
+                    </div>
+                    <button class="pay-now-btn" id="payNowBtn">
+                        <i class="fas fa-lock"></i>
+                        Confirmar Pagamento
+                    </button>
+                    <a href="perfil.html" class="cancel-payment">
+                        <i class="fas fa-times"></i>
+                        Cancelar Pagamento
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ModernStore</h3>
+                    <p>Sua loja online de confiança com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Atendimento</h3>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Trocas e Devoluções</a></li>
+                        <li><a href="#">Formas de Pagamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Minha Conta</h3>
+                    <ul>
+                        <li><a href="perfil.html">Meus Pedidos</a></li>
+                        <li><a href="#">Meus Favoritos</a></li>
+                        <li><a href="perfil.html">Meu Perfil</a></li>
+                        <li><a href="#">Histórico de Compras</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 ModernStore. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+    <script src="js/auth.js"></script>
+    <script src="js/pagamento.js"></script>
+</body>
+</html>

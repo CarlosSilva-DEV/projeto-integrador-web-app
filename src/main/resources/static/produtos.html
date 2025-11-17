@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - ModernStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/produtos.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Modern<span>Store</span></a>
+                <div class="nav-buttons" id="navButtons">
+                    <!-- Conteúdo será carregado via JavaScript baseado no status de login -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+	    <div class="container">
+	        <div class="breadcrumb" id="breadcrumb">
+	            <a href="index.html">Home</a> > 
+	            <span>Carregando...</span>
+	        </div>
+	    </div>
+
+		<div class="container">
+		       <div class="product-detail-container">
+		           <!-- Galeria de Imagens -->
+		           <div class="product-gallery">
+		               <div class="main-image">
+		                   <img src="" alt="Imagem do produto" id="mainImage">
+		               </div>
+		               <div class="image-thumbnails" id="imageThumbnails">
+		                   <!-- Thumbnails serão carregadas dinamicamente -->
+		               </div>
+		           </div>
+
+            <!-- Informações do Produto -->
+			<div class="product-info">
+			              <div class="product-category" id="productCategory">Carregando...</div>
+			              <h1 class="product-title" id="productTitle">Carregando...</h1>
+			              
+			              <div class="product-rating">
+			                  <div class="stars" id="productStars">
+			                      <!-- Estrelas serão geradas dinamicamente -->
+			                  </div>
+			                  <div class="rating-count" id="ratingCount">(0 avaliações)</div>
+			              </div>
+
+			              <div class="product-price">
+			                  <div class="current-price" id="currentPrice">R$ 0,00</div>
+			                  <!-- Remover preço original se não houver desconto -->
+			              </div>
+
+			              <div class="product-description">
+			                  <p id="productDescription">Carregando descrição...</p>
+			              </div>
+
+			              <div class="product-specs" id="productSpecs" style="display: none;">
+			                  <div class="specs-title">Informações do Produto:</div>
+			                  <ul class="specs-list" id="specsList">
+			                      <!-- Especificações serão carregadas dinamicamente -->
+			                  </ul>
+			              </div>
+
+			              <div class="product-actions">
+			                  <div class="quantity-selector">
+			                      <div class="quantity-label">Quantidade:</div>
+			                      <div class="quantity-controls">
+			                          <button class="quantity-btn" id="decreaseQty">-</button>
+			                          <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" max="10">
+			                          <button class="quantity-btn" id="increaseQty">+</button>
+			                      </div>
+			                  </div>
+
+			                  <div class="action-buttons">
+			                      <button class="btn-add-cart" id="addToCartBtn">
+			                          <i class="fas fa-shopping-cart"></i>
+			                          Adicionar ao Carrinho
+			                      </button>
+			                      <button class="btn-favorite" id="favoriteBtn">
+			                          <i class="far fa-heart"></i>
+			                      </button>
+			                  </div>
+
+			                  <div class="stock-info">
+			                      <span class="in-stock" id="stockInfo">✓ Verificando estoque...</span>
+			                  </div>
+			              </div>
+			          </div>
+			      </div>
+
+			      <!-- Produtos Relacionados -->
+			      <section class="related-products">
+			          <h2 class="section-title">Produtos Relacionados</h2>
+			          <div class="products-grid" id="relatedProductsGrid">
+			              <!-- Produtos relacionados serão carregados via JavaScript -->
+			          </div>
+			      </section>
+			  </div>
+
+			  <!-- Modal de Redirecionamento para Login -->
+			  <div class="modal" id="loginRedirectModal">
+			      <div class="modal-content">
+			          <div class="modal-icon">
+			              <i class="fas fa-user-lock"></i>
+			          </div>
+			          <h3 class="modal-title">Faça login para continuar</h3>
+			          <p class="modal-message">
+			              Para adicionar produtos ao carrinho e finalizar sua compra, você precisa estar logado em sua conta.
+			          </p>
+			          <div class="modal-actions">
+			              <a href="login.html" class="btn btn-primary">Fazer Login</a>
+			              <a href="cadastro.html" class="btn btn-outline">Criar Conta</a>
+			              <button class="btn btn-outline" id="cancelRedirectBtn">Cancelar</button>
+			          </div>
+			      </div>
+			  </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ModernStore</h3>
+                    <p>Sua loja online de confiança com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Atendimento</h3>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Trocas e Devoluções</a></li>
+                        <li><a href="#">Formas de Pagamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Minha Conta</h3>
+                    <ul>
+                        <li><a href="perfil.html">Meu Perfil</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 ModernStore. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+    <!-- Incluir o arquivo de autenticação -->
+    <script src="js/auth.js"></script>
+    <script src="js/produtos.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login - ModernStore</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+	<!-- Header -->
+	<header>
+		<div class="container">
+			<div class="navbar">
+				<a href="index.html" class="logo">Modern<span>Store</span></a>
+				<a href="index.html" class="back-home" id="backHomeBtn">
+					<i class="fas fa-arrow-left"></i> Voltar para a Home
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- Conteúdo Principal -->
+	<div class="container">
+		<div class="login-container">
+			<!-- Lado Esquerdo - Informações -->
+			<div class="login-left">
+				<h2>Bem-vindo de volta!</h2>
+				<p>Faça login em sua conta para acessar ofertas exclusivas, acompanhar seus pedidos e muito mais.</p>
+
+				<ul class="features-list">
+					<li>
+						<i class="fas fa-check-circle"></i>
+						<span>Acesso rápido e seguro</span>
+					</li>
+					<li>
+						<i class="fas fa-shipping-fast"></i>
+						<span>Acompanhe seus pedidos</span>
+					</li>
+					<li>
+						<i class="fas fa-tags"></i>
+						<span>Ofertas exclusivas para membros</span>
+					</li>
+					<li>
+						<i class="fas fa-heart"></i>
+						<span>Lista de desejos personalizada</span>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Lado Direito - Formulário -->
+			<div class="login-right">
+				<div class="login-header">
+					<h2>Fazer Login</h2>
+					<p>Entre com sua conta ModernStore</p>
+				</div>
+
+				<form id="loginForm">
+					<div class="form-group">
+					    <label for="login">Login</label>
+					    <div class="input-with-icon">
+					        <i class="fas fa-user"></i>
+					        <input type="text" id="login" class="form-control" placeholder="Seu login de usuário" required>
+					    </div>
+					    <div class="error-message" id="loginError"></div>
+					</div>
+
+					<div class="form-group">
+						<label for="password">Senha</label>
+						<div class="input-with-icon">
+							<i class="fas fa-lock"></i>
+							<input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+						</div>
+						<div class="error-message" id="passwordError"></div>
+					</div>
+
+					<div class="form-options">
+						<div class="remember-me">
+							<input type="checkbox" id="remember">
+							<label for="remember">Lembrar-me</label>
+						</div>
+						<a href="#" class="forgot-password" id="forgotPassword">Esqueceu a senha?</a>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Entrar</button>
+				</form>
+
+				<div class="signup-link">
+					Não tem uma conta? <a href="cadastro.html">Cadastre-se agora</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		<div class="footer-links">
+			<a href="#">Ajuda</a>
+			<a href="#">Termos de Uso</a>
+			<a href="#">Política de Privacidade</a>
+		</div>
+		<div class="copyright">
+			&copy; 2025 ModernStore. Todos os direitos reservados.
+		</div>
+	</footer>
+	<script src="js/auth.js"></script>
+	<script src="js/login.js"></script>
+</body>
+</html>

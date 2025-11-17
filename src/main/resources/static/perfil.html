@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - ModernStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <a href="homepage.html" class="logo">Modern<span>Store</span></a>
+                <div class="nav-buttons" id="navButtons">
+                    <!-- Será carregado dinamicamente via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="homepage.html">Home</a> > <span>Meu Perfil</span>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="profile-container">
+            <!-- Menu Lateral -->
+            <aside class="profile-sidebar">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <h2 class="profile-name" id="profileName">Usuário</h2>
+                    <div class="profile-status" id="profileStatus">Cliente</div>
+                </div>
+                <ul class="profile-menu">
+                    <li><a href="#" class="active"><i class="fas fa-user"></i> Informações Pessoais</a></li>
+                    <li><a href="#"><i class="fas fa-shopping-bag"></i> Meus Pedidos</a></li>
+                </ul>
+            </aside>
+
+            <!-- Conteúdo do Perfil -->
+            <main class="profile-content">
+                <!-- Seção de Informações Pessoais -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Informações Pessoais</h2>
+                        <button class="edit-btn" onclick="openEditModal()">Editar Perfil</button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nome Completo</div>
+                            <div class="info-value empty" id="userFullName">Carregando...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Login</div>
+                            <div class="info-value empty" id="userLogin">Carregando...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">E-mail</div>
+                            <div class="info-value empty" id="userEmail">Carregando...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Telefone</div>
+                            <div class="info-value empty" id="userPhone">Carregando...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Senha</div>
+                            <div class="info-value empty" id="userPassword">••••••••</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Papel no Sistema</div>
+                            <div class="info-value empty" id="userRole">Carregando...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção de Pedidos -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Meus Pedidos</h2>
+                        <button class="btn-new-order" onclick="startNewOrder()">
+                            <i class="fas fa-plus"></i> Novo Pedido
+                        </button>
+                    </div>
+                    
+                    <div class="loading" id="ordersLoading">
+                        <i class="fas fa-spinner fa-spin"></i> Carregando pedidos...
+                    </div>
+                    
+                    <div class="orders-list" id="ordersList">
+                        <!-- Pedidos serão carregados via JavaScript -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Perfil</h3>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label class="form-label" for="editFullName">Nome completo</label>
+                    <input type="text" class="form-input" id="editFullName" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editEmail">E-mail</label>
+                    <input type="email" class="form-input" id="editEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editPhone">Telefone</label>
+                    <input type="tel" class="form-input" id="editPhone" placeholder="(11) 99999-9999" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editPassword">Nova Senha (opcional)</label>
+                    <input type="password" class="form-input" id="editPassword" placeholder="Deixe em branco para manter a atual">
+                    <small class="form-hint">Mínimo 6 caracteres</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ModernStore</h3>
+                    <p>Sua loja online de confiança com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Atendimento</h3>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Trocas e Devoluções</a></li>
+                        <li><a href="#">Formas de Pagamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Minha Conta</h3>
+                    <ul>
+                        <li><a href="perfil.html">Meu Perfil</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 ModernStore. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/perfil.js"></script>
+</body>
+</html>
