@@ -1,4 +1,3 @@
-const API_BASE = 'http://localhost:8080';
 let userProfile = null;
 let userOrders = [];
 
@@ -50,6 +49,40 @@ async function updateNavigation() {
     }
 }
 
+// Verificar elementos essenciais do DOM
+function ensureEssentialElements() {
+    const essentialElements = [
+        'navButtons',
+        'profileName',      
+        'profileAvatar',    
+        'profileStatus',    
+        'userFullName',     
+        'userLogin',        
+        'userEmail',        
+        'userPhone',        
+        'userPassword',     
+        'userRole',         
+        'ordersList',       
+        'ordersLoading'     
+    ];
+	
+    const optionalElements = ['userName', 'userAvatar'];
+
+    const missingEssential = essentialElements.filter(id => !document.getElementById(id));
+    const missingOptional = optionalElements.filter(id => !document.getElementById(id));
+    
+    if (missingEssential.length > 0) {
+        console.error('Elementos essenciais não encontrados:', missingEssential);
+        return false;
+    }
+
+    if (missingOptional.length > 0) {
+        console.warn('Elementos opcionais não encontrados:', missingOptional);
+    }
+    
+    return true;
+}
+
 // Carregar perfil do usuário do backend
 async function loadUserProfile() {
     try {
@@ -97,43 +130,71 @@ async function loadUserOrders() {
 
 // Atualizar exibição do perfil
 function updateProfileDisplay() {
-    if (!userProfile) return;
+    if (!userProfile) {
+        console.warn('Perfil do usuário não carregado');
+        return;
+    }
 
-    // Atualiza header
-    document.getElementById('userName').textContent = userProfile.nome;
+    console.log('Atualizando perfil com dados:', userProfile);
+
+    // Função auxiliar para atualizar elementos com segurança
+    function safeUpdateElement(id, value, property = 'textContent') {
+        const element = document.getElementById(id);
+        if (element) {
+            element[property] = value;
+            console.log(`Elemento ${id} atualizado:`, value);
+        } else {
+            console.warn(`Elemento não encontrado: ${id}`);
+        }
+    }
+
+    // Função auxiliar para atualizar classe com segurança
+    function safeUpdateClass(id, className, condition) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.className = condition ? className : `${className} empty`;
+        }
+    }
+
+    // ATUALIZAÇÃO: Usar apenas IDs que existem no HTML
+    
+    // Header da página (se você adicionou como sugeri)
+    safeUpdateElement('userName', userProfile.nome);
     
     const initials = getUserInitials(userProfile.nome);
-    document.getElementById('userAvatar').textContent = initials;
+    safeUpdateElement('userAvatar', initials);
     
-    // Atualiza sidebar do perfil
-    document.getElementById('profileName').textContent = userProfile.nome;
-    document.getElementById('profileAvatar').textContent = initials;
+    // Sidebar do perfil (EXISTE no HTML)
+    safeUpdateElement('profileName', userProfile.nome);
+    safeUpdateElement('profileAvatar', initials);
     
     // Define o status baseado na role
     const status = userProfile.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente';
-    document.getElementById('profileStatus').textContent = status;
+    safeUpdateElement('profileStatus', status);
     
-    // Atualiza informações pessoais
-    document.getElementById('userFullName').textContent = userProfile.nome || 'Não informado';
-    document.getElementById('userFullName').className = userProfile.nome ? 'info-value' : 'info-value empty';
+    // Informações pessoais (EXISTEM no HTML)
+    safeUpdateElement('userFullName', userProfile.nome || 'Não informado');
+    safeUpdateClass('userFullName', 'info-value', userProfile.nome);
     
-    document.getElementById('userLogin').textContent = userProfile.login || 'Não informado';
-    document.getElementById('userLogin').className = userProfile.login ? 'info-value' : 'info-value empty';
+    safeUpdateElement('userLogin', userProfile.login || 'Não informado');
+    safeUpdateClass('userLogin', 'info-value', userProfile.login);
     
-    document.getElementById('userEmail').textContent = userProfile.email || 'Não informado';
-    document.getElementById('userEmail').className = userProfile.email ? 'info-value' : 'info-value empty';
+    safeUpdateElement('userEmail', userProfile.email || 'Não informado');
+    safeUpdateClass('userEmail', 'info-value', userProfile.email);
     
-    document.getElementById('userPhone').textContent = userProfile.telefone || 'Não informado';
-    document.getElementById('userPhone').className = userProfile.telefone ? 'info-value' : 'info-value empty';
+    safeUpdateElement('userPhone', userProfile.telefone || 'Não informado');
+    safeUpdateClass('userPhone', 'info-value', userProfile.telefone);
     
     // Sempre mostra senha mascarada
-    document.getElementById('userPassword').textContent = '••••••••';
-    document.getElementById('userPassword').className = 'info-value';
+    safeUpdateElement('userPassword', '••••••••');
+    safeUpdateClass('userPassword', 'info-value', true);
     
     // Mostra a role traduzida
     const roleText = userProfile.role === 'ROLE_ADMIN' ? 'Administrador' : 'Usuário';
-    document.getElementById('userRole').textContent = roleText;
-    document.getElementById('userRole').className = 'info-value';
+    safeUpdateElement('userRole', roleText);
+    safeUpdateClass('userRole', 'info-value', true);
+
+    console.log('Perfil atualizado com sucesso');
 }
 
 // Renderizar pedidos
@@ -198,9 +259,6 @@ function renderOrders() {
                                 <i class="fas fa-times"></i> Cancelar
                             </button>
                         ` : ''}
-                        <button class="order-action" onclick="viewOrderDetails(${order.id})">
-                            <i class="fas fa-eye"></i> Detalhes
-                        </button>
                     </div>
                 </div>
             </div>
