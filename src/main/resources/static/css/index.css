@@ -182,6 +182,14 @@ header {
 	color: var(--primary);
 }
 
+.price-filter {
+	margin-top: 10px;
+}
+
+.price-filter-text {
+	margin-top: 20px;
+}
+
 /* Produtos */
 .products-section {
 	flex: 1;
@@ -189,7 +197,7 @@ header {
 
 .section-title {
 	margin-bottom: 20px;
-	font-size: 1.5rem;
+	font-size: 2rem;
 	color: var(--dark);
 }
 
@@ -213,7 +221,6 @@ header {
 }
 
 .product-image {
-	height: 200px;
 	background-color: var(--gray-light);
 	display: flex;
 	align-items: center;
@@ -224,7 +231,7 @@ header {
 .product-image img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: scale-down;
 	transition: var(--transition);
 }
 
@@ -245,15 +252,15 @@ header {
 
 .product-name {
 	font-weight: 600;
-	margin-bottom: 10px;
+	margin-bottom: 6rem;
 	height: 40px;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .product-price {
 	font-weight: 700;
 	color: var(--primary);
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 	margin-bottom: 10px;
 }
 
@@ -315,113 +322,5 @@ footer {
 	padding-top: 20px;
 	border-top: 1px solid rgba(255, 255, 255, 0.1);
 	color: var(--gray);
-	font-size: 0.9rem;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-	.main-content {
-		flex-direction: column;
-	}
-
-	.filters {
-		width: 100%;
-	}
-
-	.products-grid {
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-	}
-
-	.navbar {
-		flex-direction: column;
-		gap: 15px;
-	}
-
-	.search-box {
-		max-width: 100%;
-	}
-}
-
-/* Loading */
-.loading {
-	text-align: center;
-	padding: 40px;
-	color: var(--gray);
-	font-size: 1.1rem;
-}
-
-.loading i {
-	margin-right: 10px;
-}
-
-/* No products */
-.no-products {
-	text-align: center;
-	padding: 60px 20px;
-	color: var(--gray);
-}
-
-.no-products i {
-	font-size: 3rem;
-	margin-bottom: 15px;
-	opacity: 0.5;
-}
-
-/* User menu styles para homepage não autenticada */
-.user-menu {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	position: relative;
-}
-
-.user-avatar {
-	width: 35px;
-	height: 35px;
-	border-radius: 50%;
-	background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-	font-weight: bold;
-	font-size: 0.8rem;
-	cursor: pointer;
-}
-
-.user-dropdown {
-	position: absolute;
-	top: 45px;
-	right: 0;
-	background: white;
-	border-radius: var(--border-radius);
-	box-shadow: var(--shadow);
-	width: 180px;
-	padding: 10px 0;
-	display: none;
-	z-index: 10;
-}
-
-.user-menu:hover .user-dropdown {
-	display: block;
-}
-
-.user-dropdown a {
-	display: block;
-	padding: 8px 15px;
-	text-decoration: none;
-	color: var(--dark);
-	transition: var(--transition);
-	font-size: 0.9rem;
-}
-
-.user-dropdown a:hover {
-	background-color: var(--gray-light);
-}
-
-.user-dropdown a i {
-	margin-right: 8px;
-	width: 16px;
-	text-align: center;
 	font-size: 0.9rem;
 }

@@ -1,10 +1,11 @@
 let allProducts = [];
 let allCategories = [];
 let filteredProducts = [];
+let cartItems = [];
 let maxProductPrice = 1000; // Valor padrão, será atualizado
 
 // Inicializar a página
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     checkAuthentication();
     initializePage();
     setupEventListeners();
@@ -40,11 +41,11 @@ async function updateNavigation() {
         const initials = getUserInitials(userName);
 
         navButtons.innerHTML = `
-            <span class="user-name">${userName}</span>
-            <button class="btn-icon" onclick="viewCart()">
+            <button class="btn btn-outline" onclick="viewCart()">
                 <i class="fas fa-shopping-cart"></i> Carrinho
             </button>
             <div class="user-menu">
+                <span class="user-name">${userName}</span>
                 <div class="user-avatar">${initials}</div>
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
@@ -106,7 +107,7 @@ async function loadProducts(categoryId = null, searchTerm = '') {
         if (categoryId) {
             params.append('category', categoryId);
         }
-        
+
         if (searchTerm) {
             params.append('q', searchTerm);
         }
@@ -124,10 +125,10 @@ async function loadProducts(categoryId = null, searchTerm = '') {
 
         allProducts = await response.json();
         console.log('Produtos recebidos:', allProducts);
-        
+
         // Calcular preço máximo para o filtro
         updateMaxPrice(allProducts);
-        
+
         filteredProducts = [...allProducts];
         renderProducts(filteredProducts);
     } catch (error) {
@@ -147,11 +148,11 @@ function updateMaxPrice(products) {
         maxProductPrice = 1000;
         return;
     }
-    
+
     const prices = products.map(product => product.preco);
     maxProductPrice = Math.max(...prices);
     console.log('Preço máximo encontrado:', maxProductPrice);
-    
+
     // Arredonda para cima para o próximo múltiplo de 100
     maxProductPrice = Math.ceil(maxProductPrice / 100) * 100;
 }
@@ -161,11 +162,11 @@ function setupPriceFilter() {
     const priceSlider = document.getElementById('priceSlider');
     const maxPriceLabel = document.getElementById('maxPriceLabel');
     const selectedPriceValue = document.getElementById('selectedPriceValue');
-    
+
     // Configura o slider com o preço máximo
     priceSlider.max = maxProductPrice;
     priceSlider.value = maxProductPrice;
-    
+
     // Atualiza os labels
     maxPriceLabel.textContent = `R$ ${maxProductPrice.toFixed(2)}`;
     selectedPriceValue.textContent = `R$ ${maxProductPrice.toFixed(2)}`;
@@ -174,7 +175,7 @@ function setupPriceFilter() {
 // Renderizar categorias
 function renderCategories() {
     const categoriesList = document.getElementById('categoriesList');
-    
+
     if (allCategories.length === 0) {
         categoriesList.innerHTML = '<li>Nenhuma categoria encontrada</li>';
         return;
@@ -265,14 +266,14 @@ function handleCategoryFilter() {
 function handlePriceFilter() {
     const priceSlider = document.getElementById('priceSlider');
     const selectedPriceValue = document.getElementById('selectedPriceValue');
-    
+
     const selectedPrice = parseFloat(priceSlider.value);
-    
+
     // Atualiza o valor exibido
     selectedPriceValue.textContent = `R$ ${selectedPrice.toFixed(2)}`;
-    
+
     // Filtra os produtos
-    filteredProducts = allProducts.filter(product => 
+    filteredProducts = allProducts.filter(product =>
         product.preco <= selectedPrice
     );
 
@@ -297,22 +298,65 @@ function viewProduct(productId) {
 
 // Adicionar ao carrinho
 function addToCart(productId) {
-    if (!authSystem.isLoggedIn()) {
-        alert('Faça login para adicionar produtos ao carrinho!');
-        window.location.href = 'login.html';
-        return;
-    }
+    try {
+        if (!authSystem.isLoggedIn()) {
+            alert('Faça login para adicionar produtos ao carrinho!');
+            window.location.href = 'login.html';
+            return;
+        }
 
-    const product = allProducts.find(p => p.id === productId);
-    if (product) {
-        alert(`${product.nome} adicionado ao carrinho!`);
-        
-        // Em uma implementação real, você faria:
-        // authSystem.authenticatedFetch('/cart/items', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ productId, quantity: 1 })
-        // });
+        const product = allProducts.find(p => p.id === productId);
+        if (product) {
+            // Verificar se o produto já está no carrinho
+            const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
+
+            if (existingItemIndex >= 0) {
+                // Se já existe, incrementar quantidade
+                if (cartItems[existingItemIndex].quantity < 10) {
+                    cartItems[existingItemIndex].quantity += 1;
+                    cartItems[existingItemIndex].subtotal = cartItems[existingItemIndex].quantity * cartItems[existingItemIndex].preco;
+                    showTempMessage('Quantidade aumentada!', 'info');
+                    console.log('Quantidade aumentada para:', cartItems[existingItemIndex].quantity);
+                } else {
+                    showTempMessage('Quantidade máxima permitida é 10', 'error');
+                    return;
+                }
+            } else {
+                // Se não existe, adicionar novo item
+                const newItem = {
+                    productId: product.id,
+                    product: product,
+                    quantity: 1,
+                    preco: product.preco,
+                    subtotal: product.preco
+                };
+                cartItems.push(newItem);
+                alert(`${product.nome} adicionado ao carrinho!`);
+                console.log('Novo item adicionado:', newItem);
+            }
+
+            saveCartToStorage();
+
+            // Atualizar a exibição dos produtos (para mostrar controles de quantidade)
+            renderProducts(allProducts);
+
+            console.log('Carrinho após adição:', cartItems);
+        }
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        console.log('Erro ao adicionar produto', 'error');
     }
+}
+
+// salvar item no carrinho
+function saveCartToStorage() {
+    const cartToSave = cartItems.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        preco: item.preco,
+        subtotal: item.subtotal
+    }));
+    localStorage.setItem('modernStoreCart', JSON.stringify(cartToSave));
 }
 
 // Ver carrinho
@@ -322,8 +366,8 @@ function viewCart() {
         window.location.href = 'login.html';
         return;
     }
-	
-	window.location.href = 'carrinho.html';
+
+    window.location.href = 'carrinho.html';
 }
 
 // Utilitários

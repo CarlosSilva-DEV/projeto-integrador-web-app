@@ -1,67 +1,38 @@
 let allProducts = [];
 let allCategories = [];
 let filteredProducts = [];
+let maxProductPrice = 1000;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializePage();
     setupEventListeners();
 });
 
 async function initializePage() {
     showLoading();
-    await updateNavigation();
     await loadCategories();
     await loadProducts();
+    setupPriceFilter();
     hideLoading();
 }
 
 function setupEventListeners() {
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
+    const priceSlider = document.getElementById('priceSlider')
 
     searchInput.addEventListener('input', debounce(handleSearch, 300));
     searchBtn.addEventListener('click', handleSearch);
+    priceSlider.addEventListener('input', handlePriceFilter);
 }
 
-async function updateNavigation() {
-	const navButtons = document.getElementById('navButtons');
-	const isLoggedIn = authSystem.isLoggedIn();
-
-	if (isLoggedIn) {
-		const currentUser = authSystem.getCurrentUser();
-		const userName = currentUser ? currentUser.nome : 'Usuário';
-		const initials = getUserInitials(userName);
-
-		navButtons.innerHTML = `
-		<div class="user-menu">
-			<div class="user-avatar">${initials}</div>
-			<span>${userName}</span>
-			
-			<div class="user-dropdown">
-				<a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
-				<a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
-			</div>
-			
-		</div>
-		<button class="btn-icon" onclick="goToAuthHomepage()">
-			<i class="fas fa-shopping-cart></i> Área do Cliente
-		</button>
-		`;
-	} else {
-		navButtons.innerHTML = `
-			<div class="nav-buttons-guest">
-				<a href="login.html" class="btn">Login</a>
-				<a href="cadastro.html" class="btn">Cadastro</a>		
-		`;
-	}
-}
 
 function goToAuthHomepage() {
-	if (authSystem.isLoggedIn()) {
-		window.location.href = 'homepage.html';
-	} else {
-		window.location.href = 'login.html';
-	}
+    if (authSystem.isLoggedIn()) {
+        window.location.href = 'homepage.html';
+    } else {
+        window.location.href = 'login.html';
+    }
 }
 
 async function loadCategories() {
@@ -90,7 +61,7 @@ async function loadProducts(categoryId = null, searchTerm = '') {
         if (categoryId) {
             params.append('category', categoryId);
         }
-        
+
         if (searchTerm) {
             params.append('q', searchTerm);
         }
@@ -108,6 +79,10 @@ async function loadProducts(categoryId = null, searchTerm = '') {
 
         allProducts = await response.json();
         console.log('Produtos recebidos:', allProducts);
+
+        // Calcular preço máximo para o filtro
+        updateMaxPrice(allProducts);
+
         filteredProducts = [...allProducts];
         renderProducts(filteredProducts);
     } catch (error) {
@@ -121,9 +96,39 @@ async function loadProducts(categoryId = null, searchTerm = '') {
     }
 }
 
+// Atualizar preço máximo baseado nos produtos
+function updateMaxPrice(products) {
+    if (products.length === 0) {
+        maxProductPrice = 1000;
+        return;
+    }
+
+    const prices = products.map(product => product.preco);
+    maxProductPrice = Math.max(...prices);
+    console.log('Preço máximo encontrado:', maxProductPrice);
+
+    // Arredonda para cima para o próximo múltiplo de 100
+    maxProductPrice = Math.ceil(maxProductPrice / 100) * 100;
+}
+
+// Configurar filtro de preço - MODIFICADO: Slider
+function setupPriceFilter() {
+    const priceSlider = document.getElementById('priceSlider');
+    const maxPriceLabel = document.getElementById('maxPriceLabel');
+    const selectedPriceValue = document.getElementById('selectedPriceValue');
+
+    // Configura o slider com o preço máximo
+    priceSlider.max = maxProductPrice;
+    priceSlider.value = maxProductPrice;
+
+    // Atualiza os labels
+    maxPriceLabel.textContent = `R$ ${maxProductPrice.toFixed(2)}`;
+    selectedPriceValue.textContent = `R$ ${maxProductPrice.toFixed(2)}`;
+}
+
 function renderCategories() {
     const categoriesList = document.getElementById('categoriesList');
-    
+
     if (allCategories.length === 0) {
         categoriesList.innerHTML = '<li>Nenhuma categoria encontrada</li>';
         return;
@@ -147,18 +152,18 @@ function renderCategories() {
 
 // Renderizar produtos
 function renderProducts(products) {
-	const productsGrid = document.getElementById('productsGrid');
-	const noProducts = document.getElementById('noProducts');
+    const productsGrid = document.getElementById('productsGrid');
+    const noProducts = document.getElementById('noProducts');
 
-	if (products.length === 0) {
-		productsGrid.innerHTML = '';
-		noProducts.style.display = 'block';
-		return;
-	}
+    if (products.length === 0) {
+        productsGrid.innerHTML = '';
+        noProducts.style.display = 'block';
+        return;
+    }
 
-	noProducts.style.display = 'none';
+    noProducts.style.display = 'none';
 
-	const productsHTML = products.map(product => `
+    const productsHTML = products.map(product => `
         <div class="product-card" data-product-id="${product.id}">
             <div class="product-image">
                 <img src="${product.imgUrl || 'https://via.placeholder.com/300x300/e9ecef/6c757d?text=Produto'}" 
@@ -181,96 +186,114 @@ function renderProducts(products) {
         </div>
     `).join('');
 
-	productsGrid.innerHTML = productsHTML;
+    productsGrid.innerHTML = productsHTML;
 }
 
 // Obter categorias do produto
 function getProductCategories(product) {
-	if (product.categories && product.categories.length > 0) {
-		return product.categories.map(cat => cat.nome).join(', ');
-	}
-	return 'Geral';
+    if (product.categories && product.categories.length > 0) {
+        return product.categories.map(cat => cat.nome).join(', ');
+    }
+    return 'Geral';
 }
 
 // Manipular filtro de categoria
 function handleCategoryFilter() {
-	const selectedCategories = Array.from(document.querySelectorAll('.filter-category input:checked'))
-		.map(checkbox => checkbox.value);
+    const selectedCategories = Array.from(document.querySelectorAll('.filter-category input:checked'))
+        .map(checkbox => checkbox.value);
 
-	if (selectedCategories.length === 0) {
-		filteredProducts = [...allProducts];
-	} else {
-		filteredProducts = allProducts.filter(product =>
-			product.categories && product.categories.some(cat =>
-				selectedCategories.includes(cat.id.toString())
-			)
-		);
-	}
+    if (selectedCategories.length === 0) {
+        filteredProducts = [...allProducts];
+    } else {
+        filteredProducts = allProducts.filter(product =>
+            product.categories && product.categories.some(cat =>
+                selectedCategories.includes(cat.id.toString())
+            )
+        );
+    }
 
-	renderProducts(filteredProducts);
+    renderProducts(filteredProducts);
+}
+
+// Manipular filtro de preço - MODIFICADO: Slider
+function handlePriceFilter() {
+    const priceSlider = document.getElementById('priceSlider');
+    const selectedPriceValue = document.getElementById('selectedPriceValue');
+
+    const selectedPrice = parseFloat(priceSlider.value);
+
+    // Atualiza o valor exibido
+    selectedPriceValue.textContent = `R$ ${selectedPrice.toFixed(2)}`;
+
+    // Filtra os produtos
+    filteredProducts = allProducts.filter(product =>
+        product.preco <= selectedPrice
+    );
+
+    renderProducts(filteredProducts);
 }
 
 // Manipular busca
 function handleSearch() {
-	const searchTerm = document.getElementById('searchInput').value.trim();
+    const searchTerm = document.getElementById('searchInput').value.trim();
 
-	if (searchTerm) {
-		// Fazer busca na API
-		loadProducts(null, searchTerm);
-	} else {
-		// Voltar para todos os produtos
-		loadProducts();
-	}
+    if (searchTerm) {
+        // Fazer busca na API
+        loadProducts(null, searchTerm);
+    } else {
+        // Voltar para todos os produtos
+        loadProducts();
+    }
 }
 
 // Ver produto detalhado
 function viewProduct(productId) {
-	window.location.href = `produtos.html?id=${productId}`;
+    window.location.href = `produtos.html?id=${productId}`;
 }
 
 // Adicionar ao carrinho (versão simplificada para usuários não logados)
 function addToCart(productId) {
-	if (!authSystem.isLoggedIn()) {
-		alert('Faça login para adicionar produtos ao carrinho!');
-		window.location.href = 'login.html';
-		return;
-	}
+    if (!authSystem.isLoggedIn()) {
+        alert('Faça login para adicionar produtos ao carrinho!');
+        window.location.href = 'login.html';
+        return;
+    }
 
-	const product = allProducts.find(p => p.id === productId);
-	if (product) {
-		alert(`${product.nome} adicionado ao carrinho!`);
-		// Aqui você pode integrar com o sistema de carrinho real
-	}
+    const product = allProducts.find(p => p.id === productId);
+    if (product) {
+        alert(`${product.nome} adicionado ao carrinho!`);
+        // Aqui você pode integrar com o sistema de carrinho real
+    }
 }
 
 // Utilitários
 function getUserInitials(name) {
-	return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
 }
 
 function debounce(func, wait) {
-	let timeout;
-	return function executedFunction(...args) {
-		const later = () => {
-			clearTimeout(timeout);
-			func(...args);
-		};
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-	};
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 function showLoading() {
-	document.getElementById('loading').style.display = 'block';
-	document.getElementById('productsGrid').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('productsGrid').style.display = 'none';
 }
 
 function hideLoading() {
-	document.getElementById('loading').style.display = 'none';
-	document.getElementById('productsGrid').style.display = 'grid';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('productsGrid').style.display = 'grid';
 }
 
 function showError(message) {
-	console.error(message);
-	// Você pode adicionar um toast ou alerta visual aqui
+    console.error(message);
+    // Você pode adicionar um toast ou alerta visual aqui
 }

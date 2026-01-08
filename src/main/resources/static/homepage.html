@@ -57,12 +57,11 @@
 					<!-- Categorias serão carregadas via JavaScript -->
 				</ul>
 
-				<h3 style="margin-top: 20px;">Filtrar por Preço</h3>
-				<div class="price-filter" style="margin-top: 10px;">
+				<h3 class="price-filter-text">Filtrar por Preço</h3>
+				<div class="price-filter">
 					<input type="range" min="0" max="1000" value="1000" class="price-slider" id="priceSlider">
 					<div class="price-labels">
-						<span>R$ 0</span>
-						<span id="maxPriceLabel"></span>
+						<span id="maxPriceLabel" style="display: none"></span>
 					</div>
 					<div class="selected-price">
 						Até: <span id="selectedPriceValue"></span>

@@ -16,10 +16,9 @@
 			<div class="navbar">
 				<a href="index.html" class="logo">Modern<span>Store</span></a>
 				<div class="nav-buttons" id="navButtons">
-					<!-- Será carregado dinamicamente via JavaScript -->
 					<div class="nav-buttons-guest">
-						<a href="login.html" class="btn">Login</a>
-						<a href="cadastro.html" class="btn">Cadastro</a>
+						<a href="login.html" class="btn btn-outline">Login</a>
+						<a href="cadastro.html" class="btn btn-outline">Cadastro</a>
 					</div>
 				</div>
 			</div>
@@ -47,6 +46,17 @@
 				<ul class="filter-category" id="categoriesList">
 					<!-- Categorias serão carregadas via JavaScript -->
 				</ul>
+
+				<h3 class="price-filter-text">Filtrar por Preço</h3>
+				<div class="price-filter">
+					<input type="range" min="0" max="1000" value="1000" class="price-slider" id="priceSlider">
+					<div class="price-labels">
+						<span id="maxPriceLabel" style="display: none"></span>
+					</div>
+					<div class="selected-price">
+						Até: <span id="selectedPriceValue"></span>
+					</div>
+				</div>
 			</aside>
 
 			<!-- Produtos -->

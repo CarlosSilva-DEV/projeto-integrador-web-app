@@ -148,11 +148,11 @@ async function updateNavigation() {
         const initials = getUserInitials(userName);
 
         navButtons.innerHTML = `
-            <span class="user-name">${userName}</span>
             <a href="homepage.html" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Continuar Comprando
             </a>
             <div class="user-menu">
+                <span class="user-name">${userName}</span>
                 <div class="user-avatar">${initials}</div>
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
@@ -274,48 +274,6 @@ function renderProducts(products) {
 
     productsGrid.innerHTML = productsHTML;
     console.log('Produtos renderizados:', products.length);
-	updateCartCounter();
-}
-
-// Atualizar contador do carrinho no header
-function updateCartCounter() {
-    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-    
-    // Atualizar ou criar contador no header
-    let cartCounter = document.getElementById('cartCounter');
-    
-    if (!cartCounter) {
-        // Criar contador se não existir
-        const navButtons = document.getElementById('navButtons');
-        if (navButtons) {
-            cartCounter = document.createElement('span');
-            cartCounter.id = 'cartCounter';
-            cartCounter.className = 'cart-counter';
-            cartCounter.style.cssText = `
-                background: #dc3545;
-                color: white;
-                border-radius: 50%;
-                padding: 2px 6px;
-                font-size: 12px;
-                margin-left: 5px;
-            `;
-            
-            // Encontrar o link do carrinho ou adicionar próximo ao avatar
-            const userMenu = navButtons.querySelector('.user-menu');
-            if (userMenu) {
-                userMenu.appendChild(cartCounter);
-            }
-        }
-    }
-    
-    if (cartCounter) {
-        if (totalItems > 0) {
-            cartCounter.textContent = totalItems;
-            cartCounter.style.display = 'inline-block';
-        } else {
-            cartCounter.style.display = 'none';
-        }
-    }
 }
 
 // Buscar produto por ID (para quando não estiver na lista carregada)

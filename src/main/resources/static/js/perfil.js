@@ -34,11 +34,11 @@ async function updateNavigation() {
         const initials = getUserInitials(userName);
 
         navButtons.innerHTML = `
-            <span class="user-name">${userName}</span>
-            <a href="carrinho.html" class="btn btn-outline">
+            <button class="btn btn-outline" onclick="viewCart()">
                 <i class="fas fa-shopping-cart"></i> Carrinho
-            </a>
+            </button>
             <div class="user-menu">
+                <span class="user-name">${userName}</span>
                 <div class="user-avatar">${initials}</div>
                 <div class="user-dropdown">
                     <a href="perfil.html" class="active"><i class="fas fa-user"></i> Meu Perfil</a>
@@ -459,4 +459,15 @@ function showError(message) {
     console.error(message);
     // Você pode implementar um sistema de notificação mais sofisticado aqui
     alert(message);
+}
+
+// Ver carrinho (com autenticação de login)
+function viewCart() {
+    if (!authSystem.isLoggedIn()) {
+        alert('Faça login para ver o carrinho!');
+        window.location.href = 'login.html';
+        return;
+    }
+	
+	window.location.href = 'carrinho.html';
 }

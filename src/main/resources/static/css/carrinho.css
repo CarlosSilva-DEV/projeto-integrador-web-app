@@ -136,7 +136,7 @@ header {
 
 .user-dropdown {
 	position: absolute;
-	top: 50px;
+	top: 45px;
 	right: 0;
 	background: white;
 	border-radius: var(--border-radius);
@@ -274,7 +274,7 @@ header {
 .product-image img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: scale-down;
 	transition: var(--transition);
 }
 
@@ -295,15 +295,15 @@ header {
 
 .product-name {
 	font-weight: 600;
-	margin-bottom: 10px;
+	margin-bottom: 6rem;
 	height: 40px;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .product-price {
 	font-weight: 700;
 	color: var(--primary);
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 	margin-bottom: 15px;
 }
 
@@ -372,10 +372,11 @@ header {
 	height: fit-content;
 	position: sticky;
 	top: 100px;
+	justify-content: space-between;
 }
 
 .cart-items {
-	margin-bottom: 20px;
+	margin-bottom: 3rem;
 	max-height: 400px;
 	overflow-y: auto;
 }
@@ -386,6 +387,7 @@ header {
 	padding: 15px 0;
 	border-bottom: 1px solid var(--gray-light);
 	align-items: center;
+	margin-bottom: 20px;
 }
 
 .cart-item:last-child {
@@ -440,7 +442,8 @@ header {
 	border: none;
 	color: #dc3545;
 	cursor: pointer;
-	font-size: 0.8rem;
+	font-size: 0.9rem;
+	margin-top: 20px;
 	transition: var(--transition);
 }
 

@@ -146,6 +146,12 @@ header {
 	position: relative;
 }
 
+.user-name {
+	color: #333;
+	font-weight: 600;
+	margin-right: 0.5rem;
+}
+
 .user-avatar {
 	width: 40px;
 	height: 40px;
@@ -161,7 +167,7 @@ header {
 
 .user-dropdown {
 	position: absolute;
-	top: 50px;
+	top: 45px;
 	right: 0;
 	background: white;
 	border-radius: var(--border-radius);
