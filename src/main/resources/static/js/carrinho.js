@@ -339,6 +339,7 @@ async function addToCart(productId) {
         
         // Atualizar o carrinho
         updateCartDisplay();
+        window.location.reload();
         
         console.log('Carrinho após adição:', cartItems);
         
@@ -373,6 +374,7 @@ function updateProductQuantity(productId, change) {
     saveCartToStorage();
     renderProducts(allProducts); // ATUALIZA OS PRODUTOS
     updateCartDisplay(); // ATUALIZA O RESUMO DO CARRINHO
+    window.location.reload();
     
     console.log('Carrinho atualizado:', cartItems);
 }
@@ -446,7 +448,6 @@ function updateCartDisplay() {
     if (cartItems.length === 0) {
         emptyCart.style.display = 'block';
         summaryTotals.style.display = 'none';
-        cartItemsContainer.innerHTML = ''; // Limpar container de itens
         console.log('Carrinho vazio exibido');
         return;
     }
@@ -506,6 +507,7 @@ function removeFromCart(productId) {
     
     // Feedback visual
     showTempMessage('Produto removido do carrinho!', 'success');
+    window.location.reload();
 }
 
 // Atualizar totais do carrinho

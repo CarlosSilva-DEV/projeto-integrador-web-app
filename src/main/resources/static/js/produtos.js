@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function initializeProductPage() {
 	await updateNavigation();
+	loadCartFromStorage();
 	await loadProductData();
 	setupEventListeners();
 }
@@ -23,23 +24,23 @@ async function updateNavigation() {
 		const initials = getUserInitials(userName);
 
 		navButtons.innerHTML = `
+            <button class="btn btn-outline" onclick="viewCart()">
+                <i class="fas fa-shopping-cart"></i> Carrinho
+            </button>
             <div class="user-menu">
+                <span class="user-name">${userName}</span>
                 <div class="user-avatar">${initials}</div>
-                <span>${userName}</span>
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
-            <button class="btn-icon" onclick="goToAuthHomepage()">
-                <i class="fas fa-shopping-cart"></i> Área do Cliente
-            </button>
         `;
 	} else {
 		navButtons.innerHTML = `
             <div class="nav-buttons-guest">
-                <a href="login.html" class="btn">Login</a>
-                <a href="cadastro.html" class="btn">Cadastro</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="cadastro.html" class="btn btn-outline">Cadastro</a>
             </div>
         `;
 	}
@@ -49,7 +50,7 @@ function goToAuthHomepage() {
 	if (authSystem.isLoggedIn()) {
 		window.location.href = 'homepage.html';
 	} else {
-		window.location.href = 'login.html';
+		window.location.href = 'index.html';
 	}
 }
 
@@ -108,9 +109,6 @@ async function renderProductDetails(product) {
 
 	// Especificações (se houver)
 	renderProductSpecs(product);
-
-	// Rating (placeholder - você pode adaptar conforme seu modelo)
-	renderProductRating(product);
 }
 
 // Atualizar breadcrumb
@@ -119,10 +117,10 @@ function updateBreadcrumb(product) {
 	const categories = product.categories || [];
 	const mainCategory = categories.length > 0 ? categories[0] : null;
 
-	let breadcrumbHTML = '<a href="index.html">Home</a> > ';
+	let breadcrumbHTML = '<a href="#" onclick="goToAuthHomepage()">Home</a> > ';
 
 	if (mainCategory) {
-		breadcrumbHTML += `<a href="index.html?category=${mainCategory.id}">${mainCategory.nome}</a> > `;
+		breadcrumbHTML += `<a href="#?category=${mainCategory.id}">${mainCategory.nome}</a> > `;
 	}
 
 	breadcrumbHTML += `<span>${product.nome}</span>`;
@@ -177,19 +175,6 @@ function renderProductSpecs(product) {
 
 	specsList.innerHTML = specsHTML;
 	specsContainer.style.display = 'block';
-}
-
-// Renderizar rating (placeholder)
-function renderProductRating(product) {
-	const starsContainer = document.getElementById('productStars');
-	// Aqui você pode implementar lógica de rating quando tiver no backend
-	starsContainer.innerHTML = `
-        <i class="far fa-star"></i>
-        <i class="far fa-star"></i>
-        <i class="far fa-star"></i>
-        <i class="far fa-star"></i>
-        <i class="far fa-star"></i>
-    `;
 }
 
 // Carregar produtos relacionados
@@ -249,7 +234,7 @@ function renderRelatedProducts(products) {
 
 	const productsHTML = products.map(product => `
         <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image">
+            <div class="product-card-image">
                 <img src="${product.imgUrl || 'https://via.placeholder.com/300x300/e9ecef/6c757d?text=Produto'}" 
                      alt="${product.nome}" 
                      onerror="this.src='https://via.placeholder.com/300x300/e9ecef/6c757d?text=Produto'">
@@ -276,7 +261,6 @@ function renderRelatedProducts(products) {
 // Configurar event listeners
 function setupEventListeners() {
 	setupQuantityControls();
-	setupFavoriteButton();
 	setupAddToCartButton();
 	setupModal();
 }
@@ -316,32 +300,6 @@ function setupQuantityControls() {
 		let value = parseInt(this.value);
 		if (value < 1) this.value = 1;
 		if (value > parseInt(this.max)) this.value = this.max;
-	});
-}
-
-// Configurar botão de favorito
-function setupFavoriteButton() {
-	const favoriteBtn = document.getElementById('favoriteBtn');
-	const icon = favoriteBtn.querySelector('i');
-
-	favoriteBtn.addEventListener('click', function() {
-		if (!authSystem.isLoggedIn()) {
-			document.getElementById('loginRedirectModal').style.display = 'flex';
-			return;
-		}
-
-		// Alternar estado do favorito
-		if (icon.classList.contains('far')) {
-			icon.classList.remove('far');
-			icon.classList.add('fas');
-			icon.style.color = 'var(--accent)';
-			// Aqui você pode chamar uma API para adicionar aos favoritos
-		} else {
-			icon.classList.remove('fas');
-			icon.classList.add('far');
-			icon.style.color = '';
-			// Aqui você pode chamar uma API para remover dos favoritos
-		}
 	});
 }
 
@@ -393,6 +351,54 @@ function hideLoadingState() {
 	document.body.style.opacity = '1';
 }
 
+// Mostrar mensagem temporária
+function showTempMessage(message, type = 'info') {
+	const messageDiv = document.createElement('div');
+	messageDiv.className = `temp-message ${type}`;
+	messageDiv.textContent = message;
+	messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+        color: white;
+        border-radius: 4px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    `;
+
+	document.body.appendChild(messageDiv);
+
+	setTimeout(() => {
+		messageDiv.style.animation = 'slideOut 0.3s ease';
+		setTimeout(() => {
+			if (messageDiv.parentNode) {
+				messageDiv.parentNode.removeChild(messageDiv);
+			}
+		}, 300);
+	}, 3000);
+}
+
+// Adicionar CSS para animações
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
+function showError(message) {
+	console.error(message);
+	alert(message);
+}
+
 function showError(message) {
 	const productInfo = document.querySelector('.product-info');
 	productInfo.innerHTML = `
@@ -412,31 +418,178 @@ function viewProduct(productId) {
 
 // Adicionar ao carrinho a partir de produtos relacionados
 function addToCartFromRelated(productId) {
-	if (!authSystem.isLoggedIn()) {
-		document.getElementById('loginRedirectModal').style.display = 'flex';
-		return;
-	}
+	try {
+		if (!authSystem.isLoggedIn()) {
+			document.getElementById('loginRedirectModal').style.display = 'flex';
+			return;
+		}
 
-	const product = relatedProducts.find(p => p.id === productId);
-	if (product) {
-		addToCart(productId, 1);
-	}
+		loadCartFromStorage();
+
+		const product = relatedProducts.find(p => p.id === productId);
+
+		if (!product) {
+			console.error('Produto não encontrado:', productId);
+			showTempMessage('Produto não encontrado', 'error');
+			return;
+		}
+
+		// Verificar se o produto já está no carrinho
+		const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
+        
+        if (existingItemIndex >= 0) {
+            // Se já existe, incrementar quantidade
+            if (cartItems[existingItemIndex].quantity < 10) {
+                cartItems[existingItemIndex].quantity += 1;
+                cartItems[existingItemIndex].subtotal = cartItems[existingItemIndex].quantity * cartItems[existingItemIndex].preco;
+                showTempMessage('Quantidade aumentada!', 'info');
+                console.log('Quantidade aumentada para:', cartItems[existingItemIndex].quantity);
+            } else {
+                showTempMessage('Quantidade máxima permitida é 10', 'error');
+                return;
+            }
+        } else {
+            // Se não existe, adicionar novo item
+            const newItem = {
+                productId: product.id,
+                product: product,
+                quantity: 1,
+                preco: product.preco,
+                subtotal: product.preco
+            };
+            cartItems.push(newItem);
+            showTempMessage('Produto adicionado ao carrinho!', 'success');
+            console.log('Novo item adicionado:', newItem);
+        }
+
+        saveCartToStorage();
+        
+        console.log('Carrinho após adição:', cartItems);
+        
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        showTempMessage('Erro ao adicionar produto', 'error');
+    }
 }
 
 // Adicionar ao carrinho
-function addToCart(productId, quantity) {
+function addToCart(productId, selectedQuantity) {
+	try {
+		if (!authSystem.isLoggedIn()) {
+			document.getElementById('loginRedirectModal').style.display = 'flex';
+			return;
+		}
+
+		loadCartFromStorage();
+
+		const product = currentProduct;
+
+		if (!product) {
+			console.error('Produto não encontrado:', productId);
+			showTempMessage('Produto não encontrado', 'error');
+			return;
+		}
+
+		if (!selectedQuantity || selectedQuantity < 1) {
+			selectedQuantity = 1;
+		}
+
+		if (selectedQuantity > 10) {
+			showTempMessage('Quantidade máxima permitida é 10', 'error');
+			return;
+		}
+
+		// Verificar se o produto já está no carrinho
+		const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
+
+		if (existingItemIndex >= 0) {
+			// Se já existe, incrementar quantidade
+			const newQuantity = cartItems[existingItemIndex].quantity + selectedQuantity;
+
+			if (newQuantity <= 10) {
+				cartItems[existingItemIndex].quantity = newQuantity;
+				cartItems[existingItemIndex].preco = product.preco; // Atualizar preço se mudou
+				cartItems[existingItemIndex].subtotal = newQuantity * product.preco;
+				cartItems[existingItemIndex].product = product; // Atualizar dados do produto
+				showTempMessage(`Quantidade aumentada para ${newQuantity}!`, 'info');
+			} else {
+				showTempMessage('Quantidade máxima permitida é 10', 'error');
+				return;
+			}
+		} else {
+			// Se não existe, adicionar novo item com a quantidade selecionada
+			const newItem = {
+				productId: product.id,
+				product: product,
+				quantity: selectedQuantity,
+				preco: product.preco,
+				subtotal: product.preco * selectedQuantity
+			};
+			cartItems.push(newItem);
+			showTempMessage(`${product.nome} (${selectedQuantity} unidade${selectedQuantity > 1 ? 's' : ''}) adicionado ao carrinho!`, 'success');
+		}
+
+		// Salvar no localStorage
+		saveCartToStorage();
+
+		console.log('Carrinho após adição:', cartItems);
+
+	} catch (error) {
+		console.error('Erro ao adicionar produto:', error);
+		showTempMessage('Erro ao adicionar produto', 'error');
+	}
+}
+
+// Carregar carrinho do localStorage
+function loadCartFromStorage() {
+	const savedCart = localStorage.getItem('modernStoreCart');
+	if (savedCart) {
+		try {
+			const parsedCart = JSON.parse(savedCart);
+			cartItems = parsedCart.map(item => {
+				// Encontrar o produto completo na lista de produtos carregados
+				if (currentProduct && currentProduct.id === item.productId) {
+					return {
+						productId: item.productId,
+						product: currentProduct,
+						quantity: item.quantity,
+						preco: item.preco,
+						subtotal: item.subtotal
+					};
+				}
+				return {
+					productId: item.productId,
+					product: null,
+					quantity: item.quantity,
+					preco: item.preco,
+					subtotal: item.subtotal
+				};
+			});
+		} catch (error) {
+			console.error('Erro ao carregar carrinho:', error);
+			cartItems = [];
+		}
+	}
+}
+
+// salvar item no carrinho
+function saveCartToStorage() {
+	const cartToSave = cartItems.map(item => ({
+		productId: item.productId,
+		quantity: item.quantity,
+		preco: item.preco,
+		subtotal: item.subtotal
+	}));
+	localStorage.setItem('modernStoreCart', JSON.stringify(cartToSave));
+}
+
+// Ver carrinho
+function viewCart() {
 	if (!authSystem.isLoggedIn()) {
-		document.getElementById('loginRedirectModal').style.display = 'flex';
+		alert('Faça login para ver o carrinho!');
+		window.location.href = 'login.html';
 		return;
 	}
 
-	// Aqui você implementará a lógica real do carrinho
-	console.log(`Adicionando produto ${productId} ao carrinho, quantidade: ${quantity}`);
-	alert('Produto adicionado ao carrinho!');
-
-	// Em uma implementação real, você faria:
-	// authSystem.authenticatedFetch('/cart/items', {
-	//     method: 'POST',
-	//     body: JSON.stringify({ productId, quantity })
-	// });
+	window.location.href = 'carrinho.html';
 }

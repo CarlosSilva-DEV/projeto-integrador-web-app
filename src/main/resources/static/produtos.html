@@ -12,7 +12,8 @@
     <header>
         <div class="container">
             <div class="navbar">
-                <a href="index.html" class="logo">Modern<span>Store</span></a>
+
+                <a href="#" class="logo" onclick="goToAuthHomepage()">Modern<span>Store</span></a>
                 <div class="nav-buttons" id="navButtons">
                     <!-- Conteúdo será carregado via JavaScript baseado no status de login -->
                 </div>
@@ -43,20 +44,13 @@
 			<div class="product-info">
 			              <div class="product-category" id="productCategory">Carregando...</div>
 			              <h1 class="product-title" id="productTitle">Carregando...</h1>
-			              
-			              <div class="product-rating">
-			                  <div class="stars" id="productStars">
-			                      <!-- Estrelas serão geradas dinamicamente -->
-			                  </div>
-			                  <div class="rating-count" id="ratingCount">(0 avaliações)</div>
-			              </div>
 
 			              <div class="product-price">
 			                  <div class="current-price" id="currentPrice">R$ 0,00</div>
 			                  <!-- Remover preço original se não houver desconto -->
 			              </div>
 
-			              <div class="product-description">
+			              <div class="product-description" style="display: none">
 			                  <p id="productDescription">Carregando descrição...</p>
 			              </div>
 
@@ -78,17 +72,10 @@
 			                  </div>
 
 			                  <div class="action-buttons">
-			                      <button class="btn-add-cart" id="addToCartBtn">
+			                      <button class="btn-add-cart" id="addToCartBtn" onclick="setupAddToCartButton()">
 			                          <i class="fas fa-shopping-cart"></i>
 			                          Adicionar ao Carrinho
 			                      </button>
-			                      <button class="btn-favorite" id="favoriteBtn">
-			                          <i class="far fa-heart"></i>
-			                      </button>
-			                  </div>
-
-			                  <div class="stock-info">
-			                      <span class="in-stock" id="stockInfo">✓ Verificando estoque...</span>
 			                  </div>
 			              </div>
 			          </div>

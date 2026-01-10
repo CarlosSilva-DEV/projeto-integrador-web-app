@@ -208,7 +208,8 @@ function renderOrders() {
                 <h3>Nenhum pedido realizado</h3>
                 <p>Que tal fazer sua primeira compra?</p>
                 <button class="btn btn-primary" onclick="startNewOrder()">
-                    <i class="fas fa-plus"></i> Fazer Primeiro Pedido
+                    <i class="fas fa-plus"></i>
+                    <span>Fazer Primeiro Pedido</span>
                 </button>
             </div>
         `;
@@ -388,11 +389,6 @@ async function handleProfileUpdate(event) {
 // Funções dos pedidos
 function startNewOrder() {
     window.location.href = 'carrinho.html';
-}
-
-function viewOrderDetails(orderId) {
-    alert(`Visualizando detalhes do pedido #${orderId}`);
-    // Em uma implementação real, você redirecionaria para uma página de detalhes do pedido
 }
 
 async function payOrder(orderId) {

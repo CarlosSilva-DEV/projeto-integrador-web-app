@@ -1,7 +1,6 @@
 let allProducts = [];
 let allCategories = [];
 let filteredProducts = [];
-let cartItems = [];
 let maxProductPrice = 1000; // Valor padrão, será atualizado
 
 // Inicializar a página
@@ -26,6 +25,7 @@ async function initializePage() {
     await updateUserWelcome();
     await loadCategories();
     await loadProducts();
+    loadCartFromStorage();
     setupPriceFilter();
     hideLoading();
 }
@@ -305,6 +305,7 @@ function addToCart(productId) {
             return;
         }
 
+        loadCartFromStorage();
         const product = allProducts.find(p => p.id === productId);
         if (product) {
             // Verificar se o produto já está no carrinho
@@ -345,6 +346,42 @@ function addToCart(productId) {
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         console.log('Erro ao adicionar produto', 'error');
+    }
+}
+
+function loadCartFromStorage() {
+    const savedCart = localStorage.getItem('modernStoreCart');
+    if (savedCart) {
+        try {
+            const parsedCart = JSON.parse(savedCart);
+            cartItems = parsedCart.map(item => {
+                // Tentar encontrar o produto completo na lista de produtos
+                const product = allProducts.find(p => p.id === item.productId);
+                if (product) {
+                    return {
+                        productId: item.productId,
+                        product: product,
+                        quantity: item.quantity,
+                        preco: item.preco,
+                        subtotal: item.subtotal
+                    };
+                }
+                // Se o produto não estiver carregado ainda, manter dados básicos
+                return {
+                    productId: item.productId,
+                    product: null, // Será preenchido depois
+                    quantity: item.quantity,
+                    preco: item.preco,
+                    subtotal: item.subtotal
+                };
+            });
+            console.log('Carrinho carregado do localStorage:', cartItems);
+        } catch (error) {
+            console.error('Erro ao carregar carrinho:', error);
+            cartItems = [];
+        }
+    } else {
+        cartItems = [];
     }
 }
 
