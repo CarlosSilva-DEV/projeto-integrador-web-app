@@ -295,12 +295,6 @@ header {
     margin-bottom: 20px;
 }
 
-.total-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
 .total-line.final {
     font-weight: 700;
     font-size: 1.2rem;
@@ -346,7 +340,7 @@ header {
 }
 
 /* Métodos de pagamento */
-.payment-methods {
+.payment-method {
     background: white;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -354,108 +348,6 @@ header {
     margin-bottom: 25px;
 }
 
-.methods-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--gray-light);
-    margin-bottom: 20px;
-}
-
-.method-tab {
-    padding: 12px 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--gray);
-    border-bottom: 3px solid transparent;
-    transition: var(--transition);
-}
-
-.method-tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-}
-
-.method-content {
-    display: none;
-}
-
-.method-content.active {
-    display: block;
-}
-
-/* Cartão de crédito */
-.credit-card-form {
-    max-width: 500px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--dark);
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid var(--gray-light);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    transition: var(--transition);
-}
-
-.form-control:focus {
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-
-.form-row .form-group {
-    flex: 1;
-}
-
-.card-preview {
-    background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    color: white;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-}
-
-.card-chip {
-    width: 40px;
-    height: 30px;
-    background: #ffd700;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-.card-number {
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    font-family: monospace;
-}
-
-.card-details {
-    display: flex;
-    justify-content: space-between;
-}
-
-.card-name, .card-expiry {
-    font-size: 0.9rem;
-}
 
 /* PIX */
 .pix-method {
@@ -543,33 +435,6 @@ header {
     background: var(--primary-dark);
 }
 
-/* Boleto */
-.boleto-method {
-    text-align: center;
-    padding: 30px 0;
-}
-
-.boleto-icon {
-    font-size: 4rem;
-    color: #28a745;
-    margin-bottom: 20px;
-}
-
-.boleto-description {
-    color: var(--gray);
-    margin-bottom: 25px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.boleto-instructions {
-    background: var(--light);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    margin-bottom: 25px;
-    text-align: left;
-}
 
 /* Ações de pagamento */
 .payment-actions {
@@ -611,7 +476,7 @@ header {
     background: var(--primary-dark);
 }
 
-.cancel-payment {
+.profile-return {
     display: inline-block;
     margin-top: 15px;
     color: var(--gray);
@@ -620,7 +485,7 @@ header {
     transition: var(--transition);
 }
 
-.cancel-payment:hover {
+.profile-return:hover {
     color: var(--accent);
 }
 
@@ -675,32 +540,22 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .payment-container {
-        flex-direction: column;
-    }
-    
-    .order-summary {
-        width: 100%;
-        position: static;
-    }
-    
-    .navbar {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .methods-tabs {
-        flex-wrap: wrap;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-    
-    .copy-pix-code {
-        flex-direction: column;
-    }
+.no-items {
+    text-align: center;
+    padding: 20px;
+    color: var(--gray);
+    font-style: italic;
+    background: var(--light);
+    border-radius: var(--border-radius);
+}
+
+.loading-item {
+    opacity: 0.5;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.5; }
 }
