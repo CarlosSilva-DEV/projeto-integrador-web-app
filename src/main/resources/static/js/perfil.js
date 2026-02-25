@@ -236,14 +236,14 @@ function renderOrders() {
                     ${order.items ? order.items.map(item => `
                         <div class="order-item">
                             <div class="item-image">
-                                <img src="${item.product?.imgUrl || 'https://via.placeholder.com/80x80/e9ecef/6c757d?text=Produto'}" 
-                                     alt="${item.product?.nome || 'Produto'}"
+                                <img src="${item.product.imgUrl || 'https://via.placeholder.com/80x80/e9ecef/6c757d?text=Produto'}" 
+                                     alt="${item.product.nome || 'Produto'}"
                                      onerror="this.src='https://via.placeholder.com/80x80/e9ecef/6c757d?text=Produto'">
                             </div>
                             <div class="item-details">
-                                <div class="item-name">${item.product?.nome || 'Produto não encontrado'}</div>
+                                <div class="item-name">${item.product.nome || 'Produto não encontrado'}</div>
                                 <div class="item-category">${getProductCategories(item.product)}</div>
-                                <div class="item-price">R$ ${item.preco?.toFixed(2) || '0.00'}</div>
+                                <div class="item-price">R$ ${item.preco.toFixed(2) || '0.00'}</div>
                             </div>
                             <div class="item-quantity">Qtd: ${item.quantidade}</div>
                         </div>
@@ -252,7 +252,7 @@ function renderOrders() {
                 <div class="order-footer">
                     <div class="order-total">Total: R$ ${total.toFixed(2)}</div>
                     <div class="order-actions">
-                        ${order.orderStatus === 'AGUARDANDO_PAGAMENTO' ? `
+                        ${order.orderStatus === 'AGUARDANDO_PAGAMENTO' || order.orderStatus === 'PROCESSANDO_PAGAMENTO' ? `
                             <button class="order-action primary" onclick="payOrder(${order.id})">
                                 <i class="fas fa-credit-card"></i> Pagar
                             </button>
@@ -278,11 +278,10 @@ function calculateOrderTotal(order) {
 // Obter texto do status do pedido
 function getOrderStatusText(status) {
     const statusMap = {
-        'AGUARDANDO_PAGAMENTO': 'Aguardando Pagamento',
-        'PAGO': 'Pago',
-        'ENVIADO': 'Enviado',
-        'ENTREGUE': 'Entregue',
-        'CANCELADO': 'Cancelado'
+        'AGUARDANDO_PAGAMENTO': 'AGUARDANDO PAGAMENTO',
+        'PAGO': 'PAGO',
+        'PROCESSANDO_PAGAMENTO': 'PROCESSANDO PAGAMENTO',
+        'CANCELADO': 'CANCELADO'
     };
     return statusMap[status] || status;
 }
@@ -292,8 +291,7 @@ function getOrderStatusClass(status) {
     const classMap = {
         'AGUARDANDO_PAGAMENTO': 'status-pending',
         'PAGO': 'status-processing',
-        'ENVIADO': 'status-processing',
-        'ENTREGUE': 'status-delivered',
+        'PROCESSANDO_PAGAMENTO': 'status-processing',
         'CANCELADO': 'status-cancelled'
     };
     return classMap[status] || 'status-pending';
@@ -402,9 +400,8 @@ async function payOrder(orderId) {
         }
         
         alert('Pagamento processado com sucesso!');
-        // Recarrega os pedidos para atualizar o status
-        await loadUserOrders();
-        
+        window.location.href = `pagamento.html?orderId=${orderId}`;
+
     } catch (error) {
         console.error('Erro ao processar pagamento:', error);
         alert('Erro ao processar pagamento: ' + error.message);
@@ -453,7 +450,6 @@ function hideOrdersLoading() {
 
 function showError(message) {
     console.error(message);
-    // Você pode implementar um sistema de notificação mais sofisticado aqui
     alert(message);
 }
 
