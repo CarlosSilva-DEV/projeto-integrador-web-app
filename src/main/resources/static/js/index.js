@@ -178,7 +178,7 @@ function renderProducts(products) {
                     <button class="btn btn-outline btn-small" onclick="viewProduct(${product.id})">
                         Detalhes
                     </button>
-                    <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">
+                    <button class="btn btn-primary btn-small" onclick="addToCart()">
                         Comprar
                     </button>
                 </div>
@@ -252,17 +252,11 @@ function viewProduct(productId) {
 }
 
 // Adicionar ao carrinho (versão simplificada para usuários não logados)
-function addToCart(productId) {
+function addToCart() {
     if (!authSystem.isLoggedIn()) {
         alert('Faça login para adicionar produtos ao carrinho!');
         window.location.href = 'login.html';
         return;
-    }
-
-    const product = allProducts.find(p => p.id === productId);
-    if (product) {
-        alert(`${product.nome} adicionado ao carrinho!`);
-        // Aqui você pode integrar com o sistema de carrinho real
     }
 }
 
