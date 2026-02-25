@@ -55,7 +55,11 @@ public class PaymentService {
 		
 		String qrCode = generatePixQrCode(order);
 		String copiaCola = generatePixCopiaCola(order);
-		return new PaymentDTO(savedPayment, qrCode, copiaCola);
+		return new PaymentDTO(savedPayment, qrCode, copiaCola) {
+			{
+				this.setStatus(PaymentStatus.PENDENTE);
+			}
+		};
 	}
 	
 	public OrderDTO confirmPayment(Long orderId) {
@@ -137,15 +141,5 @@ public class PaymentService {
 	public Payment findPaymentByOrderId(Long orderId) {
 		return paymentRepository.findByOrderId(orderId)
 				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado para o pedido: ID " + orderId));
-	}
-	
-	public PaymentDTO updatedPaymentStatus(Long paymentId, PaymentStatus newStatus) {
-		Payment payment = paymentRepository.findById(paymentId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado: ID " + paymentId));
-		
-		payment.setStatus(newStatus);
-		Payment updatedPayment = paymentRepository.save(payment);
-		
-		return new PaymentDTO(updatedPayment, null, null);
 	}
 }

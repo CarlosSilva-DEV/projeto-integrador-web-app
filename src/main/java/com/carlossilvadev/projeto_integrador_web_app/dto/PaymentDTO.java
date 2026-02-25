@@ -22,14 +22,14 @@ public class PaymentDTO {
 		this.id = payment.getId();
 		this.moment = payment.getMoment();
 		this.order = new OrderDTO(payment.getOrder());
-		this.status = PaymentStatus.PENDENTE;
+		this.status = payment.getStatus();
 	}
 	
 	public PaymentDTO(Payment payment, String pixQrCode, String pixCopiaCola) {
 		this.id = payment.getId();
 		this.moment = payment.getMoment();
 		this.order = new OrderDTO(payment.getOrder());
-		this.status = PaymentStatus.PENDENTE;
+		this.status = payment.getStatus();
 		this.pixQrCode = pixQrCode;
 		this.pixCopiaCola = pixCopiaCola;
 	}
