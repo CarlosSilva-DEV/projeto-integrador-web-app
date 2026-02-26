@@ -23,6 +23,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 
@@ -106,8 +107,12 @@ public class Order implements Serializable {
 		this.payment = payment;
 	}
 	
-	// calculo total
 	public double getTotal() {
+		return total;
+	}
+	
+	// calculo total
+	public double calcularTotal() {
 		double soma = 0.0;
 		
 		for (OrderItem i : items) {
@@ -118,7 +123,8 @@ public class Order implements Serializable {
 	}
 	
 	@PrePersist
-	public void prePersist() {
+	@PreUpdate
+	public void prePersisAndUpdate() {
 		if (this.moment == null) {
 			this.moment = Instant.now();
 		}
@@ -126,6 +132,8 @@ public class Order implements Serializable {
 		if (this.orderStatus == null) {
 			this.orderStatus = OrderStatus.AGUARDANDO_PAGAMENTO;
 		}
+		
+		this.calcularTotal();
 	}
 	
 	

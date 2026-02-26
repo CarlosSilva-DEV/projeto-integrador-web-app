@@ -66,7 +66,6 @@ public class OrderService {
 		
 		Order order = new Order();
 		order.setClient(currentUser);
-		order.setOrderStatus(OrderStatus.AGUARDANDO_PAGAMENTO);
 		
 		
 		Order savedOrder = orderRepository.save(order);
@@ -77,6 +76,7 @@ public class OrderService {
 			
 			OrderItem orderItem = new OrderItem(savedOrder, product, itemDto.getQuantidade(), product.getPreco());
 			order.getItems().add(orderItem);
+			order.calcularTotal();
 			
 			orderItemRepository.save(orderItem);
 		}

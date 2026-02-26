@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +31,7 @@ public class OrderItem implements Serializable {
 		id.setProduct(product);
 		this.quantidade = quantidade;
 		this.preco = preco;
+		this.calcularSubtotal();
 	}
 	
 	// getters e setters
@@ -52,6 +55,7 @@ public class OrderItem implements Serializable {
 	}
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+		this.calcularSubtotal();
 	}
 
 	public double getPreco() {
@@ -59,12 +63,23 @@ public class OrderItem implements Serializable {
 	}
 	public void setPreco(double preco) {
 		this.preco = preco;
+		this.calcularSubtotal();
+	}
+	
+	public double getSubtotal() {
+		return subtotal;
 	}
 	
 	// calculo subtotal
-	public double getSubtotal() {
-		this.subtotal = this.getPreco() * this.getQuantidade();
-		return this.subtotal;
+	private void calcularSubtotal() {
+		this.subtotal = this.preco * this.quantidade;
+	}
+	
+	// callbacks do JPA
+	@PrePersist
+	@PreUpdate
+	public void prePersistAndUpdate() {
+		this.calcularSubtotal();
 	}
 	
 	// hashcode e equals
