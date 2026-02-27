@@ -12,8 +12,8 @@ import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryReposi
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
 
 @Configuration
-@Profile({"test", "dev"}) // define como uma classe de configuração, especifica pros perfis "test" e "dev"
-public class TestDevConfig implements CommandLineRunner{
+@Profile({"test", "dev", "prod"}) // define como uma classe de configuração, especifica pros perfis "test" e "dev"
+public class TestDevProdConfig implements CommandLineRunner{
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
