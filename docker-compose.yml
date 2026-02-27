@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: docker-test-database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc123
+    # se falhar na build: verifique se postgre local está em execução (conflito de portas)
+    # (sudo systemctl status postgresql)
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docker-test-database"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DATABASE_URL: jdbc:postgresql://postgres:5432/docker-test-database
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: abc123
+      JWTSECRETKEY: testKey
+      JWTEXPIRATIONMS: 900000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
