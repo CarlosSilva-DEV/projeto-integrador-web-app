@@ -18,10 +18,10 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
 	
-	@Value("${JWTSECRETKEY}")
+	@Value("${JWTSECRETKEY:defaultForDev}")
 	private String jwtSecret;
 	
-	@Value("${JWTEXPIRATIONMS}")
+	@Value("${JWTEXPIRATIONMS:900000}")
 	private int jwtExpirationMs;
 
     public String generateTokenFromUserDetailsImpl(UserDetailsImpl userDetails) {
