@@ -82,7 +82,6 @@ function setupEventListeners() {
 // Carregar categorias
 async function loadCategories() {
     try {
-        console.log('Carregando categorias...');
         const response = await fetch(`${API_BASE}/categories`);
 
         if (!response.ok) {
@@ -90,7 +89,6 @@ async function loadCategories() {
         }
 
         allCategories = await response.json();
-        console.log('Categorias recebidas:', allCategories);
         renderCategories();
     } catch (error) {
         console.error('Erro ao carregar categorias:', error);
@@ -116,7 +114,6 @@ async function loadProducts(categoryId = null, searchTerm = '') {
             url += `?${params.toString()}`;
         }
 
-        console.log('Fazendo request para:', url);
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -124,7 +121,6 @@ async function loadProducts(categoryId = null, searchTerm = '') {
         }
 
         allProducts = await response.json();
-        console.log('Produtos recebidos:', allProducts);
 
         // Calcular preço máximo para o filtro
         updateMaxPrice(allProducts);
@@ -151,7 +147,6 @@ function updateMaxPrice(products) {
 
     const prices = products.map(product => product.preco);
     maxProductPrice = Math.max(...prices);
-    console.log('Preço máximo encontrado:', maxProductPrice);
 
     // Arredonda para cima para o próximo múltiplo de 100
     maxProductPrice = Math.ceil(maxProductPrice / 100) * 100;
@@ -317,7 +312,6 @@ function addToCart(productId) {
                     cartItems[existingItemIndex].quantity += 1;
                     cartItems[existingItemIndex].subtotal = cartItems[existingItemIndex].quantity * cartItems[existingItemIndex].preco;
                     showTempMessage('Quantidade aumentada!', 'info');
-                    console.log('Quantidade aumentada para:', cartItems[existingItemIndex].quantity);
                 } else {
                     showTempMessage('Quantidade máxima permitida é 10', 'error');
                     return;
@@ -333,19 +327,15 @@ function addToCart(productId) {
                 };
                 cartItems.push(newItem);
                 alert(`${product.nome} adicionado ao carrinho!`);
-                console.log('Novo item adicionado:', newItem);
             }
 
             saveCartToStorage();
 
             // Atualizar a exibição dos produtos (para mostrar controles de quantidade)
             renderProducts(allProducts);
-
-            console.log('Carrinho após adição:', cartItems);
         }
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
-        console.log('Erro ao adicionar produto', 'error');
     }
 }
 
@@ -375,7 +365,6 @@ function loadCartFromStorage() {
                     subtotal: item.subtotal
                 };
             });
-            console.log('Carrinho carregado do localStorage:', cartItems);
         } catch (error) {
             console.error('Erro ao carregar carrinho:', error);
             cartItems = [];

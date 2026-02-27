@@ -443,7 +443,6 @@ function addToCartFromRelated(productId) {
                 cartItems[existingItemIndex].quantity += 1;
                 cartItems[existingItemIndex].subtotal = cartItems[existingItemIndex].quantity * cartItems[existingItemIndex].preco;
                 showTempMessage('Quantidade aumentada!', 'info');
-                console.log('Quantidade aumentada para:', cartItems[existingItemIndex].quantity);
             } else {
                 showTempMessage('Quantidade máxima permitida é 10', 'error');
                 return;
@@ -459,13 +458,9 @@ function addToCartFromRelated(productId) {
             };
             cartItems.push(newItem);
             showTempMessage('Produto adicionado ao carrinho!', 'success');
-            console.log('Novo item adicionado:', newItem);
         }
 
         saveCartToStorage();
-        
-        console.log('Carrinho após adição:', cartItems);
-        
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         showTempMessage('Erro ao adicionar produto', 'error');
@@ -531,9 +526,6 @@ function addToCart(productId, selectedQuantity) {
 
 		// Salvar no localStorage
 		saveCartToStorage();
-
-		console.log('Carrinho após adição:', cartItems);
-
 	} catch (error) {
 		console.error('Erro ao adicionar produto:', error);
 		showTempMessage('Erro ao adicionar produto', 'error');

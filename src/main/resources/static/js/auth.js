@@ -17,11 +17,8 @@ function checkLogin() {
             const exp = payload.exp * 1000;
             
             if (Date.now() < exp) {
-                console.log('Token válido encontrado');
-                
                 // Se não temos usuário no localStorage, carregar do backend
                 if (!storedUser) {
-                    console.log('Token válido mas usuário não encontrado. Carregando do backend...');
                     loadCurrentUser().catch(error => {
                         console.error('Falha ao carregar usuário:', error);
                     });
@@ -31,7 +28,7 @@ function checkLogin() {
                 
                 return true;
             } else {
-                console.log('Token expirado');
+                // token expirado
                 logout();
             }
         } catch (error) {
@@ -187,8 +184,6 @@ async function authenticatedFetch(url, options = {}) {
         headers: { ...defaultOptions.headers, ...options.headers }
     };
 
-    console.log(`[authenticatedFetch] Fazendo requisição para: ${url}`);
-
     try {
         const response = await fetch(`${API_BASE}${url}`, fetchOptions);
         
@@ -198,7 +193,6 @@ async function authenticatedFetch(url, options = {}) {
             try {
                 await loadCurrentUser(); // Tentar recarregar usuário
                 // Se conseguir recarregar, tentar a requisição novamente
-                console.log('Usuário recarregado. Repetindo requisição...');
                 return await fetch(`${API_BASE}${url}`, fetchOptions);
             } catch (refreshError) {
                 console.error('Falha ao recarregar usuário:', refreshError);
@@ -234,7 +228,6 @@ async function handleLogin(credentials) {
             // AGORA usar loadCurrentUser para buscar dados completos
             await loadCurrentUser();
             
-            console.log('Login realizado com sucesso:', getCurrentUser());
             window.location.href = 'homepage.html';
         } else {
             throw new Error('Credenciais inválidas');

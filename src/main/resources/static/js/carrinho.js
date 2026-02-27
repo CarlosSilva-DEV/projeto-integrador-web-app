@@ -1,9 +1,3 @@
-// DEBUG
-console.log('carrinho.js carregado - verificando elementos do DOM...');
-console.log('cartItems:', document.getElementById('cartItems'));
-console.log('emptyCart:', document.getElementById('emptyCart'));
-console.log('summaryTotals:', document.getElementById('summaryTotals'));
-
 let allProducts = [];
 let cartItems = [];
 let currentOrder = null;
@@ -55,8 +49,6 @@ function checkRequiredElements() {
         console.error('Elementos obrigatórios não encontrados:', missingElements);
         return false;
     }
-    
-    console.log('Todos os elementos obrigatórios encontrados');
     return true;
 }
 
@@ -80,8 +72,6 @@ async function initializePage() {
     
     loadCartFromStorage();
     hideProductsLoading();
-    
-    console.log('Página do carrinho inicializada com sucesso');
 }
 
 // Verificar autenticação
@@ -95,11 +85,6 @@ function checkAuthentication() {
 
 // Verificar estado da autenticação
 function checkAuthStatus() {
-    console.log('=== VERIFICAÇÃO DE AUTENTICAÇÃO ===');
-    console.log('Usuário logado:', authSystem.isLoggedIn());
-    console.log('Token existe:', !!authSystem.getToken());
-    console.log('Usuário atual:', authSystem.getCurrentUser());
-    
     // Verificar se o token está expirado
     const token = authSystem.getToken();
     if (token) {
@@ -107,13 +92,10 @@ function checkAuthStatus() {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const exp = payload.exp * 1000; // Converter para milliseconds
             const now = Date.now();
-            console.log('Token expira em:', new Date(exp).toLocaleString());
-            console.log('Token expirado?', now > exp);
         } catch (e) {
-            console.log('Erro ao decodificar token:', e);
+            console.error('Erro ao decodificar token:', e);
         }
     }
-    console.log('================================');
 }
 
 // Função para garantir que os elementos do carrinho existem
@@ -125,10 +107,8 @@ function ensureCartElements() {
             const emptyCart = document.getElementById('emptyCart');
             
             if (cartItems && summaryTotals && emptyCart) {
-                console.log('Elementos do carrinho encontrados');
                 resolve(true);
             } else {
-                console.log('Aguardando elementos do carrinho...');
                 setTimeout(checkElements, 100);
             }
         };
@@ -241,8 +221,6 @@ function renderProducts(products) {
         const cartItem = cartItems.find(item => item.productId === product.id);
         const quantity = cartItem ? cartItem.quantity : 0;
 
-        console.log(`Produto ${product.id}: quantidade no carrinho = ${quantity}`);
-
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image">
@@ -273,7 +251,6 @@ function renderProducts(products) {
     }).join('');
 
     productsGrid.innerHTML = productsHTML;
-    console.log('Produtos renderizados:', products.length);
 }
 
 // Buscar produto por ID (para quando não estiver na lista carregada)
@@ -293,17 +270,12 @@ async function fetchProductById(productId) {
 // Adicionar produto ao carrinho
 async function addToCart(productId) {
     try {
-        console.log('Adicionando produto ao carrinho:', productId);
-        
         let product = allProducts.find(p => p.id === productId);
         if (!product) {
             console.error('Produto não encontrado na lista local. ID:', productId);
             showTempMessage('Produto não encontrado!', 'error');
             return;
         }
-
-        console.log('Produto encontrado:', product.nome);
-
         // Verificar se o produto já está no carrinho
         const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
         
@@ -313,7 +285,6 @@ async function addToCart(productId) {
                 cartItems[existingItemIndex].quantity += 1;
                 cartItems[existingItemIndex].subtotal = cartItems[existingItemIndex].quantity * cartItems[existingItemIndex].preco;
                 showTempMessage('Quantidade aumentada!', 'info');
-                console.log('Quantidade aumentada para:', cartItems[existingItemIndex].quantity);
             } else {
                 showTempMessage('Quantidade máxima permitida é 10', 'error');
                 return;
@@ -329,7 +300,6 @@ async function addToCart(productId) {
             };
             cartItems.push(newItem);
             showTempMessage('Produto adicionado ao carrinho!', 'success');
-            console.log('Novo item adicionado:', newItem);
         }
 
         saveCartToStorage();
@@ -340,9 +310,6 @@ async function addToCart(productId) {
         // Atualizar o carrinho
         updateCartDisplay();
         window.location.reload();
-        
-        console.log('Carrinho após adição:', cartItems);
-        
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         showTempMessage('Erro ao adicionar produto', 'error');
@@ -375,8 +342,6 @@ function updateProductQuantity(productId, change) {
     renderProducts(allProducts); // ATUALIZA OS PRODUTOS
     updateCartDisplay(); // ATUALIZA O RESUMO DO CARRINHO
     window.location.reload();
-    
-    console.log('Carrinho atualizado:', cartItems);
 }
 
 // Carregar carrinho do localStorage
@@ -435,7 +400,6 @@ function updateCartDisplay() {
             const retryEmptyCart = document.getElementById('emptyCart');
             
             if (retryCartItems && retrySummaryTotals && retryEmptyCart) {
-                console.log('Elementos encontrados na retentativa. Atualizando carrinho...');
                 updateCartDisplay(); // Recursão para atualizar com elementos encontrados
             }
         }, 100);
@@ -443,12 +407,9 @@ function updateCartDisplay() {
         return;
     }
 
-    console.log('Atualizando exibição do carrinho. Itens:', cartItems.length);
-
     if (cartItems.length === 0) {
         emptyCart.style.display = 'block';
         summaryTotals.style.display = 'none';
-        console.log('Carrinho vazio exibido');
         return;
     }
 
@@ -457,7 +418,6 @@ function updateCartDisplay() {
 
     // Renderizar itens do carrinho
     const itemsHTML = cartItems.map(item => {
-        console.log('Renderizando item:', item);
         return `
             <div class="cart-item">
                 <div class="item-image">
@@ -488,18 +448,11 @@ function updateCartDisplay() {
 
     // Calcular totais
     updateCartTotals();
-    
-    console.log('Carrinho atualizado com sucesso');
 }
 
 // Remover item do carrinho
 function removeFromCart(productId) {
-    console.log('Removendo produto:', productId);
-    console.log('Carrinho antes:', cartItems);
-    
     cartItems = cartItems.filter(item => item.productId !== productId);
-    
-    console.log('Carrinho depois:', cartItems);
     
     saveCartToStorage();
     renderProducts(allProducts);
@@ -552,8 +505,6 @@ async function handleCheckout() {
             }))
         };
 
-        console.log('Enviando dados do pedido:', orderData);
-
         const response = await authSystem.authenticatedFetch('/users/profile/orders', {
             method: 'POST',
             headers: {
@@ -569,7 +520,6 @@ async function handleCheckout() {
         }
 
         currentOrder = await response.json();
-        console.log('Pedido criado com sucesso:', currentOrder);
         
         // Limpar carrinho após criar pedido
         cartItems = [];
@@ -617,20 +567,13 @@ function debounce(func, wait) {
 
 // Função para verificar e sincronizar autenticação (ATUALIZADA)
 async function verifyAndSyncAuth() {
-    console.log('=== SINCRONIZANDO AUTENTICAÇÃO ===');
-    
     const hasToken = !!authSystem.getToken();
     let currentUser = authSystem.getCurrentUser(); // Tenta pegar do cache primeiro
     
-    console.log('Token presente:', hasToken);
-    console.log('Usuário no cache:', currentUser);
-    
     if (hasToken && !currentUser) {
-        console.log('Token presente mas usuário ausente no cache. Carregando do backend...');
         try {
             // Usar o loadCurrentUser para buscar dados atualizados
             currentUser = await authSystem.loadCurrentUser();
-            console.log('Dados do usuário carregados do backend:', currentUser);
         } catch (error) {
             console.error('Erro ao carregar dados do usuário:', error);
             authSystem.logout();
@@ -640,7 +583,6 @@ async function verifyAndSyncAuth() {
     }
     
     if (!hasToken) {
-        console.log('Token não encontrado. Redirecionando para login...');
         window.location.href = 'login.html';
         return false;
     }
@@ -653,7 +595,6 @@ async function verifyAndSyncAuth() {
         return false;
     }
     
-    console.log('Autenticação válida. Usuário:', currentUser.nome);
     return true;
 }
 

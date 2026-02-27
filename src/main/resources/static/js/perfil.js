@@ -134,15 +134,11 @@ function updateProfileDisplay() {
         console.warn('Perfil do usuário não carregado');
         return;
     }
-
-    console.log('Atualizando perfil com dados:', userProfile);
-
     // Função auxiliar para atualizar elementos com segurança
     function safeUpdateElement(id, value, property = 'textContent') {
         const element = document.getElementById(id);
         if (element) {
             element[property] = value;
-            console.log(`Elemento ${id} atualizado:`, value);
         } else {
             console.warn(`Elemento não encontrado: ${id}`);
         }
@@ -193,8 +189,6 @@ function updateProfileDisplay() {
     const roleText = userProfile.role === 'ROLE_ADMIN' ? 'Administrador' : 'Usuário';
     safeUpdateElement('userRole', roleText);
     safeUpdateClass('userRole', 'info-value', true);
-
-    console.log('Perfil atualizado com sucesso');
 }
 
 // Renderizar pedidos

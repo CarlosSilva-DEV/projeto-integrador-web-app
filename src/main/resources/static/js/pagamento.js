@@ -102,7 +102,6 @@ function getOrderIdFromUrl() {
         // Tentar obter do localStorage
         const savedOrderId = localStorage.getItem('lastOrderId');
         if (savedOrderId) {
-            console.log('Usando orderId do localStorage:', savedOrderId);
             localStorage.removeItem('lastOrderId');
             return savedOrderId;
         }
@@ -110,8 +109,6 @@ function getOrderIdFromUrl() {
         console.error('OrderId não encontrado');
         return null;
     }
-
-    console.log('OrderId obtido da URL:', orderId);
     return orderId;
 }
 
@@ -122,8 +119,6 @@ async function loadOrderData() {
     showLoading(true);
 
     try {
-        console.log(`Carregando dados do pedido ${currentOrderId}...`);
-
         // Chamar endpoint para criar pagamento
         const response = await window.authSystem.authenticatedFetch(
             `/users/profile/orders/${currentOrderId}/payment`,
@@ -137,7 +132,6 @@ async function loadOrderData() {
         }
 
         paymentData = await response.json();
-        console.log('Pagamento gerado:', paymentData);
 
         // Atualizar interface com dados reais
         updateOrderSummary(paymentData);
@@ -284,8 +278,6 @@ async function processPayment() {
     elements.payNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
 
     try {
-        console.log(`Processando pagamento para pedido ${currentOrderId}...`);
-
         // Pedir confirmação do usuário
         const userConfirmed = confirm('Você já realizou o pagamento PIX?');
         if (userConfirmed) {
@@ -315,7 +307,6 @@ async function confirmPaymentBackend() {
         }
 
         const updatedOrder = await response.json();
-        console.log('Pagamento confirmado:', updatedOrder);
 
         // Atualizar dados locais
         if (paymentData) {
