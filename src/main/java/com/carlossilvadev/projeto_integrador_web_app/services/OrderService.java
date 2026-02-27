@@ -39,18 +39,6 @@ public class OrderService {
 	public List<OrderDTO> findOrdersByCurrentUser() {
 		User currentUser = userService.getCurrentUserEntity();
 		List<Order> orders = orderRepository.findByClientWithItems(currentUser);
-		
-		// DEBUG
-		System.out.println("\n=== DEBUG: Pedidos encontrados ===\n");
-	    for (Order order : orders) {
-	        System.out.println("Pedido ID: " + order.getId());
-	        System.out.println("Moment: " + order.getMoment());
-	        System.out.println("Items count: " + order.getItems().size());
-	        for (OrderItem item : order.getItems()) {
-	            System.out.println(" - Item: " + item.getProduct().getNome() + ", Qtd: " + item.getQuantidade());
-	        }
-	    }
-		
 		return orders.stream().map(OrderDTO::new).collect(Collectors.toList());
 	}
 	
