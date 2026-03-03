@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.ProductUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
@@ -108,26 +109,37 @@ public class ProductService {
 		return orderItemRepository.existsByProductId(product.getId());
 	}
 	
-	public ProductDTO update(Long id, ProductDTO productDto) {
+	public ProductDTO update(Long id, ProductUpdateDTO productUpdateDto) {
 		Product entity = productRepository.findByIdWithCategories(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + id));
-		updateData(entity, productDto);
+		updateData(entity, productUpdateDto);
 
 		Product updatedProduct = productRepository.save(entity);
 		return new ProductDTO(updatedProduct);
 	}
 	
-	private void updateData(Product entity, ProductDTO obj) {
-		entity.setNome(obj.getNome());
-		entity.setDescricao(obj.getDescricao());
-		entity.setPreco(obj.getPreco());
-		entity.setImgUrl(obj.getImgUrl());
+	private void updateData(Product entity, ProductUpdateDTO obj) {
+		if (obj.hasNome()) {
+			entity.setNome(obj.getNome());
+		}
 		
-		if (obj.getCategories() != null) {
+		if (obj.hasDescricao()) {
+			entity.setDescricao(obj.getDescricao());
+		}
+		
+		if (obj.hasPreco()) {
+			entity.setPreco(obj.getPreco());
+		}
+		
+		if (obj.hasImgUrl()) {
+			entity.setImgUrl(obj.getImgUrl());
+		}
+		
+		if (obj.hasCategories()) {
 			for (Category category : obj.getCategories()) {
 				Category managedCategory = categoryRepository.findById(category.getId())
 						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada" + category.getId()));
-				obj.getCategories().add(managedCategory);
+				entity.getCategories().add(managedCategory);
 			}
 		}
 	}

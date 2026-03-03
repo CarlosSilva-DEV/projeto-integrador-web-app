@@ -29,7 +29,7 @@ public class Product implements Serializable {
 	private Long id;
 	private String nome;
 	private String descricao;
-	private double preco;
+	private Double preco;
 	private String imgUrl;
 	
 	@ManyToMany //relação n:n e criando tabela de associação db
@@ -43,7 +43,7 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public Product(String nome, String descricao, double preco, String imgUrl) {
+	public Product(String nome, String descricao, Double preco, String imgUrl) {
 		this.id = null;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -90,10 +90,10 @@ public class Product implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public double getPreco() {
+	public Double getPreco() {
 		return preco;
 	}
-	public void setPreco(double preco) {
+	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
 
