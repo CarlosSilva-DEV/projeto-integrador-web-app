@@ -23,10 +23,10 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      DATABASE_URL: jdbc:postgresql://postgres:5432/docker-test-database
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: abc123
-      JWTSECRETKEY: testKey
+      DOCKER_DATABASE_URL: jdbc:postgresql://postgres:5432/docker-test-database
+      DOCKER_DATABASE_USER: postgres
+      DOCKER_DATABASE_PASSWORD: abc123
+      JWTSECRETKEY: e16ffa6fbdd3b47af08dd03487b40869deda34199b7ea93b5dced3e44881ddef
       JWTEXPIRATIONMS: 900000
     depends_on:
       postgres:
