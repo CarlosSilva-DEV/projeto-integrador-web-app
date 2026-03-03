@@ -22,10 +22,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.carlossilvadev.projeto_integrador_web_app.security.jwt.AuthEntryPoint;
 import com.carlossilvadev.projeto_integrador_web_app.security.jwt.AuthFilterToken;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
+@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class WebSecurityConfig {
 	
 	@Autowired
@@ -80,6 +84,9 @@ public class WebSecurityConfig {
 				.requestMatchers("/users/profile/**").authenticated()
 				
 				.requestMatchers("/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
+				
+				// edpoints API Swagger
+				.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
 				.anyRequest().authenticated());
 		
