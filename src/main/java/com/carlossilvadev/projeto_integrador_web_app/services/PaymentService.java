@@ -137,9 +137,4 @@ public class PaymentService {
 				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado: ID " + id));
 		return new PaymentDTO(payment);
 	}
-	
-	public Payment findPaymentByOrderId(Long orderId) {
-		return paymentRepository.findByOrderId(orderId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado para o pedido: ID " + orderId));
-	}
 }
