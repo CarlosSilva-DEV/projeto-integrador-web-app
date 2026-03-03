@@ -53,6 +53,11 @@ public class CategoryService {
 	public CategoryDTO update(Long id, CategoryDTO categoryDto) {
 		Category entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
+		
+		if (entity != null && !entity.getNome().isEmpty() && repository.findByNomeIgnoreCase(entity.getNome()).isPresent()) {
+			throw new BusinessException("Categoria com o nome " + entity.getNome() + " já existente");
+		}
+		
 		updateData(entity, categoryDto);
 		Category updatedCategory = repository.save(entity);
 		return new CategoryDTO(updatedCategory);
