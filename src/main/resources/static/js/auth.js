@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8080';
+const API_BASE = window.location.origin;
 let userLoggedIn = false;
 let currentUser = null;
 let jwtToken = null;
