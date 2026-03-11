@@ -47,14 +47,17 @@ async function updateNavigation() {
             <button class="btn btn-outline" onclick="viewCart()">
                 <i class="fas fa-shopping-cart"></i> Carrinho
             </button>
-            <div class="user-menu">
-                <span class="user-name">${userName}</span>
-                <div class="user-avatar">${initials}</div>
+            <details class="user-menu-details">
+                <summary class-"user-menu-summary">
+                    <span class="user-name">${userName}</span>
+                    <div class="user-avatar">${initials}</div>
+                </summary>
+                                   
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
-            </div>
+            </details>
         `;
     } else {
         // Se não estiver logado, redireciona
@@ -278,11 +281,7 @@ async function processPayment() {
     elements.payNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
 
     try {
-        // Pedir confirmação do usuário
-        const userConfirmed = confirm('Você já realizou o pagamento PIX?');
-        if (userConfirmed) {
-            await confirmPaymentBackend();
-        }
+        await confirmPaymentBackend();
     } catch (error) {
         console.error('Erro ao processar pagamento:', error);
         showError('Erro ao processar pagamento. Tente novamente.');
@@ -322,7 +321,7 @@ async function confirmPaymentBackend() {
         // Redirecionar após alguns segundos
         setTimeout(() => {
             window.location.href = 'perfil.html';
-        }, 3000);
+        }, 1000);
 
     } catch (error) {
         console.error('Erro ao confirmar pagamento no backend:', error);
