@@ -131,14 +131,17 @@ async function updateNavigation() {
             <a href="homepage.html" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Continuar Comprando
             </a>
-            <div class="user-menu">
-                <span class="user-name">${userName}</span>
-                <div class="user-avatar">${initials}</div>
+            <details class="user-menu-details">
+                <summary class="user-menu-summary">
+                    <span class="user-name">${userName}</span>
+                    <div class="user-avatar">${initials}</div>
+                </summary>
+                
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
-            </div>
+            </details>
         `;
     }
 }
@@ -391,8 +394,6 @@ function updateCartDisplay() {
 
     // Verificar se os elementos existem antes de manipular
     if (!cartItemsContainer || !summaryTotals || !emptyCart) {
-        console.warn('Elementos do carrinho não encontrados no DOM. Tentando novamente...');
-        
         // Tentar encontrar os elementos novamente após um delay
         setTimeout(() => {
             const retryCartItems = document.getElementById('cartItems');
