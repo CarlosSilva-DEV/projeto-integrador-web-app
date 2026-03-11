@@ -268,32 +268,6 @@
            padding: 0 15px;
        }
 
-       .social-login {
-           display: flex;
-           gap: 15px;
-           margin-bottom: 25px;
-       }
-
-       .btn-social {
-           flex: 1;
-           padding: 12px;
-           border: 2px solid var(--gray-light);
-           background: white;
-           border-radius: var(--border-radius);
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           gap: 10px;
-           cursor: pointer;
-           transition: var(--transition);
-       }
-
-       .btn-social:hover {
-           border-color: var(--primary);
-           background: var(--light);
-           transform: translateY(-2px);
-       }
-
        .signup-link {
            text-align: center;
            margin-top: 20px;
@@ -351,28 +325,344 @@
        }
 
        /* Responsividade */
+       @media screen and (max-width: 992px) {
+            .login-container {
+                max-width: 800px;
+            }
+
+            .login-left {
+                padding: 40px;
+            }
+
+            .login-left h2 {
+                font-size: 2rem;
+            }
+
+            .login-right {
+                padding: 40px;
+            }
+
+            .login-header h2 {
+                font-size: 1.8rem;
+            }
+        }
+
        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                justify-content: flex-start;
+            }
+
+            header {
+                position: relative;
+                padding: 15px 0;
+            }
+
            .login-container {
                flex-direction: column;
                max-width: 500px;
+               margin: 20px 0;
+               border-radius: 12px;
            }
            
            .login-left, .login-right {
                padding: 30px;
            }
            
-           .social-login {
-               flex-direction: column;
-           }
-           
            .navbar {
-               flex-direction: column;
+               flex-direction: row;
+               justify-content: space-between;
                gap: 15px;
+               padding: 0 10px;
            }
+
+            .back-home {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .back-home i {
+                font-size: 0.9rem;
+            }
+
+            .features-list li {
+                justify-content: center;
+            }
            
            .form-options {
-               flex-direction: column;
+               flex-direction: row;
+               flex-wrap: wrap;
                gap: 15px;
                align-items: flex-start;
            }
+
+            .btn {
+                padding: 14px 20px;
+            }
+
+            .footer-links {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .footer-links a {
+                font-size: 0.9rem;
+            }
        }
+
+        /* Dispositivos móveis pequenos (até 576px) */
+        @media screen and (max-width: 576px) {
+            body {
+                padding: 5px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            /* Header mais compacto */
+            header {
+                padding: 10px 0;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .back-home {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            /* Card de login */
+            .login-container {
+                margin: 15px 0;
+                border-radius: 10px;
+            }
+
+            .login-left {
+                padding: 25px 20px;
+            }
+
+            .login-left h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .login-left p {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .features-list li {
+                margin-bottom: 12px;
+                font-size: 0.9rem;
+            }
+
+            .features-list i {
+                font-size: 1rem;
+            }
+
+            .login-right {
+                padding: 25px 20px;
+            }
+
+            .login-header {
+                margin-bottom: 20px;
+            }
+
+            .login-header h2 {
+                font-size: 1.4rem;
+                margin-bottom: 5px;
+            }
+
+            .login-header p {
+                font-size: 0.85rem;
+            }
+
+            /* Formulário */
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+                margin-bottom: 5px;
+            }
+
+            .form-control {
+                padding: 12px 12px 12px 40px;
+                font-size: 0.95rem;
+            }
+
+            .input-with-icon i {
+                font-size: 0.9rem;
+                left: 12px;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+
+            .remember-me {
+                font-size: 0.9rem;
+            }
+
+            .forgot-password {
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .signup-link {
+                margin-top: 15px;
+                font-size: 0.9rem;
+            }
+
+            /* Footer */
+            footer {
+                padding: 15px 0;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .footer-links a {
+                font-size: 0.85rem;
+            }
+
+            .copyright {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Dispositivos muito pequenos (até 375px) */
+        @media screen and (max-width: 375px) {
+            .login-left {
+                padding: 20px 15px;
+            }
+
+            .login-left h2 {
+                font-size: 1.3rem;
+            }
+
+            .features-list li {
+                font-size: 0.85rem;
+            }
+
+            .login-right {
+                padding: 20px 15px;
+            }
+
+            .login-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .form-control {
+                padding: 10px 10px 10px 35px;
+                font-size: 0.9rem;
+            }
+
+            .input-with-icon i {
+                left: 10px;
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .signup-link {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Ajustes para orientação paisagem em mobile */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+            }
+
+            header {
+                position: relative;
+            }
+
+            .login-container {
+                margin: 10px 0;
+            }
+
+            .login-left, 
+            .login-right {
+                padding: 20px;
+            }
+
+            .features-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .features-list li {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Melhorias de acessibilidade para touch */
+        @media (hover: none) and (pointer: coarse) {
+            .btn,
+            .back-home,
+            .forgot-password,
+            .signup-link a,
+            .footer-links a {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .form-control {
+                font-size: 16px; /* Previne zoom automático em iOS */
+            }
+
+            .remember-me input {
+                width: 20px;
+                height: 20px;
+            }
+
+            .remember-me label {
+                padding: 10px 0;
+            }
+        }
+
+        /* Animações suaves em dispositivos que suportam */
+        @media (prefers-reduced-motion: no-preference) {
+            .login-container {
+                animation: fadeInUp 0.5s ease;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
