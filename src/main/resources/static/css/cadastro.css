@@ -278,33 +278,6 @@ header {
     font-size: 0.9rem;
 }
 
-.social-signup {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.btn-social {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid var(--gray-light);
-    background: white;
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
-    color: var(--dark);
-}
-
-.btn-social:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
-}
-
 .login-link {
     text-align: center;
     margin-top: 20px;
@@ -360,46 +333,345 @@ footer {
 }
 
 /* Estilos para telas menores */
+@media screen and (max-width: 992px) {
+    .signup-container {
+        max-width: 900px;
+    }
+
+    .signup-left {
+        padding: 40px;
+    }
+
+    .signup-left h2 {
+        font-size: 2rem;
+    }
+
+    .signup-right {
+        padding: 35px;
+    }
+
+    .signup-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .features-list li {
+        font-size: 0.95rem;
+    }
+}
+
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+        justify-content: flex-start;
+    }
+
+    header {
+        position: relative;
+        padding: 15px 0;
+    }
+
     .signup-container {
         flex-direction: column;
-        margin: 60px auto 20px;
-    }
-    
-    .signup-left, .signup-right {
-        padding: 30px;
-    }
-    
-    .social-signup {
-        flex-direction: column;
+        margin: 20px auto;
+        max-width: 550px;
+        border-radius: 12px;
     }
     
     .navbar {
-        flex-direction: column;
+        flex-direction: row;
         gap: 15px;
         text-align: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .back-home {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .back-home i {
+        font-size: 0.9rem;
+    }
+
+    .signup-left {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .signup-left p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
     }
     
     .signup-left h2 {
         font-size: 1.8rem;
+        margin-bottom: 15px;
     }
     
+    .signup-header {
+        margin-bottom: 20px;
+    }
+
     .signup-header h2 {
         font-size: 1.6rem;
+        margin-bottom: 5px;
+    }
+
+    .signup-header p {
+        font-size: 0.9rem;
+    }
+
+    .features-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .features-list li {
+        margin-bottom: 0;
+        justify-content: center;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+    
+    .signup-right {
+        padding: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        padding: 12px 12px 12px 40px;
+        font-size: 0.95rem;
+    }
+
+    .password-hints {
+        font-size: 0.75rem;
+    }
+
+    .btn {
+        padding: 14px;
+        font-size: 0.95rem;
+    }
+
+    .footer-links {
+        gap: 15px;
+    }
+
+    .footer-links a {
+        font-size: 0.9rem;
     }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 576px) {
     body {
-        padding: 10px;
+        padding: 5px;
     }
-    
-    .signup-left, .signup-right {
-        padding: 20px;
+
+    .container {
+        padding: 0 10px;
     }
-    
-    .footer-links {
+
+    /* Header mais compacto */
+    header {
+        padding: 10px 0;
+    }
+
+    .navbar {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
+    .back-home {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    /* Card de cadastro */
+    .signup-container {
+        margin: 15px 0;
+        border-radius: 10px;
+    }
+
+    .signup-left {
+        padding: 25px 20px;
+    }
+
+    .signup-left h2 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .signup-left p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .features-list {
+        grid-template-columns: 1fr; /* Volta para uma coluna */
+        gap: 10px;
+    }
+
+    .features-list li {
+        font-size: 0.85rem;
+        justify-content: flex-start;
+    }
+
+    .features-list i {
+        font-size: 1rem;
+        min-width: 20px;
+    }
+
+    .signup-right {
+        padding: 25px 20px;
+    }
+
+    .signup-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .signup-header p {
+        font-size: 0.85rem;
+    }
+
+    /* Formulário compacto */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+
+    .form-control {
+        padding: 12px 12px 12px 38px;
+        font-size: 0.9rem;
+    }
+
+    .input-with-icon i {
+        font-size: 0.9rem;
+        left: 12px;
+    }
+
+    .password-strength {
+        height: 4px;
+        margin-top: 4px;
+    }
+
+    .password-hints {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary:hover {
+        transform: none; /* Remove hover em touch */
+    }
+
+    .divider {
+        margin: 20px 0;
+    }
+
+    .divider span {
+        font-size: 0.8rem;
+        padding: 0 10px;
+    }
+
+    .login-link {
+        margin-top: 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+        padding: 15px 0;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .footer-links a {
+        font-size: 0.85rem;
+        padding: 8px 0;
+    }
+
+    .copyright {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .signup-left {
+        padding: 20px 15px;
+    }
+
+    .signup-left h2 {
+        font-size: 1.3rem;
+    }
+
+    .features-list li {
+        font-size: 0.8rem;
+    }
+
+    .signup-right {
+        padding: 20px 15px;
+    }
+
+    .signup-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-control {
+        padding: 10px 10px 10px 35px;
+        font-size: 0.85rem;
+    }
+
+    .input-with-icon i {
+        left: 10px;
+        font-size: 0.8rem;
+    }
+
+    .password-hints {
+        font-size: 0.65rem;
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .login-link {
+        font-size: 0.8rem;
     }
 }
