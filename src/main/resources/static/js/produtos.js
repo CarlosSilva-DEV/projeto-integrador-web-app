@@ -27,14 +27,17 @@ async function updateNavigation() {
             <button class="btn btn-outline" onclick="viewCart()">
                 <i class="fas fa-shopping-cart"></i> Carrinho
             </button>
-            <div class="user-menu">
-                <span class="user-name">${userName}</span>
-                <div class="user-avatar">${initials}</div>
+            <details class="user-menu-details">
+				<summary class="user-menu-summary">
+					<span class="user-name">${userName}</span>
+					<div class="user-avatar">${initials}</div>
+				</summary>
+				
                 <div class="user-dropdown">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
-            </div>
+            </details>
         `;
 	} else {
 		navButtons.innerHTML = `
