@@ -37,14 +37,16 @@ async function updateNavigation() {
             <button class="btn btn-outline" onclick="viewCart()">
                 <i class="fas fa-shopping-cart"></i> Carrinho
             </button>
-            <div class="user-menu">
-                <span class="user-name">${userName}</span>
-                <div class="user-avatar">${initials}</div>
+            <details class="user-menu-details">
+                <summary class="user-menu-summary">
+                    <span class="user-name">${userName}</span>
+                    <div class="user-avatar">${initials}</div>
+                </summary>
                 <div class="user-dropdown">
                     <a href="perfil.html" class="active"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" onclick="authSystem.logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
-            </div>
+            </details>
         `;
     }
 }
@@ -201,10 +203,6 @@ function renderOrders() {
                 <i class="fas fa-shopping-bag"></i>
                 <h3>Nenhum pedido realizado</h3>
                 <p>Que tal fazer sua primeira compra?</p>
-                <button class="btn btn-primary" onclick="startNewOrder()">
-                    <i class="fas fa-plus"></i>
-                    <span>Fazer Primeiro Pedido</span>
-                </button>
             </div>
         `;
         return;
@@ -393,7 +391,6 @@ async function payOrder(orderId) {
             throw new Error('Erro ao processar pagamento');
         }
         
-        alert('Pagamento processado com sucesso!');
         window.location.href = `pagamento.html?orderId=${orderId}`;
 
     } catch (error) {
