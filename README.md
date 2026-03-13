@@ -1,9 +1,14 @@
 <h1 align="center" style="font-weight: bold">PROJETO INTEGRADOR - APLICAÇÃO WEB 💻</h1>
 
+<h2 align="center">Link para a aplicação hospedada:
+  <a href="https://spring-based-web-store.onrender.com/">https://spring-based-web-store.onrender.com/</a>
+</h2>
+
 <p align="center">
   <a href="#visão-geral">Visão Geral</a> •
   <a href="#tecnologias-utilizadas">Tecnologias Utilizadas</a> •
   <a href="#técnicas-utilizadas">Técnicas Utilizadas</a> •
+  <a href="#diagrama-de-classes">Diagrama de Classes</a> •
   <a href="#como-testar-o-projeto">Como testar o projeto?</a> •
   <a href="#documentação-da-api">Documentação da API</a> •
   <a href="#contribuir-para-o-projeto">Contribuir para o projeto</a>
@@ -27,6 +32,7 @@
   <img src=https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white>
   <img src=https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white>
   <img src=https://img.shields.io/badge/Eclipse-FE7A16.svg?style=for-the-badge&logo=Eclipse&logoColor=white>
+  <img src=https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white>
 </div>
 
 <br>
@@ -65,6 +71,7 @@ Esse projeto consiste em uma aplicação completa com frontend baseado em web, a
 ## TÉCNICAS UTILIZADAS
 
 - Desenvolvimento no Visual Studio Code e Spring Tools Suite (Eclipse)
+- Deploy da aplicação e servidor remoto de banco de dados com Render
 - Paradigmas de Programação Orientada a Objetos e Estruturas de Dados
 - Arquitetura Monolítica
 - Padrão de Projeto MVC (Model-View-Controller)
@@ -78,16 +85,28 @@ Esse projeto consiste em uma aplicação completa com frontend baseado em web, a
 
 <br>
 
+## DIAGRAMA DE CLASSES
+
+O diagrama UML abaixo contém uma representação das entidades da aplicação, seus relacionamentos e classes utilitárias que auxiliam em diversas funções, desde a criação de chaves compostas até a representação de estados de entidades através de Enums.
+
+<img src="./diagrama-uml.png" alt="Diagrama UML representando as entidades do sistema">
+
+<br>
+
 ## COMO TESTAR O PROJETO?
 
 ### Pré-requisitos
 
-- Docker Engine
-- Docker Compose
+- [Instale o Docker Engine](https://docs.docker.com/engine/install)
+- [Instale o Docker Compose](https://docs.docker.com/compose/install)
 
 ### 1. Clonar repositório
-Em seu computador, abra o terminal e navegue até um diretório de sua preferência para armazenar o projeto. Execute o comando abaixo para clonar o repositório remoto para seu computador: 
+Em seu computador, abra o terminal e navegue até um diretório de sua preferência para armazenar o projeto. Execute qualquer um dos comandos abaixo para clonar o repositório remoto para seu computador: 
 ```bash
+# Clonar utilizando URL do repositório remoto
+git clone https://github.com/CarlosSilva-DEV/projeto-integrador-web-app.git
+
+# Clonar utilizando chave SSH
 git clone git@github.com:CarlosSilva-DEV/projeto-integrador-web-app.git
 ```
 
@@ -96,6 +115,9 @@ Após clonar o projeto, execute o comando abaixo para realizar o build dos conta
 ```bash
 sudo docker-compose up --build
 ```
+
+### 3. Acesse a aplicação através do localhost
+Após a conclusão do build dos containers e inicialização do Spring, você poderá acessar a aplicação diretamente em seu navegador, através do endereço: http://localhost:8080.
 
 ### Adicionais
 
@@ -123,7 +145,7 @@ sudo docker-compose down -v
 
 A API backend de uma aplicação web serve para receber requisições de seus usuários, processá-las e retornar suas respectivas respostas. No contexto desse projeto, a API possui endpoints livres para acesso por qualquer **usuário autenticado** e endpoints restritos a **usuários ADMIN**. Caso deseje testar requisições restritas a usuários ADMIN, consulte a classe [AdminConfig.java](https://github.com/CarlosSilva-DEV/projeto-integrador-web-app/blob/main/src/main/java/com/carlossilvadev/projeto_integrador_web_app/config/AdminConfig.java), a qual contém os **dados do ADMIN padrão criado na inicialização da aplicação**.
 
-Seguem abaixo algumas demonstrações de como realizar requisições nos principais endpoints da aplicação. Para mais detalhes sobre a API, execute a aplicação e **visite a documentação do Swagger** no endereço: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html#/)
+Seguem abaixo algumas demonstrações de como realizar requisições nos principais endpoints da aplicação. Para mais detalhes sobre a API, [execute a aplicação](#como-testar-o-projeto) e **visite a documentação do Swagger** no endereço: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html#/)
 
 ### 1. /auth/register
 - Endpoint inicial da aplicação para um novo usuário, responsável por receber requisições de cadastro de novos usuários
