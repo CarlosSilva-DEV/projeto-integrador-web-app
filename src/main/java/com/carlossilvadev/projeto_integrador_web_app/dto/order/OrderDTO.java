@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.OrderClientDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
-import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -18,7 +18,7 @@ public class OrderDTO {
 	private Instant moment;
 	
 	private OrderStatus orderStatus;
-	private User client;
+	private OrderClientDTO client;
 	private Set<OrderItemDTO> items = new HashSet<>();
 	private double total;
 	private Payment payment;
@@ -28,7 +28,7 @@ public class OrderDTO {
 		this.id = order.getId();
 		this.moment = order.getMoment();
 		this.orderStatus = order.getOrderStatus();
-		this.client = order.getClient();
+		this.client = new OrderClientDTO(order.getClient());
 		this.total = order.getTotal();
 		this.payment = order.getPayment();
 		
@@ -59,10 +59,10 @@ public class OrderDTO {
 		this.orderStatus = orderStatus;
 	}
 	
-	public User getClient() {
+	public OrderClientDTO getClient() {
 		return client;
 	}
-	public void setClient(User client) {
+	public void setClient(OrderClientDTO client) {
 		this.client = client;
 	}
 	
