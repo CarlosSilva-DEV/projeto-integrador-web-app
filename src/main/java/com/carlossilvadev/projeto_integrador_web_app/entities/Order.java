@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 

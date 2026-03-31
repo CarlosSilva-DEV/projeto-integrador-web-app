@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserUpdateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;

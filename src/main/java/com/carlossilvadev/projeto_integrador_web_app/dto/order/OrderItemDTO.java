@@ -1,5 +1,6 @@
-package com.carlossilvadev.projeto_integrador_web_app.dto;
+package com.carlossilvadev.projeto_integrador_web_app.dto.order;
 
+import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 
 public class OrderItemDTO {

@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.ProductUpdateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;

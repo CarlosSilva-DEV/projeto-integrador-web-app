@@ -10,10 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.AccessDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.AuthenticationDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.RegisterDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AccessDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;

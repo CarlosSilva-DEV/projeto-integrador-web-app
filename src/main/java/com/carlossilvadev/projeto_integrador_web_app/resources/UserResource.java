@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderCreateDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.PaymentDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserUpdateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderCreateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.payment.PaymentDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
 import com.carlossilvadev.projeto_integrador_web_app.services.PaymentService;
 import com.carlossilvadev.projeto_integrador_web_app.services.UserService;

@@ -1,4 +1,4 @@
-package com.carlossilvadev.projeto_integrador_web_app.dto;
+package com.carlossilvadev.projeto_integrador_web_app.dto.order;
 
 import java.time.Instant;
 import java.util.HashSet;

@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderCreateDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderItemDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderCreateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderItemDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
 import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;

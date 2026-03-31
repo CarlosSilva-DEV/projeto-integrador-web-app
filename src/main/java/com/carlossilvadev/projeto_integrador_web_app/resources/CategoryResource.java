@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.CategoryDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;

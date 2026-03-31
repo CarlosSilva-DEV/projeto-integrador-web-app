@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

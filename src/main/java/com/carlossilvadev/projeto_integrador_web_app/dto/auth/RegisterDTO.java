@@ -1,4 +1,4 @@
-package com.carlossilvadev.projeto_integrador_web_app.dto;
+package com.carlossilvadev.projeto_integrador_web_app.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

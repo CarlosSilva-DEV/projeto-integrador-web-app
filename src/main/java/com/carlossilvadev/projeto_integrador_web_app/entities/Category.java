@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.CategoryDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;

@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.CategoryDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;

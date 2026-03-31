@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.ProductDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.ProductUpdateDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.PaymentDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.payment.PaymentDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;

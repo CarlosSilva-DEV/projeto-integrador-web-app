@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.OrderDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;

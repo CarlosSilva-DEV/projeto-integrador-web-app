@@ -1,7 +1,8 @@
-package com.carlossilvadev.projeto_integrador_web_app.dto;
+package com.carlossilvadev.projeto_integrador_web_app.dto.payment;
 
 import java.time.Instant;
 
+import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;

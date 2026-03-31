@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.carlossilvadev.projeto_integrador_web_app.dto.AccessDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.AuthenticationDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.RegisterDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AccessDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;

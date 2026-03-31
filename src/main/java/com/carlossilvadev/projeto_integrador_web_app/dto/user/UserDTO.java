@@ -1,4 +1,4 @@
-package com.carlossilvadev.projeto_integrador_web_app.dto;
+package com.carlossilvadev.projeto_integrador_web_app.dto.user;
 
 import org.springframework.beans.BeanUtils;
 
