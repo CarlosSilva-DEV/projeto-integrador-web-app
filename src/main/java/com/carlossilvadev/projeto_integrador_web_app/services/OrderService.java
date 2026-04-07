@@ -1,4 +1,5 @@
 package com.carlossilvadev.projeto_integrador_web_app.services;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,24 +56,22 @@ public class OrderService {
 		Order order = new Order();
 		order.setClient(currentUser);
 		
-		
-		Order savedOrder = orderRepository.save(order);
+		List<OrderItem> tempList = new ArrayList<>();
 		
 		for (OrderItemDTO itemDto : orderCreateDto.getItems()) {
 			Product product = productRepository.findById(itemDto.getProductId())
 					.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + itemDto.getProductId()));
 			
-			OrderItem orderItem = new OrderItem(savedOrder, product, itemDto.getQuantidade(), product.getPreco());
+			OrderItem orderItem = new OrderItem(order, product, itemDto.getQuantidade(), product.getPreco());
+			tempList.add(orderItem);
 			order.getItems().add(orderItem);
-			order.calcularTotal();
-			
-			orderItemRepository.save(orderItem);
 		}
 		
-		Order orderWithItems = orderRepository.findByIdWithItems(savedOrder.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + savedOrder.getId()));
+		order.calcularTotal();
+		orderRepository.save(order);		
+		orderItemRepository.saveAll(tempList);
 		
-		return new OrderDTO(orderWithItems);
+		return new OrderDTO(order);
 	}
 	
 	public OrderDTO cancelOrder(Long id) {
