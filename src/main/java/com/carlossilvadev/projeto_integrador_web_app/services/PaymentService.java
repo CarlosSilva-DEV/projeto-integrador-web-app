@@ -2,7 +2,6 @@ package com.carlossilvadev.projeto_integrador_web_app.services;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,10 @@ public class PaymentService {
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
 				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + orderId));
 		
-		Optional<Payment> existingPayment = paymentRepository.findByOrderId(orderId);
-		
-		if (existingPayment.isPresent()) {
-			Payment payment = existingPayment.get();
-			String qrCode = generatePixQrCode(order);
-			String copiaCola = generatePixCopiaCola(order);
-			return new PaymentDTO(payment, qrCode, copiaCola);
+		if (order.getPayment() != null) {
+			Payment payment = order.getPayment();
+			String pixCode = generatePixCode(order);
+			return new PaymentDTO(payment, pixCode, pixCode, payment.getStatus());
 		}
 		
 		Payment payment = new Payment(order);
@@ -53,13 +49,8 @@ public class PaymentService {
 		order.setOrderStatus(OrderStatus.PROCESSANDO_PAGAMENTO);
 		orderRepository.save(order);
 		
-		String qrCode = generatePixQrCode(order);
-		String copiaCola = generatePixCopiaCola(order);
-		return new PaymentDTO(savedPayment, qrCode, copiaCola) {
-			{
-				this.setStatus(PaymentStatus.PENDENTE);
-			}
-		};
+		String pixCode = generatePixCode(order);
+		return new PaymentDTO(savedPayment, pixCode, pixCode, payment.getStatus());
 	}
 	
 	public OrderDTO confirmPayment(Long orderId) {
@@ -78,19 +69,7 @@ public class PaymentService {
 	
 	
 	// métodos auxiliares (gerar códigos Pix e cálculo CRC16)
-	private String generatePixQrCode(Order order) {
-		StringBuilder payload = new StringBuilder();
-		payload.append("00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000");
-		payload.append("5204000053039865406");
-		payload.append(String.format("%.2f", order.getTotal()));
-		payload.append("5802BR5901%6001%62070503***6304");
-		payload.append("MINHA_LOJA");
-		
-		String crc = calculateCRC16(payload.toString());
-		return payload.toString() + crc;
-	}
-	
-	private String generatePixCopiaCola(Order order) {
+	private String generatePixCode(Order order) {
 		StringBuilder payload = new StringBuilder();
 		payload.append("00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000");
 		payload.append("5204000053039865406");
