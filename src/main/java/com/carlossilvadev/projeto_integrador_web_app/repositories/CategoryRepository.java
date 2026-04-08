@@ -11,8 +11,6 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>{
-	Optional<Category> findByNome(String nome);
-	
 	@Query("SELECT c FROM Category c WHERE LOWER(c.nome) = LOWER(:nome)")
 	Optional<Category> findByNomeIgnoreCase(@Param("nome") String nome);
 	
