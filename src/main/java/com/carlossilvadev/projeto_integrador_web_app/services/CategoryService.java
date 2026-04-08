@@ -54,8 +54,8 @@ public class CategoryService {
 		Category entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
 		
-		if (entity != null && !entity.getNome().isEmpty() && repository.findByNomeIgnoreCase(entity.getNome()).isPresent()) {
-			throw new BusinessException("Categoria com o nome " + entity.getNome() + " já existente");
+		if (categoryDto != null && !categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
+			throw new BusinessException("Categoria com o nome " + categoryDto.getNome() + " já existente");
 		}
 		
 		updateData(entity, categoryDto);
