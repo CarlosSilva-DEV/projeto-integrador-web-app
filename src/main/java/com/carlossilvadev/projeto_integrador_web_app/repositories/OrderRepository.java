@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
-import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>{
@@ -18,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product WHERE o.client = :client")
 	List<Order> findByClientWithItems(@Param("client") User client);
 	
-	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product WHERE o.id = :id AND o.client = :client")
+	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH o.payment LEFT JOIN FETCH i.id.product WHERE o.id = :id AND o.client = :client")
 	Optional<Order> findByIdAndClientWithItems(@Param("id") Long id, @Param("client") User client);
 	
 	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product")
@@ -29,11 +28,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 	
 	
 	// métodos de busca (filtros)
-	@Query("SELECT o FROM Order o WHERE o.orderStatus IN :statusList")
-	List<Order> findByStatusIn(@Param("statusList") List<OrderStatus> statusList);
-	
-	List<Order> findByOrderStatus(OrderStatus status);
-	
 	@Query("SELECT COUNT(o) > 0 FROM Order o WHERE o.client = :client")
 	boolean existsByClient(@Param("client") User client);
 }
