@@ -8,8 +8,4 @@ public class OrderCreateDTO {
 	public List<OrderItemDTO> getItems() {
 		return items;
 	}
-	
-	public void setItems(List<OrderItemDTO> items) {
-		this.items = items;
-	}
 }
