@@ -3,9 +3,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
-import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserRequestDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -53,8 +52,24 @@ public class User implements Serializable { // interface que salva o estado atua
 		this.senha = senha;
 	}
 	
-	public User(UserDTO userDto) {
-		BeanUtils.copyProperties(userDto, this);
+	public User(UserRequestDTO userDto) {
+		this.id = null;
+		this.nome = userDto.getNome();
+		this.login = userDto.getLogin();
+		this.email = userDto.getEmail();
+		this.telefone = userDto.getTelefone();
+		this.senha = userDto.getSenha();
+		this.role = userDto.getRole();
+	}
+	
+	public User(RegisterDTO registerDto) {
+		this.id = null;
+		this.nome = registerDto.getNome();
+		this.login = registerDto.getLogin();
+		this.email = registerDto.getEmail();
+		this.telefone = registerDto.getTelefone();
+		this.senha = registerDto.getSenha();
+		this.role = UserRole.ROLE_USER;
 	}
 	
 	// getters e setters
