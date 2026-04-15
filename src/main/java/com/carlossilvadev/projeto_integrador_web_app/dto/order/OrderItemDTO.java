@@ -22,39 +22,24 @@ public class OrderItemDTO {
 		this.product = new ProductDTO(orderItem.getProduct());
 	}
 	
-	// getters e setters
+	// getters
 	public Long getProductId() {
 		return productId;
-	}
-	public void setProductId(Long productId) {
-		this.productId = productId;
 	}
 	
 	public Integer getQuantidade() {
 		return quantidade;
 	}
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
 	
 	public double getPreco() {
 		return preco;
-	}
-	public void setPreco(double preco) {
-		this.preco = preco;
 	}
 
 	public double getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(double subtotal) {
-		this.subtotal = subtotal;
-	}
 
 	public ProductDTO getProduct() {
 		return product;
-	}
-	public void setProduct(ProductDTO product) {
-		this.product = product;
 	}
 }
