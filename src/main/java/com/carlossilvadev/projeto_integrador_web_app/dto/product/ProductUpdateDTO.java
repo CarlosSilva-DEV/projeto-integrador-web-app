@@ -2,13 +2,10 @@ package com.carlossilvadev.projeto_integrador_web_app.dto.product;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
-
-import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
-import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -16,8 +13,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ProductUpdateDTO {
-	private Long id;
-	
 	@Size(min = 1, max = 50, message = "Nome deve ter entre 1 a 50 caracteres")
 	private String nome;
 	
@@ -30,28 +25,24 @@ public class ProductUpdateDTO {
 	private Double preco;
 	
 	private String imgUrl;
-	private Set<Category> categories = new HashSet<>();
-	
-	@JsonIgnore
-	private Set<OrderItem> items = new HashSet<>();
+	private Set<CategoryDTO> categories = new HashSet<>();
 	
 	// Construtores
 	public ProductUpdateDTO(Product product) {
-		BeanUtils.copyProperties(product, this);
+		this.nome = product.getNome();
+		this.descricao = product.getDescricao();
+		this.preco = product.getPreco();
+		this.imgUrl = product.getImgUrl();
 		
 		if (product.getCategories() != null) {
-			this.categories = new HashSet<>(product.getCategories());
+			this.categories = new HashSet<>(product.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toSet()));
 		}
 	}
 
 	public ProductUpdateDTO() {
 	}
 	
-	// getters e setters
-	public Long getId() {
-		return id;
-	}
-
+	// getters
 	public String getNome() {
 		return nome;
 	}
@@ -68,12 +59,8 @@ public class ProductUpdateDTO {
 		return imgUrl;
 	}
 	
-	public Set<Category> getCategories() {
+	public Set<CategoryDTO> getCategories() {
 		return categories;
-	}
-
-	public Set<OrderItem> getItems() {
-		return items;
 	}
 	
 	// métodos has (update de Produto)
