@@ -26,11 +26,11 @@ public class PaymentDTO {
 		this.status = payment.getStatus();
 	}
 	
-	public PaymentDTO(Payment payment, String pixQrCode, String pixCopiaCola) {
+	public PaymentDTO(Payment payment, String pixQrCode, String pixCopiaCola, PaymentStatus status) {
 		this.id = payment.getId();
 		this.moment = payment.getMoment();
 		this.order = new OrderDTO(payment.getOrder());
-		this.status = payment.getStatus();
+		this.status = status;
 		this.pixQrCode = pixQrCode;
 		this.pixCopiaCola = pixCopiaCola;
 	}
@@ -38,46 +38,28 @@ public class PaymentDTO {
 	public PaymentDTO() {
 	}
 	
-	// getters e setters
+	// getters
 	public Long getId() {
 		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Instant getMoment() {
 		return moment;
 	}
-	public void setMoment(Instant moment) {
-		this.moment = moment;
-	}
 
 	public OrderDTO getOrder() {
 		return order;
-	}
-	public void setOrder(OrderDTO order) {
-		this.order = order;
 	}
 
 	public PaymentStatus getStatus() {
 		return status;
 	}
-	public void setStatus(PaymentStatus status) {
-		this.status = status;
-	}
 
 	public String getPixQrCode() {
 		return pixQrCode;
 	}
-	public void setPixQrCode(String pixQrCode) {
-		this.pixQrCode = pixQrCode;
-	}
 
 	public String getPixCopiaCola() {
 		return pixCopiaCola;
-	}
-	public void setPixCopiaCola(String pixCopiaCola) {
-		this.pixCopiaCola = pixCopiaCola;
 	}
 }
