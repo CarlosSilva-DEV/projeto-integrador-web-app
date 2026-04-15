@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.OrderClientDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Order;
-import com.carlossilvadev.projeto_integrador_web_app.entities.Payment;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,7 +20,6 @@ public class OrderDTO {
 	private OrderClientDTO client;
 	private Set<OrderItemDTO> items = new HashSet<>();
 	private double total;
-	private Payment payment;
 	
 	// Construtores
 	public OrderDTO(Order order) {
@@ -30,7 +28,6 @@ public class OrderDTO {
 		this.orderStatus = order.getOrderStatus();
 		this.client = new OrderClientDTO(order.getClient());
 		this.total = order.getTotal();
-		this.payment = order.getPayment();
 		
 		if (order.getItems() != null) {
 			this.items = new HashSet<>(order.getItems().stream().map(OrderItemDTO::new).collect(Collectors.toSet()));
@@ -40,12 +37,9 @@ public class OrderDTO {
 	public OrderDTO() {
 	}
 	
-	// getters e setters
+	// getters
 	public Long getId() {
 		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public Instant getMoment() {
@@ -55,32 +49,16 @@ public class OrderDTO {
 	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
-	public void setOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus = orderStatus;
-	}
 	
 	public OrderClientDTO getClient() {
 		return client;
-	}
-	public void setClient(OrderClientDTO client) {
-		this.client = client;
 	}
 	
 	public Set<OrderItemDTO> getItems() {
 		return items;
 	}
-	public void setItems(Set<OrderItemDTO> items) {
-		this.items = items;
-	}
 	
 	public double getTotal() {
 		return total;
-	}
-	
-	public Payment getPayment() {
-		return payment;
-	}
-	public void setPayment(Payment payment) {
-		this.payment = payment;
 	}
 }
