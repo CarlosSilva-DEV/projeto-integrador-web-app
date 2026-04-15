@@ -1,7 +1,5 @@
 package com.carlossilvadev.projeto_integrador_web_app.dto.user;
 
-import org.springframework.beans.BeanUtils;
-
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 
@@ -10,13 +8,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserUpdateDTO {
-	private Long id;
-	
 	@Size(min = 2, max = 50, message = "Nome deve ter entre 2 e 50 caracteres")
 	private String nome;
-	
-	@Size(min = 3, max = 15, message = "Login deve ter entre 3 e 15 caracteres")
-	private String login;
 	
 	@Email(message = "Email deve ser válido: email_address@domain.com")
 	private String email;
@@ -31,23 +24,19 @@ public class UserUpdateDTO {
 	
 	// Construtores (copiando propriedades da entidade User para o DTO)
 	public UserUpdateDTO(User user) {
-		BeanUtils.copyProperties(user, this);
+		this.nome = user.getNome();
+		this.email = user.getEmail();
+		this.telefone = user.getTelefone();
+		this.senha = user.getSenha();
+		this.role = user.getRole();
 	}
 	
 	public UserUpdateDTO() {
 	}
 	
-	// getters e setters
-	public Long getId() {
-		return id;
-	}
-	
+	// getters
 	public String getNome() {
 		return nome;
-	}
-	
-	public String getLogin() {
-		return login;
 	}
 	
 	public String getEmail() {
@@ -69,10 +58,6 @@ public class UserUpdateDTO {
 	// métodos has (update de usuário)
 	public boolean hasNome() {
 		return nome != null;
-	}
-	
-	public boolean hasLogin() {
-		return login != null;
 	}
 	
 	public boolean hasEmail() {
