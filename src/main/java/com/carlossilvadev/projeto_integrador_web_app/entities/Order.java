@@ -5,9 +5,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.BeanUtils;
-
-import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -60,9 +57,9 @@ public class Order implements Serializable {
 		this.setOrderStatus(OrderStatus.AGUARDANDO_PAGAMENTO);
 	}
 	
-	public Order(OrderDTO orderDto, User client) {
-		this();
-		BeanUtils.copyProperties(orderDto, this, "client", "orderStatus");
+	public Order(User client) {
+		this.moment = Instant.now();
+		this.setOrderStatus(OrderStatus.AGUARDANDO_PAGAMENTO);
 		this.client = client;
 	}
 	
