@@ -2,13 +2,10 @@ package com.carlossilvadev.projeto_integrador_web_app.dto.product;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
-
-import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
-import com.carlossilvadev.projeto_integrador_web_app.entities.OrderItem;
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -35,64 +32,46 @@ public class ProductDTO {
 	private double preco;
 	
 	private String imgUrl;
-	private Set<Category> categories = new HashSet<>();
-	
-	@JsonIgnore
-	private Set<OrderItem> items = new HashSet<>();
+	private Set<CategoryDTO> categories = new HashSet<>();
 	
 	// Construtores
 	public ProductDTO(Product product) {
-		BeanUtils.copyProperties(product, this);
+		this.id = product.getId();
+		this.nome = product.getNome();
+		this.descricao = product.getDescricao();
+		this.preco = product.getPreco();
+		this.imgUrl = product.getImgUrl();
 		
 		if (product.getCategories() != null) {
-			this.categories = new HashSet<>(product.getCategories());
+			this.categories = new HashSet<>(product.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toSet()));
 		}
 	}
 
 	public ProductDTO() {
 	}
 	
-	// getters e setters
+	// getters
 	public Long getId() {
 		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getNome() {
 		return nome;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 
 	public String getDescricao() {
 		return descricao;
-	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public double getPreco() {
 		return preco;
 	}
-	public void setPreco(double preco) {
-		this.preco = preco;
-	}
 
 	public String getImgUrl() {
 		return imgUrl;
 	}
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
 	
-	public Set<Category> getCategories() {
+	public Set<CategoryDTO> getCategories() {
 		return categories;
-	}
-
-	public Set<OrderItem> getItems() {
-		return items;
 	}
 }
