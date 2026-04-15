@@ -1,18 +1,15 @@
 package com.carlossilvadev.projeto_integrador_web_app.dto.user;
 
-import org.springframework.beans.BeanUtils;
-
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class UserDTO {
-	private Long id;
-	
+public class UserRequestDTO {
 	@NotBlank(message = "Nome é obrigatório")
 	@Size(min = 2, max = 50, message = "Nome deve ter entre 2 e 50 caracteres")
 	private String nome;
@@ -33,88 +30,44 @@ public class UserDTO {
 	@Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
 	private String senha;
 	
+	@NotNull(message = "Role é obrigatória")
 	private UserRole role;
 	
 	// Construtores (copiando propriedades da entidade User para o DTO)
-	public UserDTO(User user) {
-		BeanUtils.copyProperties(user, this);
+	public UserRequestDTO(User user) {
+		this.nome = user.getNome();
+		this.login = user.getLogin();
+		this.email = user.getEmail();
+		this.telefone = user.getTelefone();
+		this.senha = user.getSenha();
+		this.role = user.getRole();
 	}
 	
-	public UserDTO() {
+	public UserRequestDTO() {
 	}
 	
-	// getters e setters
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
+	// getters
 	public String getNome() {
 		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 	
 	public String getLogin() {
 		return login;
 	}
-	public void setLogin(String login) {
-		this.login = login;
-	}
 	
 	public String getEmail() {
 		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	
 	public String getTelefone() {
 		return telefone;
 	}
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
 	
 	public String getSenha() {
 		return senha;
 	}
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
 	
 	public UserRole getRole() {
 		return role;
-	}
-	public void setRole(UserRole role) {
-		this.role = role;
-	}
-	
-	// métodos has (update de usuário)
-	public boolean hasNome() {
-		return nome != null;
-	}
-	
-	public boolean hasLogin() {
-		return login != null;
-	}
-	
-	public boolean hasEmail() {
-		return email != null;
-	}
-	
-	public boolean hasTelefone() {
-		return telefone != null;
-	}
-	
-	public boolean hasSenha() {
-		return senha != null;
-	}
-	
-	public boolean hasRole() {
-		return role != null;
 	}
 }
