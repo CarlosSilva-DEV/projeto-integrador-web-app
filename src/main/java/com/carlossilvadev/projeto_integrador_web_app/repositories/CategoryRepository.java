@@ -11,7 +11,7 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>{
-	@Query("SELECT c FROM Category c WHERE LOWER(c.nome) = LOWER(:nome)")
+	@Query("SELECT c FROM Category c LEFT JOIN FETCH c.products WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
 	Optional<Category> findByNomeIgnoreCase(@Param("nome") String nome);
 	
 	// carregamento de produtos
