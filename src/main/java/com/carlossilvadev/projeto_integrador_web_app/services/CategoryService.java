@@ -40,10 +40,10 @@ public class CategoryService {
 	}
 	
 	public void delete(Long id) {
-		repository.findById(id)
+		Category category = repository.findByIdWithProducts(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
 		
-		if (repository.existsProductsByCategoryId(id)) {
+		if (!category.getProducts().isEmpty()) {
 			throw new BusinessException("Não é possível excluir uma Categoria que tenha Produtos vínculados a ela");
 		}
 		

@@ -20,7 +20,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long>{
 		
 	@Query("SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.products")
 	List<Category> findAllWithProducts();
-	
-	@Query("SELECT COUNT(p) > 0 FROM Product p JOIN p.categories c WHERE c.id = :categoryId")
-    boolean existsProductsByCategoryId(@Param("categoryId") Long categoryId);
 }
