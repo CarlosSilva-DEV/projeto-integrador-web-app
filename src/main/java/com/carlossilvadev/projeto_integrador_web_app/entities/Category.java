@@ -8,6 +8,7 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ public class Category implements Serializable {
 	private String nome;
 	
 	@JsonIgnore
-	@ManyToMany(mappedBy = "categories") // mapeamento da relação estabelecida na classe Product
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories") // mapeamento da relação estabelecida na classe Product
 	private Set<Product> products = new HashSet<>();
 	
 	// Construtores
