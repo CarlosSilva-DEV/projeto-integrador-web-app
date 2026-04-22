@@ -1,7 +1,5 @@
 package com.carlossilvadev.projeto_integrador_web_app.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AccessDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserResponseDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
@@ -36,12 +34,6 @@ public class AuthService {
 	private JwtUtils jwtUtils;
 	
 	public AccessDTO login(AuthenticationDTO authDto) {
-		Optional<User> userOptional = userRepository.findByLogin(authDto.getUsername());
-		
-		if (userOptional.isEmpty()) {
-			throw new InvalidCredentialsException("Usuário não encontrado");
-		}
-		
 		try {
 			// cria mecanismo de credencial para o Spring
 			UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
@@ -57,7 +49,7 @@ public class AuthService {
 			return new AccessDTO(token);
 			
 		} catch (BadCredentialsException exception) {
-			throw new InvalidCredentialsException("Senha incorreta");
+			throw new InvalidCredentialsException("Credenciais inválidas: " + exception.getMessage());
 		}
 	}
 	
