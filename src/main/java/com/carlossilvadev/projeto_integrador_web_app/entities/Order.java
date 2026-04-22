@@ -12,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,16 +40,16 @@ public class Order implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 	
-	@ManyToOne // define associação N:1 para relação no db
+	@ManyToOne(fetch = FetchType.LAZY, optional = false) // define associação N:1 para relação no db
 	@JoinColumn(name = "client_id") // determina chave FK do User na tabela Order
 	private User client;
 	
-	@OneToMany(mappedBy = "id.order")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
 	
 	private double total;
 	
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // obrigatório em relacionamento 1:1
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL) // obrigatório em relacionamento 1:1
 	private Payment payment;
 	
 	// Construtores
