@@ -31,7 +31,7 @@ public class CategoryService {
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	public CategoryDTO insert(CategoryDTO categoryDto) {
-		if (categoryDto != null && !categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
+		if (!categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
 			throw new BusinessException("Categoria com o nome " + categoryDto.getNome() + " já existente");
 		}
 		
@@ -54,7 +54,7 @@ public class CategoryService {
 		Category entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
 		
-		if (categoryDto != null && !categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
+		if (!categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
 			throw new BusinessException("Categoria com o nome " + categoryDto.getNome() + " já existente");
 		}
 		
