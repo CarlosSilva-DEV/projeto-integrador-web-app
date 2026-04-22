@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class User implements Serializable { // interface que salva o estado atua
 	private UserRole role;
 	
 	@JsonIgnore // evita looping nas requisições de User-Order
-	@OneToMany(mappedBy = "client") // define associação 1:N para relação no db
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "client") // define associação 1:N para relação no db
 	private List<Order> orders = new ArrayList<>();
 	
 	// Construtores (padrão do Spring: vazio e com params)
