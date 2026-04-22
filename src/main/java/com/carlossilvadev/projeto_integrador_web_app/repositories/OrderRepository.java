@@ -25,9 +25,4 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 	
 	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.client c LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product pr LEFT JOIN FETCH o.payment py WHERE o.id = :id")
 	Optional<Order> findByIdWithItems(@Param("id") Long id);
-	
-	
-	// métodos de busca (filtros)
-	@Query("SELECT COUNT(o) > 0 FROM Order o WHERE o.client = :client")
-	boolean existsByClient(@Param("client") User client);
 }

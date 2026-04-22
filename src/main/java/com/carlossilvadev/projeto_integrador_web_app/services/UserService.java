@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
-import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
@@ -22,9 +21,6 @@ import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.UserNot
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private OrderRepository orderRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -85,7 +81,7 @@ public class UserService {
 	public void deleteCurrentUser() {
 		User currentUser = getCurrentUserEntity();
 		
-		if (hasUserAssociations(currentUser)) {
+		if (!currentUser.getOrders().isEmpty()) {
 			throw new BusinessException("Não é possível excluir um Usuário que tenha Pedidos vinculados a ele");
 		}
 		
@@ -126,18 +122,14 @@ public class UserService {
 	
 	// método Service que deleta objeto no Repository (admin-only)
 	public void delete(Long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID" + id));
+		User user = userRepository.findByIdWithOrders(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
 		
-		if (hasUserAssociations(user)) {
+		if (!user.getOrders().isEmpty()) {
 			throw new BusinessException("Não é possível excluir um Usuário que tenha Pedidos vinculados a ele");
 		}
 		
 		userRepository.deleteById(id);
-	}
-	// verifica se o usuário possui pedidos vinculados a ele
-	private boolean hasUserAssociations(User user) {
-		return orderRepository.existsByClient(user);
 	}
 	
 	// método Service que atualiza objeto no Repository (Patch)
