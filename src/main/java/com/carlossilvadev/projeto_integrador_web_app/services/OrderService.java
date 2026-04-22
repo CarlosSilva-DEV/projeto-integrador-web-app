@@ -1,6 +1,8 @@
 package com.carlossilvadev.projeto_integrador_web_app.services;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +55,21 @@ public class OrderService {
 	public OrderDTO createOrder(OrderCreateDTO orderCreateDto) {
 		User currentUser = userService.getCurrentUserEntity();
 		
-		Order order = new Order();
-		order.setClient(currentUser);
+		Order order = new Order(currentUser);
+		
+		// armazena ID de cada produto informado no DTO
+		List<Long> productIds = orderCreateDto.getItems()
+				.stream().map(OrderItemDTO::getProductId).toList();
+		
+		// recupera cada produto do db com base na lista de IDs
+		Map<Long, Product> productsById = productRepository.findAllById(productIds)
+				.stream().collect(Collectors.toMap(Product::getId, p -> p));
 		
 		List<OrderItem> tempList = new ArrayList<>();
 		
 		for (OrderItemDTO itemDto : orderCreateDto.getItems()) {
-			Product product = productRepository.findById(itemDto.getProductId())
-					.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + itemDto.getProductId()));
+			Product product = Optional.ofNullable(productsById.get(itemDto.getProductId()))
+					.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + itemDto.getProductId()));
 			
 			OrderItem orderItem = new OrderItem(order, product, itemDto.getQuantidade(), product.getPreco());
 			tempList.add(orderItem);

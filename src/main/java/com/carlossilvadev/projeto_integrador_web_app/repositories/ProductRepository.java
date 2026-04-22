@@ -19,6 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 	@Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.categories")
 	List<Product> findAllWithCategories();
 	
+	@Query("SELECT p FROM Product p LEFT JOIN FETCH p.categories WHERE p.id IN :ids")
+	List<Product> findAllById(Iterable<Long> ids);
+	
 	
 	// busca de produtos por nome
 	@Query("SELECT p FROM Product p LEFT JOIN FETCH p.categories WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
