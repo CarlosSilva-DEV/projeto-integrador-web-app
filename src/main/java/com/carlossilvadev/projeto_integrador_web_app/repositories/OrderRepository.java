@@ -14,16 +14,16 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.User;
 public interface OrderRepository extends JpaRepository<Order, Long>{
 	
 	// métodos de busca com join fetch
-	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product WHERE o.client = :client")
+	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.client c LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product pr LEFT JOIN FETCH o.payment py WHERE c = :client")
 	List<Order> findByClientWithItems(@Param("client") User client);
 	
-	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH o.payment LEFT JOIN FETCH i.id.product WHERE o.id = :id AND o.client = :client")
+	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.client c LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product pr LEFT JOIN FETCH o.payment py WHERE o.id = :id AND c = :client")
 	Optional<Order> findByIdAndClientWithItems(@Param("id") Long id, @Param("client") User client);
 	
-	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product")
+	@Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.client c LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product pr LEFT JOIN FETCH o.payment py")
 	List<Order> findAllWithItems();
 	
-	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product WHERE o.id = :id")
+	@Query("SELECT o FROM Order o LEFT JOIN FETCH o.client c LEFT JOIN FETCH o.items i LEFT JOIN FETCH i.id.product pr LEFT JOIN FETCH o.payment py WHERE o.id = :id")
 	Optional<Order> findByIdWithItems(@Param("id") Long id);
 	
 	
