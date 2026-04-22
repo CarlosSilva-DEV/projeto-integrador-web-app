@@ -8,6 +8,7 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,11 +31,11 @@ public class Product implements Serializable {
 	private Double preco;
 	private String imgUrl;
 	
-	@ManyToMany //relação n:n e criando tabela de associação db
+	@ManyToMany(fetch = FetchType.LAZY) //relação n:n e criando tabela de associação db
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>(); // garante que um mesmo objeto não tenha mais de uma categoria
 	
-	@OneToMany(mappedBy = "id.product")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "id.product")
 	private Set<OrderItem> items = new HashSet<>();
 	
 	// Construtores
