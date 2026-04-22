@@ -26,7 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 	
 	// filtros para busca
-	@Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.categories c WHERE c.id = :categoryId")
+	@Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.categories c WHERE EXISTS (SELECT c FROM p.categories c WHERE c.id = :categoryId)")
 	List<Product> findByCategoryId(@Param("categoryId") Long categoryId);
 	
 	@Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.categories c WHERE " +
