@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,7 +32,7 @@ public class Payment implements Serializable {
 	private Instant moment;
 	
 	@JsonIgnore
-	@OneToOne // anotações para relacionamento de dependência 1:1
+	@OneToOne(fetch = FetchType.LAZY) // anotações para relacionamento de dependência 1:1
 	@MapsId
 	private Order order;
 	
