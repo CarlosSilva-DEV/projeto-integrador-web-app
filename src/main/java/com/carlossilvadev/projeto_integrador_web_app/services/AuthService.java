@@ -13,7 +13,6 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserResponseDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.User;
-import com.carlossilvadev.projeto_integrador_web_app.entities.enums.UserRole;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.UserRepository;
 import com.carlossilvadev.projeto_integrador_web_app.security.jwt.JwtUtils;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
@@ -54,7 +53,7 @@ public class AuthService {
 	}
 	
 	// registro de novo user
-	public UserDTO register(RegisterDTO registerDto) {
+	public UserResponseDTO register(RegisterDTO registerDto) {
 		if (registerDto.getLogin() != null && !registerDto.getLogin().isEmpty() && 
 				userRepository.findByLogin(registerDto.getLogin()).isPresent()) {
 			throw new BusinessException("Login já está em uso");
@@ -66,14 +65,9 @@ public class AuthService {
 			
 		}
 		
-		User user = new User();
-		user.setNome(registerDto.getNome());
-		user.setLogin(registerDto.getLogin());
-		user.setEmail(registerDto.getEmail());
-		user.setTelefone(registerDto.getTelefone());
+		User user = new User(registerDto);
 		user.setSenha(passwordEncoder.encode(registerDto.getSenha()));
-		user.setRole(UserRole.ROLE_USER);
 			
-		return new UserDTO(userRepository.save(user));
+		return new UserResponseDTO(userRepository.save(user));
 	}
 }
