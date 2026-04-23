@@ -93,9 +93,9 @@ public class UserService {
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	
 	// métodos Service que recuperam objetos no Repository (admin-only)
-	public List<UserDTO> findAll() {
-		List<User> users = userRepository.findAll();
-		return users.stream().map(UserDTO::new).collect(Collectors.toList());
+	public List<UserResponseDTO> findAll() {
+		List<User> users = userRepository.findAllWithOrders();
+		return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
 	}
 	
 	public UserDTO findById(Long id) {
