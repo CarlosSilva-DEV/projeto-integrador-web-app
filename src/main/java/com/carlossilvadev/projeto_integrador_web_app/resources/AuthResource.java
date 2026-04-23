@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AccessDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.RegisterDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserResponseDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class AuthResource {
 	@ApiResponse(responseCode = "409", description = "Não é possível cadastrar um novo Usuário com login ou email já utilizados")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDto) {
-		UserDTO newUser = authService.register(registerDto);
+		UserResponseDTO newUser = authService.register(registerDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri();
 		return ResponseEntity.created(uri).body(newUser);
 	}
