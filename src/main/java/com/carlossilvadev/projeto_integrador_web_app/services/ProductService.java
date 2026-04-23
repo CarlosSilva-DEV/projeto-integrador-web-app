@@ -125,9 +125,9 @@ public class ProductService {
 		}
 		
 		if (obj.hasCategories()) {
-			for (Category category : obj.getCategories()) {
+			for (CategoryDTO category : obj.getCategories()) {
 				Category managedCategory = categoryRepository.findById(category.getId())
-						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada" + category.getId()));
+						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + category.getId()));
 				entity.getCategories().add(managedCategory);
 			}
 		}
