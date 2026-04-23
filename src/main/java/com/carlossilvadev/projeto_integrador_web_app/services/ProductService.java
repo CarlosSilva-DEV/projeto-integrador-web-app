@@ -11,7 +11,6 @@ import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductUpdateDT
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Product;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.CategoryRepository;
-import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderItemRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.ProductRepository;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
@@ -24,9 +23,6 @@ public class ProductService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
-	@Autowired
-	private OrderItemRepository orderItemRepository;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	public List<ProductDTO> findAll() {
@@ -95,15 +91,11 @@ public class ProductService {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
 		
-		if (isProductInUse(product)) {
+		if (!product.getOrders().isEmpty()) {
 			throw new BusinessException("Não é possível excluir um Produto vinculado a Pedidos existentes");
 		}
 		
 		productRepository.deleteById(id);
-	}
-	
-	private boolean isProductInUse(Product product) {
-		return orderItemRepository.existsByProductId(product.getId());
 	}
 	
 	public ProductDTO update(Long id, ProductUpdateDTO productUpdateDto) {
