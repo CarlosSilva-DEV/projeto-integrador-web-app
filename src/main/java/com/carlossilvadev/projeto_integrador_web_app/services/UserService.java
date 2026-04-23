@@ -52,7 +52,7 @@ public class UserService {
 		return new UserResponseDTO(currentUser);
 	}
 	
-	public UserDTO updateCurrentUser(UserUpdateDTO userUpdateDto) {
+	public UserResponseDTO updateCurrentUser(UserUpdateDTO userUpdateDto) {
 		User currentUser = getCurrentUserEntity();
 		
 		if (userUpdateDto.hasNome()) {
@@ -76,7 +76,7 @@ public class UserService {
         }
         
         User updatedUser = userRepository.save(currentUser);
-        return new UserDTO(updatedUser);
+        return new UserResponseDTO(updatedUser);
 	}
 	
 	public void deleteCurrentUser() {
