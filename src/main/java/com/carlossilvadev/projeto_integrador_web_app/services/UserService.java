@@ -105,7 +105,7 @@ public class UserService {
 	}
 	
 	// método Service para inserir novo user (admin-only)
-	public UserDTO insert(UserDTO userDto) {
+	public UserResponseDTO insert(UserRequestDTO userDto) {
 		if (userDto.getLogin() != null && !userDto.getLogin().isEmpty() && userRepository.findByLogin(userDto.getLogin()).isPresent()) {
 			throw new BusinessException("Login já está em uso");
 		}
@@ -116,9 +116,8 @@ public class UserService {
 		
 		User user = new User(userDto);
 		user.setSenha(passwordEncoder.encode(userDto.getSenha()));
-		user.setRole(userDto.getRole());
 		
-		return new UserDTO(userRepository.save(user));
+		return new UserResponseDTO(userRepository.save(user));
 	}
 	
 	// método Service que deleta objeto no Repository (admin-only)
