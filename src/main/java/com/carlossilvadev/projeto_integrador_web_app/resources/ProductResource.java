@@ -80,7 +80,7 @@ public class ProductResource {
 	}
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping
 	@Operation(summary = "Criar um novo Produto", description = "Método responsável por criar um novo Produto")
 	@ApiResponse(responseCode = "201", description = "Produto criado com sucesso")
@@ -92,7 +92,7 @@ public class ProductResource {
 		return ResponseEntity.created(uri).body(productDto);
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Deleta um Produto por ID", description = "Método responsável por retornar um Produto com base em um ID")
 	@ApiResponse(responseCode = "204", description = "Produto deletado com sucesso")
@@ -104,7 +104,7 @@ public class ProductResource {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PatchMapping(value = "/{id}")
 	@Operation(summary = "Atualiza dados de um Produto por ID", description = "Método responsável por atualizar os dados de um Produto com base em um ID")
 	@ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso")
