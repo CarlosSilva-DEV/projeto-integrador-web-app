@@ -98,10 +98,10 @@ public class UserService {
 		return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
 	}
 	
-	public UserDTO findById(Long id) {
-		User user = userRepository.findById(id)
+	public UserResponseDTO findById(Long id) {
+		User user = userRepository.findByIdWithOrders(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
-		return new UserDTO(user);
+		return new UserResponseDTO(user);
 	}
 	
 	// método Service para inserir novo user (admin-only)
