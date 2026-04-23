@@ -19,7 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderCreateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.payment.PaymentDTO;
-import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserRequestDTO;
+import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserResponseDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.services.OrderService;
 import com.carlossilvadev.projeto_integrador_web_app.services.PaymentService;
@@ -55,8 +56,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "401", description = "Usuário não autenticado")
 	@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<UserDTO> getCurrentUser() {
-		UserDTO userDto = userService.getCurrentUserDTO();
+	public ResponseEntity<UserResponseDTO> getCurrentUser() {
+		UserResponseDTO userDto = userService.getCurrentUserDTO();
 		return ResponseEntity.ok().body(userDto);
 	}
 	
@@ -65,8 +66,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso")
 	@ApiResponse(responseCode = "409", description = "Endereço de e-mail fornecido já é utilizado")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<UserDTO> updateCurrentUser(@Valid @RequestBody UserUpdateDTO userUpdateDto) {
-		UserDTO updatedUser = userService.updateCurrentUser(userUpdateDto);
+	public ResponseEntity<UserResponseDTO> updateCurrentUser(@Valid @RequestBody UserUpdateDTO userUpdateDto) {
+		UserResponseDTO updatedUser = userService.updateCurrentUser(userUpdateDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 	
@@ -155,8 +156,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "200", description = "Usuários obtidos com sucesso")
 	@ApiResponse(responseCode = "401", description = "Acesso não autorizado caso o Usuário atual não tenha a role ADMIN")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<List<UserDTO>> findAll() {
-		List<UserDTO> lista = userService.findAll();
+	public ResponseEntity<List<UserResponseDTO>> findAll() {
+		List<UserResponseDTO> lista = userService.findAll();
 		return ResponseEntity.ok().body(lista);
 	}
 	
@@ -168,8 +169,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "401", description = "Acesso não autorizado caso o Usuário atual não tenha a role ADMIN")
 	@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-		UserDTO obj = userService.findById(id);
+	public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
+		UserResponseDTO obj = userService.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -181,8 +182,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "401", description = "Acesso não autorizado caso o Usuário atual não tenha a role ADMIN")
 	@ApiResponse(responseCode = "409", description = "Não é possível criar um Usuário com um login ou email já utilizado")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserDTO obj) {
-		UserDTO userDto = userService.insert(obj);
+	public ResponseEntity<UserResponseDTO> insert(@Valid @RequestBody UserRequestDTO obj) {
+		UserResponseDTO userDto = userService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(userDto);
 	}
@@ -210,8 +211,8 @@ public class UserResource {
 	@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
 	@ApiResponse(responseCode = "409", description = "Não é possível incluir um endereço de e-mail utilizado por outro Usuário")
 	@ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userUpdateDto) {
-		UserDTO updatedUser = userService.update(id, userUpdateDto);
+	public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userUpdateDto) {
+		UserResponseDTO updatedUser = userService.update(id, userUpdateDto);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 }
