@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductUpdateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
@@ -77,14 +78,10 @@ public class ProductService {
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	public ProductDTO insert(ProductDTO productDto) {
-		Product product = new Product();
-		product.setNome(productDto.getNome());
-		product.setDescricao(productDto.getDescricao());
-		product.setPreco(productDto.getPreco());
-		product.setImgUrl(productDto.getImgUrl());
+		Product product = new Product(productDto);
 		
 		if (productDto.getCategories() != null) {
-			for (Category category : productDto.getCategories()) {
+			for (CategoryDTO category : productDto.getCategories()) {
 				Category managedCategory = categoryRepository.findById(category.getId())
 						.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 				product.getCategories().add(managedCategory);
