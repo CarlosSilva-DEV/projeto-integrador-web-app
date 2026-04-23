@@ -133,12 +133,12 @@ public class UserService {
 	}
 	
 	// método Service que atualiza objeto no Repository (Patch)
-	public UserDTO update(Long id, UserUpdateDTO userUpdateDto) {
-		User entity = userRepository.findById(id)
+	public UserResponseDTO update(Long id, UserUpdateDTO userUpdateDto) {
+		User entity = userRepository.findByIdWithOrders(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
 		updateData(entity, userUpdateDto);
 		User updatedUser = userRepository.save(entity);
-		return new UserDTO(updatedUser);
+		return new UserResponseDTO(updatedUser);
 	}
 	
 	private void updateData(User entity, UserUpdateDTO obj) {
