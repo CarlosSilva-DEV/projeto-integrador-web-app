@@ -16,6 +16,7 @@ import com.carlossilvadev.projeto_integrador_web_app.entities.enums.OrderStatus;
 import com.carlossilvadev.projeto_integrador_web_app.entities.enums.PaymentStatus;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.OrderRepository;
 import com.carlossilvadev.projeto_integrador_web_app.repositories.PaymentRepository;
+import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.BusinessException;
 import com.carlossilvadev.projeto_integrador_web_app.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -58,10 +59,12 @@ public class PaymentService {
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
 				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + orderId));
 		
-		order.setOrderStatus(OrderStatus.PAGO);
-		if (order.getPayment() != null) {
-			order.getPayment().setStatus(PaymentStatus.PAGO);
+		if (order.getPayment() == null) {
+			throw new BusinessException("Não foi possível confirmar o pagamento: Pagamento inexistente");
 		}
+		
+		order.setOrderStatus(OrderStatus.PAGO);
+		order.getPayment().setStatus(PaymentStatus.PAGO);
 		
 		Order updatedOrder = orderRepository.save(order);
 		return new OrderDTO(updatedOrder);
