@@ -88,6 +88,10 @@ public class OrderService {
 		Order order = orderRepository.findByIdAndClientWithItems(id, currentUser)
 				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + id));
 		
+		if (order.getOrderStatus() == OrderStatus.CANCELADO) {
+			throw new BusinessException("Não foi possível cancelar o pedido: Pedido já cancelado");
+		}
+		
 		if (order.getOrderStatus() == OrderStatus.PAGO) {
 			throw new BusinessException("Não é possivel cancelar um pedido já pago");
 		}
