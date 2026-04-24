@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.product.ProductDTO;
@@ -25,11 +26,13 @@ public class ProductService {
 	private CategoryRepository categoryRepository;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
+	@Transactional(readOnly = true)
 	public List<ProductDTO> findAll() {
 		List<Product> products = productRepository.findAllWithCategories();
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
 		Product product = productRepository.findByIdWithCategories(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + id));
@@ -37,6 +40,7 @@ public class ProductService {
 	}
 	
 	// realizar busca (com ou sem params)
+	@Transactional(readOnly = true)
 	public List<ProductDTO> search(String searchTerm) {
 		if (searchTerm == null || searchTerm.trim().isEmpty()) {
 			return findAll();
@@ -45,16 +49,19 @@ public class ProductService {
 	}
 	
 	// método auxiliar para buscar nome do produto no repositório
+	@Transactional(readOnly = true)
 	public List<ProductDTO> findByNome(String nome) {
 		List<Product> products = productRepository.findByNomeContainingIgnoreCase(nome);
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public List<ProductDTO> findByCategory(Long categoryId) {
 		List<Product> products = productRepository.findByCategoryId(categoryId);
 		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public List<ProductDTO> findWithFilter(Long categoryId, String searchTerm) {
 		List<Product> products;
 
@@ -73,6 +80,7 @@ public class ProductService {
 	
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
+	@Transactional
 	public ProductDTO insert(ProductDTO productDto) {
 		Product product = new Product(productDto);
 		
@@ -87,6 +95,7 @@ public class ProductService {
 		return new ProductDTO(productRepository.save(product));
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
@@ -98,6 +107,7 @@ public class ProductService {
 		productRepository.deleteById(id);
 	}
 	
+	@Transactional
 	public ProductDTO update(Long id, ProductUpdateDTO productUpdateDto) {
 		Product entity = productRepository.findByIdWithCategories(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: ID " + id));
