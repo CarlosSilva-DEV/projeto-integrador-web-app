@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.payment.PaymentDTO;
@@ -32,6 +33,7 @@ public class PaymentService {
 	private PaymentRepository paymentRepository;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
+	@Transactional
 	public PaymentDTO createPayment(Long orderId) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
@@ -54,6 +56,7 @@ public class PaymentService {
 		return new PaymentDTO(savedPayment, pixCode, pixCode, payment.getStatus());
 	}
 	
+	@Transactional
 	public OrderDTO confirmPayment(Long orderId) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(orderId, currentUser)
@@ -109,11 +112,13 @@ public class PaymentService {
 	}
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
+	@Transactional(readOnly = true)
 	public List<PaymentDTO> findAll() {
 		List<Payment> payments = paymentRepository.findAllWithOrdersAndClients();
 		return payments.stream().map(PaymentDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public PaymentDTO findById(Long id) {
 		Payment payment = paymentRepository.findByIdWithOrdersAndClients(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado: ID " + id));
