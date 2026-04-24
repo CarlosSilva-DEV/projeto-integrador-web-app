@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderCreateDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.order.OrderDTO;
@@ -39,12 +40,14 @@ public class OrderService {
 	private UserService userService;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
+	@Transactional(readOnly = true)
 	public List<OrderDTO> findOrdersByCurrentUser() {
 		User currentUser = userService.getCurrentUserEntity();
 		List<Order> orders = orderRepository.findByClientWithItems(currentUser);
 		return orders.stream().map(OrderDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public OrderDTO findByIdAndCurrentUser(Long id) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(id, currentUser)
@@ -52,6 +55,7 @@ public class OrderService {
 		return new OrderDTO(order);
 	}
 	
+	@Transactional
 	public OrderDTO createOrder(OrderCreateDTO orderCreateDto) {
 		User currentUser = userService.getCurrentUserEntity();
 		
@@ -83,6 +87,7 @@ public class OrderService {
 		return new OrderDTO(order);
 	}
 	
+	@Transactional
 	public OrderDTO cancelOrder(Long id) {
 		User currentUser = userService.getCurrentUserEntity();
 		Order order = orderRepository.findByIdAndClientWithItems(id, currentUser)
@@ -108,11 +113,13 @@ public class OrderService {
 	}
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
+	@Transactional(readOnly = true)
 	public List<OrderDTO> findAll() {
 		List<Order> orders = orderRepository.findAllWithItems();
 		return orders.stream().map(OrderDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public OrderDTO findById(Long id) {
 		Order order = orderRepository.findByIdWithItems(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado: ID " + id));
