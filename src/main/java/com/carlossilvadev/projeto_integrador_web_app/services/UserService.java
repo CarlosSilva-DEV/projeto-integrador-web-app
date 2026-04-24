@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserRequestDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.user.UserResponseDTO;
@@ -29,6 +31,7 @@ public class UserService {
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
 	
 	// método auxiliar
+	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public User getCurrentUserEntity() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -47,11 +50,13 @@ public class UserService {
 	}
 	
 	// método para retornar usuário atual logado
+	@Transactional(readOnly = true)
 	public UserResponseDTO getCurrentUserDTO() {
 		User currentUser = getCurrentUserEntity();
 		return new UserResponseDTO(currentUser);
 	}
 	
+	@Transactional
 	public UserResponseDTO updateCurrentUser(UserUpdateDTO userUpdateDto) {
 		User currentUser = getCurrentUserEntity();
 		
@@ -79,6 +84,7 @@ public class UserService {
         return new UserResponseDTO(updatedUser);
 	}
 	
+	@Transactional
 	public void deleteCurrentUser() {
 		User currentUser = getCurrentUserEntity();
 		
@@ -93,11 +99,13 @@ public class UserService {
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
 	
 	// métodos Service que recuperam objetos no Repository (admin-only)
+	@Transactional(readOnly = true)
 	public List<UserResponseDTO> findAll() {
 		List<User> users = userRepository.findAllWithOrders();
 		return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public UserResponseDTO findById(Long id) {
 		User user = userRepository.findByIdWithOrders(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
@@ -105,6 +113,7 @@ public class UserService {
 	}
 	
 	// método Service para inserir novo user (admin-only)
+	@Transactional
 	public UserResponseDTO insert(UserRequestDTO userDto) {
 		if (userDto.getLogin() != null && !userDto.getLogin().isEmpty() && userRepository.findByLogin(userDto.getLogin()).isPresent()) {
 			throw new BusinessException("Login já está em uso");
@@ -121,6 +130,7 @@ public class UserService {
 	}
 	
 	// método Service que deleta objeto no Repository (admin-only)
+	@Transactional
 	public void delete(Long id) {
 		User user = userRepository.findByIdWithOrders(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
@@ -133,6 +143,7 @@ public class UserService {
 	}
 	
 	// método Service que atualiza objeto no Repository (Patch)
+	@Transactional
 	public UserResponseDTO update(Long id, UserUpdateDTO userUpdateDto) {
 		User entity = userRepository.findByIdWithOrders(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: ID " + id));
