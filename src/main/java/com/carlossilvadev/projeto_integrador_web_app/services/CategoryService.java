@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.category.CategoryDTO;
 import com.carlossilvadev.projeto_integrador_web_app.entities.Category;
@@ -18,11 +19,13 @@ public class CategoryService {
 	private CategoryRepository repository;
 	
 	//============================ MÉTODOS USUÁRIOS ==========================================================================
+	@Transactional(readOnly = true)
 	public List<CategoryDTO> findAll() {
 		List<Category> categories = repository.findAllWithProducts();
 		return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		Category category = repository.findByIdWithProducts(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
@@ -30,6 +33,7 @@ public class CategoryService {
 	}
 	
 	// ============================ MÉTODOS ADMINISTRATIVOS ==================================================================
+	@Transactional
 	public CategoryDTO insert(CategoryDTO categoryDto) {
 		if (!categoryDto.getNome().isEmpty() && repository.findByNomeIgnoreCase(categoryDto.getNome()).isPresent()) {
 			throw new BusinessException("Categoria com o nome " + categoryDto.getNome() + " já existente");
@@ -39,6 +43,7 @@ public class CategoryService {
 		return new CategoryDTO(repository.save(category));
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		Category category = repository.findByIdWithProducts(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
@@ -50,6 +55,7 @@ public class CategoryService {
 		repository.deleteById(id);
 	}
 	
+	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO categoryDto) {
 		Category entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada: ID " + id));
