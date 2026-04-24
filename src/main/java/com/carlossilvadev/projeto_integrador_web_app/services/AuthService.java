@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AccessDTO;
 import com.carlossilvadev.projeto_integrador_web_app.dto.auth.AuthenticationDTO;
@@ -52,6 +53,7 @@ public class AuthService {
 		}
 	}
 	
+	@Transactional
 	// registro de novo user
 	public UserResponseDTO register(RegisterDTO registerDto) {
 		if (registerDto.getLogin() != null && !registerDto.getLogin().isEmpty() && 
