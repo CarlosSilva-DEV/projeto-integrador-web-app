@@ -79,9 +79,10 @@ Esse projeto consiste em uma aplicação completa com frontend baseado em web, a
 - API RESTful
 - Operações CRUD
 - Tratamento de Exceções
-- Delegação de papéis entre Usuários (roles)
-- Sistema de autenticação stateless para validação de requisições dos Usuários
+- Autenticação stateless com Controle de Acesso Baseado em Papéis (Role-Based Access Control)
 - Data Transfer Objects (DTOs)
+- Lazy Loading com JPQL (Java Persistence Query Language)
+- Métodos transacionais com Spring @Transactional
 
 <br>
 
@@ -175,7 +176,6 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
   "login": "carlos",
   "email": "carlos@gmail.com",
   "telefone": "(11) 11111-1111",
-  "senha": "$2a$10$ehL1dRNv8HR8HJn0NnC9s.7heAo/05sVheHmo6SObdpJyDkjP8vkq",
   "role": "ROLE_USER" # Definido automaticamente
 }
 ```
@@ -229,7 +229,6 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
   "login": "carlos",
   "email": "carlos@gmail.com",
   "telefone": "(11) 11111-1111",
-  "senha": "$2a$10$ehL1dRNv8HR8HJn0NnC9s.7heAo/05sVheHmo6SObdpJyDkjP8vkq",
   "role": "ROLE_USER"
 }
 ```
@@ -253,7 +252,6 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
   "login": "carlos",
   "email": "carlossilva123@gmail.com", # dado atualizado
   "telefone": "(99) 99999-9999", # dado atualizado
-  "senha": "$2a$10$ehL1dRNv8HR8HJn0NnC9s.7heAo/05sVheHmo6SObdpJyDkjP8vkq",
   "role": "ROLE_USER"
 }
 ```
@@ -311,10 +309,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
     "id": 3,
     "nome": "Carlos Silva",
     "login": "carlos",
-    "email": "carlos@gmail.com",
-    "telefone": "(11) 11111-1111",
-    "senha": "$2a$10$zNUlwLorSQelJZa0ig8hVOXEtTaKan/6JWlT7rtzhu./QojDSwy7.",
-    "role": "ROLE_USER"
+    "email": "carlos@gmail.com"
   },
   "items": [ # Itens do pedido (Produtos)
     {
@@ -361,7 +356,6 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
     }
   ],
   "total": 7291.7,
-  "payment": null # Dados do Pagamento, null por padrão
 }
 ```
 
@@ -381,10 +375,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
       "id": 3,
       "nome": "Carlos Silva",
       "login": "carlos",
-      "email": "carlos@gmail.com",
-      "telefone": "(11) 11111-1111",
-      "senha": "$2a$10$zNUlwLorSQelJZa0ig8hVOXEtTaKan/6JWlT7rtzhu./QojDSwy7.",
-      "role": "ROLE_USER"
+      "email": "carlos@gmail.com"
     },
     "items": [ # Itens do Pedido (Produtos)
       {
@@ -431,11 +422,6 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
       }
     ],
     "total": 7291.7,
-    "payment": { # Objeto Pagamento criado e vinculado ao Pedido
-      "id": 1,
-      "moment": "2026-03-03T15:32:49Z",
-      "status": "PENDENTE"
-    }
   },
   "status": "PENDENTE",
   "pixQrCode": "00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-42661417400052040000530398654067291.705802BR5901%6001%62070503***6304MINHA_LOJA2595", # Código gerado para alimentar frontend
@@ -456,10 +442,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
     "id": 3,
     "nome": "Carlos Silva",
     "login": "carlos",
-    "email": "carlos@gmail.com",
-    "telefone": "(11) 11111-1111",
-    "senha": "$2a$10$zNUlwLorSQelJZa0ig8hVOXEtTaKan/6JWlT7rtzhu./QojDSwy7.",
-    "role": "ROLE_USER"
+    "email": "carlos@gmail.com"
   },
   "items": [
     {
@@ -505,12 +488,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
       }
     }
   ],
-  "total": 7291.7,
-  "payment": { # Dados do Pagamento vinculado ao Pedido
-    "id": 1,
-    "moment": "2026-03-03T15:32:49Z",
-    "status": "PAGO" # Status do Pagamento alterado automaticamente
-  }
+  "total": 7291.7
 }
 ```
 
@@ -527,10 +505,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
     "id": 3,
     "nome": "Carlos Silva",
     "login": "carlos",
-    "email": "carlos@gmail.com",
-    "telefone": "(11) 11111-1111",
-    "senha": "$2a$10$zNUlwLorSQelJZa0ig8hVOXEtTaKan/6JWlT7rtzhu./QojDSwy7.",
-    "role": "ROLE_USER"
+    "email": "carlos@gmail.com"
   },
   "items": [
     {
@@ -553,8 +528,7 @@ Seguem abaixo algumas demonstrações de como realizar requisições nos princip
       }
     }
   ],
-  "total": 1059.8,
-  "payment": null # Dados do Pagamento, null por padrão caso o Pedido seja cancelado antes de iniciar um Pagamento
+  "total": 1059.8
 }
 ```
 
